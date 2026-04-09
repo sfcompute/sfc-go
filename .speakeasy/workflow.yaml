@@ -1,0 +1,19 @@
+workflowVersion: 1.0.0
+speakeasyVersion: latest
+sources:
+    sfc-api:
+        inputs:
+            - location: ../sfcompute/blueprint/current/openapi.json
+        output: .speakeasy/out.openapi.yaml
+        registry:
+            location: registry.speakeasyapi.dev/the-san-francisco-compute-company/v2/sfc-api
+targets:
+    sfc:
+        target: go
+        source: sfc-api
+        codeSamples:
+            registry:
+                location: registry.speakeasyapi.dev/the-san-francisco-compute-company/v2/sfc-api-go-code-samples
+            labelOverride:
+                fixedValue: Go (SDK)
+            blocking: false

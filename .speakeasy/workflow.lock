@@ -1,0 +1,37 @@
+speakeasyVersion: 1.761.1
+sources:
+    sfc-api:
+        sourceNamespace: sfc-api
+        sourceRevisionDigest: sha256:d310b26528cd9d16e1a7857fa33a0da9e0068c664b643cf56633dd16240af705
+        sourceBlobDigest: sha256:7825f7586955416d41194a079f392b467c4f506cdf360121bb16b9cea30550c4
+        tags:
+            - latest
+            - 0.1.0
+targets:
+    sfc:
+        source: sfc-api
+        sourceNamespace: sfc-api
+        sourceRevisionDigest: sha256:d310b26528cd9d16e1a7857fa33a0da9e0068c664b643cf56633dd16240af705
+        sourceBlobDigest: sha256:7825f7586955416d41194a079f392b467c4f506cdf360121bb16b9cea30550c4
+        codeSamplesNamespace: sfc-api-go-code-samples
+        codeSamplesRevisionDigest: sha256:67e8a6247a3c0be990d61a5a7df0685ae255f48fec8eaf210bed672d28801405
+workflow:
+    workflowVersion: 1.0.0
+    speakeasyVersion: latest
+    sources:
+        sfc-api:
+            inputs:
+                - location: ../sfcompute/blueprint/current/openapi.json
+            output: .speakeasy/out.openapi.yaml
+            registry:
+                location: registry.speakeasyapi.dev/the-san-francisco-compute-company/v2/sfc-api
+    targets:
+        sfc:
+            target: go
+            source: sfc-api
+            codeSamples:
+                registry:
+                    location: registry.speakeasyapi.dev/the-san-francisco-compute-company/v2/sfc-api-go-code-samples
+                labelOverride:
+                    fixedValue: Go (SDK)
+                blocking: false

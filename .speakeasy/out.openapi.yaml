@@ -1,0 +1,4362 @@
+openapi: "3.1.0"
+info:
+  title: "sfc-api"
+  description: ""
+  version: "0.1.0"
+servers:
+  - url: "https://api.sfcompute.com"
+paths:
+  /v2/capacities:
+    get:
+      tags:
+        - "Capacities"
+      summary: "List capacities"
+      description: "List all capacities."
+      operationId: "list_capacities"
+      parameters:
+        - name: "workspace"
+          in: "query"
+          description: "Filter by workspace."
+          required: true
+          schema:
+            $ref: "#/components/schemas/ResourcePathOrId_WorkspaceId"
+        - name: "id"
+          in: "query"
+          description: "Filter by capacity ID, resource path, or name (repeatable)."
+          required: false
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/ResourcePathOrId_CapacityId"
+          style: "form"
+          explode: true
+        - name: "limit"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "u-int32"
+            default: 50
+            maximum: 200
+            minimum: 1
+        - name: "starting_after"
+          in: "query"
+          description: "Set to the response's `cursor` to fetch the next page."
+          required: false
+          schema:
+            $ref: "#/components/schemas/CapacitiesCursor"
+        - name: "ending_before"
+          in: "query"
+          description: "Set to the response's `cursor` to fetch the previous page."
+          required: false
+          schema:
+            $ref: "#/components/schemas/CapacitiesCursor"
+        - name: "schedule_history_minutes"
+          in: "query"
+          description: "How many minutes of past schedule to include."
+          required: false
+          schema:
+            type: "integer"
+            format: "u-int64"
+            default: 0
+            maximum: 1440
+            minimum: 0
+        - name: "tag"
+          in: "query"
+          description: "Filter by tag key-value pair (repeatable). Format: `key=value` (the `=` between key and value must be percent-encoded in the URL)."
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+          style: "form"
+          explode: true
+        - name: "tag_key"
+          in: "query"
+          description: "Filter by tag key existence (repeatable). Returns resources that have a tag with this key, regardless of the value."
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+          style: "form"
+          explode: true
+        - name: "expand"
+          in: "query"
+          description: "Expand related resources inline instead of returning IDs."
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              enum:
+                - "procurements"
+                - "deployments"
+          style: "form"
+          explode: true
+      responses:
+        "200":
+          description: "Paginated list of capacities."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListCapacitiesResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-pagination:
+        type: "cursor"
+        inputs:
+          - name: "starting_after"
+            in: "parameters"
+            type: "cursor"
+        outputs:
+          nextCursor: "$.cursor"
+    post:
+      tags:
+        - "Capacities"
+      summary: "Create capacity"
+      description: "Create a capacity to hold compute in specified zones."
+      operationId: "create_capacity"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCapacityRequest"
+        required: true
+      responses:
+        "201":
+          description: "Capacity created."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CapacityResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: "Forbidden."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /v2/capacities/{id}:
+    get:
+      tags:
+        - "Capacities"
+      summary: "Get capacity"
+      description: "Retrieve a capacity by ID, resource path, or name, including its compute schedule."
+      operationId: "fetch_capacity"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "cap_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(cap_[0-9a-zA-Z_-]{1,21})|(sfc:capacity:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+        - name: "schedule_history_minutes"
+          in: "query"
+          description: "How many minutes of past schedule to include."
+          required: false
+          schema:
+            type: "integer"
+            format: "u-int64"
+            default: 0
+            maximum: 1440
+            minimum: 0
+        - name: "expand"
+          in: "query"
+          description: "Expand related resources inline instead of returning IDs."
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              enum:
+                - "procurements"
+                - "deployments"
+          style: "form"
+          explode: true
+      responses:
+        "200":
+          description: "Capacity details."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CapacityResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Capacity not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    delete:
+      tags:
+        - "Capacities"
+      summary: "Delete capacity"
+      description: "Delete a capacity. The capacity must have no active orders, future allocations, active nodes, deployments, or procurements. Remove all dependencies before deleting."
+      operationId: "delete_capacity"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "cap_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(cap_[0-9a-zA-Z_-]{1,21})|(sfc:capacity:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      responses:
+        "204":
+          description: "Capacity deleted."
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Capacity not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: "Capacity has active dependencies."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    patch:
+      tags:
+        - "Capacities"
+      summary: "Update capacity"
+      description: "Update a capacity. Omitted fields are left unchanged."
+      operationId: "update_capacity"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "cap_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(cap_[0-9a-zA-Z_-]{1,21})|(sfc:capacity:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchCapacityRequest"
+        required: true
+      responses:
+        "200":
+          description: "Capacity updated."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CapacityResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: "Forbidden."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: "Capacity not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /v2/deployments:
+    get:
+      tags:
+        - "Deployments"
+      summary: "List deployments"
+      description: "List all deployments."
+      operationId: "list_deployments"
+      parameters:
+        - name: "workspace"
+          in: "query"
+          description: "Filter by workspace."
+          required: true
+          schema:
+            $ref: "#/components/schemas/ResourcePathOrId_WorkspaceId"
+        - name: "capacity"
+          in: "query"
+          required: false
+          schema:
+            $ref: "#/components/schemas/ResourcePathOrId_CapacityId"
+        - name: "limit"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "u-int32"
+            default: 50
+            maximum: 50
+            minimum: 1
+        - name: "starting_after"
+          in: "query"
+          required: false
+          schema:
+            $ref: "#/components/schemas/DeploymentsCursor"
+        - name: "ending_before"
+          in: "query"
+          required: false
+          schema:
+            $ref: "#/components/schemas/DeploymentsCursor"
+        - name: "expand"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              enum:
+                - "capacity"
+                - "node_template"
+          style: "form"
+          explode: true
+      responses:
+        "200":
+          description: "Paginated list of deployments."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListDeploymentsResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-pagination:
+        type: "cursor"
+        inputs:
+          - name: "starting_after"
+            in: "parameters"
+            type: "cursor"
+        outputs:
+          nextCursor: "$.cursor"
+    post:
+      tags:
+        - "Deployments"
+      summary: "Create deployment"
+      description: "Create a deployment for bulk node management."
+      operationId: "create_deployment"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDeploymentRequest"
+        required: true
+      responses:
+        "201":
+          description: "Deployment created."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeploymentResponse"
+        "400":
+          description: "Deployment with this name already exists."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: "Forbidden."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: "Capacity or node template not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /v2/deployments/{id}:
+    get:
+      tags:
+        - "Deployments"
+      summary: "Get deployment"
+      description: "Retrieve a deployment by ID or name."
+      operationId: "get_deployment"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "depl_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(depl_[0-9a-zA-Z_-]{1,21})|(sfc:deployment:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+        - name: "expand"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              enum:
+                - "capacity"
+                - "node_template"
+          style: "form"
+          explode: true
+      responses:
+        "200":
+          description: "Deployment details."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeploymentResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Deployment not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    delete:
+      tags:
+        - "Deployments"
+      summary: "Delete deployment"
+      description: "Delete a deployment."
+      operationId: "delete_deployment"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "depl_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(depl_[0-9a-zA-Z_-]{1,21})|(sfc:deployment:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      responses:
+        "204":
+          description: "Deployment deleted."
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: "Forbidden."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: "Deployment not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    patch:
+      tags:
+        - "Deployments"
+      summary: "Update deployment"
+      description: "Update a deployment's configuration."
+      operationId: "patch_deployment"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "depl_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(depl_[0-9a-zA-Z_-]{1,21})|(sfc:deployment:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchDeploymentRequest"
+        required: true
+      responses:
+        "200":
+          description: "Deployment updated."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeploymentResponse"
+        "400":
+          description: "Deployment with this name already exists."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: "Forbidden."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: "Deployment not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /v2/images:
+    get:
+      tags:
+        - "Images"
+      summary: "List images"
+      description: "List all images owned by the authenticated user."
+      operationId: "list_images"
+      parameters:
+        - name: "workspace"
+          in: "query"
+          description: "Filter by workspace."
+          required: true
+          schema:
+            $ref: "#/components/schemas/ResourcePathOrId_WorkspaceId"
+        - name: "id"
+          in: "query"
+          description: "Filter by image ID (repeatable)."
+          required: false
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/ImageId"
+          style: "form"
+          explode: true
+        - name: "limit"
+          in: "query"
+          description: "Maximum number of results to return (1-200, default 50)."
+          required: false
+          schema:
+            type: "integer"
+            format: "u-int32"
+            default: 50
+            maximum: 200
+            minimum: 1
+        - name: "starting_after"
+          in: "query"
+          description: "Cursor for forward pagination (from a previous response's `cursor` field)."
+          required: false
+          schema:
+            $ref: "#/components/schemas/ImagesCursor"
+        - name: "ending_before"
+          in: "query"
+          description: "Cursor for backward pagination."
+          required: false
+          schema:
+            $ref: "#/components/schemas/ImagesCursor"
+      responses:
+        "200":
+          description: "Paginated list of images"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListImagesResponse"
+        "400":
+          description: "Bad request."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
+          description: "Unauthorized request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-pagination:
+        type: "cursor"
+        inputs:
+          - name: "starting_after"
+            in: "parameters"
+            type: "cursor"
+        outputs:
+          nextCursor: "$.cursor"
+    post:
+      tags:
+        - "Images"
+      summary: "Create image"
+      description: "Create an image and start a multipart upload."
+      operationId: "create_image"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StartUploadRequest"
+        required: true
+      responses:
+        "201":
+          description: "Image created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImageUploadResponse"
+        "400":
+          description: "Validation failed"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
+          description: "Unauthorized request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "409":
+          description: "Image already exists"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConflictError"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-name-override: "startUpload"
+  /v2/images/{id}:
+    get:
+      tags:
+        - "Images"
+      summary: "Get image"
+      description: "Retrieve an image by ID. Returns both user-owned and public images."
+      operationId: "fetch_image"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Image ID, name, or resource path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "image_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(image_[0-9a-zA-Z_-]{1,21})|(sfc:image:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      responses:
+        "200":
+          description: "Image details"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImageListEntry"
+        "401":
+          description: "Unauthorized request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Image not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    delete:
+      tags:
+        - "Images"
+      summary: "Delete image"
+      description: "Delete an image."
+      operationId: "delete_image"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Image ID, name, or resource path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "image_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(image_[0-9a-zA-Z_-]{1,21})|(sfc:image:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      responses:
+        "200":
+          description: "Image deleted"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteImageResponse"
+        "401":
+          description: "Unauthorized request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Image not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "409":
+          description: "Image is referenced by a node template"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConflictError"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /v2/images/{id}/complete:
+    post:
+      tags:
+        - "Images"
+      summary: "Complete image upload"
+      description: "Finalize a multipart image upload."
+      operationId: "complete_image_upload"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Image ID, name, or resource path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "image_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(image_[0-9a-zA-Z_-]{1,21})|(sfc:image:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompleteUploadRequest"
+        required: true
+      responses:
+        "200":
+          description: "Upload completed"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImageUploadResponse"
+        "400":
+          description: "Validation failed"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
+          description: "Unauthorized request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Image not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-name-override: "completeUpload"
+  /v2/images/{id}/download:
+    get:
+      tags:
+        - "Images"
+      summary: "Download image"
+      description: "Get a presigned URL to download an image."
+      operationId: "download_image"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Image ID, name, or resource path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "image_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(image_[0-9a-zA-Z_-]{1,21})|(sfc:image:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      responses:
+        "200":
+          description: "Download URL generated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImageDownloadResponse"
+        "401":
+          description: "Unauthorized request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Image not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "409":
+          description: "Image upload not completed"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConflictError"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-name-override: "download"
+  /v2/images/{id}/parts:
+    post:
+      tags:
+        - "Images"
+      summary: "Get upload part URL"
+      description: "Get a presigned URL to upload one part of a multipart image upload."
+      operationId: "create_image_upload_part_url"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Image ID, name, or resource path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "image_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(image_[0-9a-zA-Z_-]{1,21})|(sfc:image:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UploadPartRequest"
+        required: true
+      responses:
+        "200":
+          description: "Upload URL generated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadPartResponse"
+        "400":
+          description: "Validation failed"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
+          description: "Unauthorized request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Image not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-name-override: "uploadPart"
+  /v2/node_templates:
+    get:
+      tags:
+        - "Node Templates"
+      summary: "List node templates"
+      description: "List all node templates."
+      operationId: "list_node_templates"
+      parameters:
+        - name: "workspace"
+          in: "query"
+          description: "Filter by workspace."
+          required: true
+          schema:
+            $ref: "#/components/schemas/ResourcePathOrId_WorkspaceId"
+        - name: "id"
+          in: "query"
+          description: "Filter by node template ID or name (repeatable)."
+          required: false
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/ResourcePathOrId_NodeTemplateId"
+          style: "form"
+          explode: true
+        - name: "limit"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "u-int32"
+            default: 50
+            maximum: 50
+            minimum: 1
+        - name: "starting_after"
+          in: "query"
+          description: "Set to the response's `cursor` to fetch the next page."
+          required: false
+          schema:
+            $ref: "#/components/schemas/NodeTemplatesCursor"
+        - name: "ending_before"
+          in: "query"
+          description: "Set to the response's `cursor` to fetch the previous page."
+          required: false
+          schema:
+            $ref: "#/components/schemas/NodeTemplatesCursor"
+        - name: "include"
+          in: "query"
+          description: "Additional fields to include in the response."
+          required: false
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/NodeTemplateInclude"
+        - name: "expand"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              const: "image"
+              default: "image"
+              readOnly: true
+          style: "form"
+          explode: true
+      responses:
+        "200":
+          description: "Paginated list of node templates."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListNodeTemplatesResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-pagination:
+        type: "cursor"
+        inputs:
+          - name: "starting_after"
+            in: "parameters"
+            type: "cursor"
+        outputs:
+          nextCursor: "$.cursor"
+    post:
+      tags:
+        - "Node Templates"
+      summary: "Create node template"
+      description: "Create a reusable node configuration."
+      operationId: "create_node_template"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNodeTemplateRequest"
+        required: true
+      responses:
+        "201":
+          description: "Node template created."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NodeTemplateResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /v2/node_templates/{id}:
+    get:
+      tags:
+        - "Node Templates"
+      summary: "Get node template"
+      description: "Retrieve a node template by ID, resource path, or name."
+      operationId: "fetch_node_template"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(ntmpl_[0-9a-zA-Z_-]{1,21})|(sfc:node_template:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+        - name: "expand"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              const: "image"
+              default: "image"
+              readOnly: true
+          style: "form"
+          explode: true
+      responses:
+        "200":
+          description: "Node template details."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NodeTemplateResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Node template not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    delete:
+      tags:
+        - "Node Templates"
+      summary: "Delete node template"
+      description: "Delete a node template. The template must not be in use by any capacity."
+      operationId: "delete_node_template"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(ntmpl_[0-9a-zA-Z_-]{1,21})|(sfc:node_template:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      responses:
+        "204":
+          description: "Node template deleted."
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Node template not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: "Node template is in use."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /v2/nodes:
+    get:
+      tags:
+        - "Nodes"
+      summary: "List nodes"
+      description: "List all nodes."
+      operationId: "list_nodes"
+      parameters:
+        - name: "workspace"
+          in: "query"
+          description: "Filter by workspace."
+          required: true
+          schema:
+            $ref: "#/components/schemas/ResourcePathOrId_WorkspaceId"
+        - name: "id"
+          in: "query"
+          description: "Filter by node ID (repeatable)."
+          required: false
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/NodeId"
+          style: "form"
+          explode: true
+          example: "node_k3R-nX9vLm7Qp2Yw5Jd8F"
+        - name: "capacity"
+          in: "query"
+          description: "Filter by capacity."
+          required: false
+          schema:
+            $ref: "#/components/schemas/ResourcePathOrId_CapacityId"
+        - name: "status"
+          in: "query"
+          description: "Filter by node status (repeatable)."
+          required: false
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/NodeStatus"
+          style: "form"
+          explode: true
+        - name: "limit"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "u-int32"
+            default: 50
+            maximum: 200
+            minimum: 1
+        - name: "starting_after"
+          in: "query"
+          description: "Cursor for forward pagination (from a previous response's `cursor` field)."
+          required: false
+          schema:
+            $ref: "#/components/schemas/NodesCursor"
+        - name: "ending_before"
+          in: "query"
+          description: "Cursor for backward pagination."
+          required: false
+          schema:
+            $ref: "#/components/schemas/NodesCursor"
+        - name: "include"
+          in: "query"
+          description: "Additional fields to include in the response."
+          required: false
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/NodeInclude"
+        - name: "expand"
+          in: "query"
+          description: "Fields to expand with full objects instead of IDs."
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              enum:
+                - "capacity"
+                - "image"
+                - "deployment"
+          style: "form"
+          explode: true
+        - name: "tag"
+          in: "query"
+          description: "Filter by tag key-value pair (repeatable). Format: `key=value` (the `=` between key and value must be percent-encoded in the URL)."
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+          style: "form"
+          explode: true
+        - name: "tag_key"
+          in: "query"
+          description: "Filter by tag key existence (repeatable). Returns resources that have a tag with this key, regardless of the value."
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+          style: "form"
+          explode: true
+      responses:
+        "200":
+          description: "Paginated list of nodes."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListNodesResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Capacity not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-pagination:
+        type: "cursor"
+        inputs:
+          - name: "starting_after"
+            in: "parameters"
+            type: "cursor"
+        outputs:
+          nextCursor: "$.cursor"
+    post:
+      tags:
+        - "Nodes"
+      summary: "Create node"
+      description: "Create a node."
+      operationId: "create_node"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNodeRequest"
+        required: true
+      responses:
+        "201":
+          description: "Node created."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NodeResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: "Forbidden."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: "Capacity not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: "Validation error (e.g. capacity limit reached)."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /v2/nodes/{id}:
+    get:
+      tags:
+        - "Nodes"
+      summary: "Get node"
+      description: "Retrieve a node by ID or name."
+      operationId: "fetch_node"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "node_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(node_[0-9a-zA-Z_-]{1,21})|(sfc:node:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+        - name: "expand"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              enum:
+                - "capacity"
+                - "image"
+                - "deployment"
+          style: "form"
+          explode: true
+      responses:
+        "200":
+          description: "Node details."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NodeResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Node not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    delete:
+      tags:
+        - "Nodes"
+      summary: "Delete node"
+      description: "Delete a node."
+      operationId: "delete_node"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "node_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(node_[0-9a-zA-Z_-]{1,21})|(sfc:node:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      responses:
+        "204":
+          description: "Node deleted."
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Node not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "409":
+          description: "Node must be terminated before deletion."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConflictError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /v2/nodes/{id}/logs:
+    get:
+      tags:
+        - "Nodes"
+      summary: "Get node logs"
+      description: "Retrieve logs for a node."
+      operationId: "get_node_logs"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "node_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(node_[0-9a-zA-Z_-]{1,21})|(sfc:node:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+        - name: "seqnum_before"
+          in: "query"
+          description: "Return logs with `seqnum` less than or equal to this value."
+          required: false
+          schema:
+            type: "integer"
+            format: "u-int64"
+            minimum: 0
+        - name: "seqnum_after"
+          in: "query"
+          description: "Return logs with `seqnum` greater than or equal to this value."
+          required: false
+          schema:
+            type: "integer"
+            format: "u-int64"
+            minimum: 0
+        - name: "realtime_timestamp_before"
+          in: "query"
+          description: "Due to clock synchronization, some earlier log messages may have a realtime timestamp after this value."
+          required: false
+          schema:
+            $ref: "#/components/schemas/UnixEpoch"
+        - name: "realtime_timestamp_after"
+          in: "query"
+          description: "Due to clock synchronization, some later log messages may have a realtime timestamp before this value."
+          required: false
+          schema:
+            $ref: "#/components/schemas/UnixEpoch"
+        - name: "sort_by"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            enum:
+              - "seqnum"
+              - "-seqnum"
+        - name: "limit"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "u-int64"
+            default: 100
+            maximum: 2500
+            minimum: 1
+      responses:
+        "200":
+          description: "Log chunks."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NodeLogsResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Node not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-name-override: "getLogsForNode"
+  /v2/nodes/{id}/ssh:
+    get:
+      tags:
+        - "Nodes"
+      summary: "Get node SSH info"
+      description: "Retrieve SSH connection details for a node."
+      operationId: "get_node_ssh"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "node_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(node_[0-9a-zA-Z_-]{1,21})|(sfc:node:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      responses:
+        "200":
+          description: "SSH connection details."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NodeSshInfo"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "SSH details not available."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-name-override: "getSSHInfoForNode"
+  /v2/nodes/{id}/terminate:
+    post:
+      tags:
+        - "Nodes"
+      summary: "Terminate node"
+      description: "Terminates a running node. Terminated nodes can not be restarted."
+      operationId: "terminate_node"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "node_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(node_[0-9a-zA-Z_-]{1,21})|(sfc:node:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      responses:
+        "200":
+          description: "Node terminated."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NodeResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Node not found or already terminated."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /v2/orders:
+    get:
+      tags:
+        - "Orders"
+      summary: "List orders"
+      description: "List all orders."
+      operationId: "list_orders"
+      parameters:
+        - name: "id"
+          in: "query"
+          description: "Filter by order ID (repeatable)."
+          required: false
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/OrderId"
+          style: "form"
+          explode: true
+        - name: "capacity"
+          in: "query"
+          description: "Filter by capacity."
+          required: false
+          schema:
+            $ref: "#/components/schemas/ResourcePathOrId_CapacityId"
+        - name: "side"
+          in: "query"
+          required: false
+          schema:
+            $ref: "#/components/schemas/Side"
+        - name: "status"
+          in: "query"
+          description: "Filter by status (repeatable)."
+          required: false
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/OrderStatus"
+          style: "form"
+          explode: true
+        - name: "created_after"
+          in: "query"
+          required: false
+          schema:
+            $ref: "#/components/schemas/UnixEpoch"
+        - name: "created_before"
+          in: "query"
+          required: false
+          schema:
+            $ref: "#/components/schemas/UnixEpoch"
+        - name: "sort_by"
+          in: "query"
+          description: "Prefix with `-` for descending."
+          required: false
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/v2.OrderSortBy"
+            default: "-created_at"
+        - name: "limit"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "u-int32"
+            default: 50
+            maximum: 200
+            minimum: 1
+        - name: "starting_after"
+          in: "query"
+          description: "Set to the response's `cursor` to fetch the next page."
+          required: false
+          schema:
+            $ref: "#/components/schemas/OrdersCursor"
+        - name: "ending_before"
+          in: "query"
+          description: "Set to the response's `cursor` to fetch the previous page."
+          required: false
+          schema:
+            $ref: "#/components/schemas/OrdersCursor"
+        - name: "expand"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              const: "capacity"
+              default: "capacity"
+              readOnly: true
+          style: "form"
+          explode: true
+      responses:
+        "200":
+          description: "Paginated list of orders."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v2.ListOrdersResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-pagination:
+        type: "cursor"
+        inputs:
+          - name: "starting_after"
+            in: "parameters"
+            type: "cursor"
+        outputs:
+          nextCursor: "$.cursor"
+    post:
+      tags:
+        - "Orders"
+      summary: "Create order"
+      description: "Place a buy or sell order. Orders fill completely or not at all. All nodes fill in a single zone. Order filling is asynchronous; poll `GET /v2/orders/{id}` to check status."
+      operationId: "create_order"
+      parameters:
+        - name: "Idempotency-Key"
+          in: "header"
+          description: "Unique key to ensure idempotent order creation. If provided, duplicate requests with the same key will not place a new order and return the original order."
+          required: false
+          schema:
+            type:
+              - "string"
+              - "null"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/v2.CreateOrderRequest"
+        required: true
+      responses:
+        "201":
+          description: "Order created."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v2.OrderResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "402":
+          description: "Insufficient balance."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentRequiredError"
+        "403":
+          description: "Forbidden."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: "Not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "503":
+          description: "Service temporarily unavailable. Try again later."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceUnavailableError"
+  /v2/orders/{id}:
+    get:
+      tags:
+        - "Orders"
+      summary: "Get order"
+      description: "Retrieve an order by ID."
+      operationId: "fetch_order"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Order ID"
+          required: true
+          schema:
+            $ref: "#/components/schemas/OrderId"
+          example: "ordr_xyz789"
+        - name: "expand"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              const: "capacity"
+              default: "capacity"
+              readOnly: true
+          style: "form"
+          explode: true
+      responses:
+        "200":
+          description: "Order details."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v2.OrderResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Order not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    delete:
+      tags:
+        - "Orders"
+      summary: "Cancel order"
+      description: "Request cancellation of an order. This is asynchronous — poll `GET /v2/orders/{id}` to confirm the status has changed to cancelled."
+      operationId: "cancel_order"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Order ID"
+          required: true
+          schema:
+            $ref: "#/components/schemas/OrderId"
+          example: "ordr_xyz789"
+      responses:
+        "204":
+          description: "Order cancellation initiated."
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Order not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: "Order cannot be cancelled."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-name-override: "cancel"
+  /v2/procurements:
+    get:
+      tags:
+        - "Procurements"
+      summary: "List procurements"
+      description: "List all procurements."
+      operationId: "list_procurements"
+      parameters:
+        - name: "workspace"
+          in: "query"
+          description: "Filter by workspace."
+          required: true
+          schema:
+            $ref: "#/components/schemas/ResourcePathOrId_WorkspaceId"
+        - name: "capacity"
+          in: "query"
+          required: false
+          schema:
+            $ref: "#/components/schemas/ResourcePathOrId_CapacityId"
+        - name: "limit"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "u-int32"
+            default: 50
+            maximum: 50
+            minimum: 1
+        - name: "starting_after"
+          in: "query"
+          required: false
+          schema:
+            $ref: "#/components/schemas/ProcurementsCursor"
+        - name: "ending_before"
+          in: "query"
+          required: false
+          schema:
+            $ref: "#/components/schemas/ProcurementsCursor"
+        - name: "expand"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              const: "capacity"
+              default: "capacity"
+              readOnly: true
+          style: "form"
+          explode: true
+      responses:
+        "200":
+          description: "Paginated list of procurements."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListProcurementsResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+      x-speakeasy-pagination:
+        type: "cursor"
+        inputs:
+          - name: "starting_after"
+            in: "parameters"
+            type: "cursor"
+        outputs:
+          nextCursor: "$.cursor"
+    post:
+      tags:
+        - "Procurements"
+      summary: "Create procurement"
+      description: "Create a market automation that maintains capacity by placing buy/sell orders."
+      operationId: "create_procurement"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProcurementRequest"
+        required: true
+      responses:
+        "201":
+          description: "Procurement created."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProcurementResponse"
+        "400":
+          description: "Validation error (e.g. duplicate name)."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: "Forbidden."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "409":
+          description: "Capacity already has a procurement."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConflictError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /v2/procurements/{id}:
+    get:
+      tags:
+        - "Procurements"
+      summary: "Get procurement"
+      description: "Retrieve a procurement by ID or name."
+      operationId: "get_procurement"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "proc_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(proc_[0-9a-zA-Z_-]{1,21})|(sfc:procurement:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+        - name: "expand"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              const: "capacity"
+              default: "capacity"
+              readOnly: true
+          style: "form"
+          explode: true
+      responses:
+        "200":
+          description: "Procurement details."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProcurementResponse"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "404":
+          description: "Procurement not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    delete:
+      tags:
+        - "Procurements"
+      summary: "Delete procurement"
+      description: "Delete a procurement. Standing orders are cancelled automatically."
+      operationId: "delete_procurement"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "proc_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(proc_[0-9a-zA-Z_-]{1,21})|(sfc:procurement:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      responses:
+        "204":
+          description: "Procurement deleted."
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: "Forbidden."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: "Procurement not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    patch:
+      tags:
+        - "Procurements"
+      summary: "Update procurement"
+      description: "Update a procurement's configuration."
+      operationId: "patch_procurement"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+            examples:
+              - "proc_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "(proc_[0-9a-zA-Z_-]{1,21})|(sfc:procurement:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchProcurementRequest"
+        required: true
+      responses:
+        "200":
+          description: "Procurement updated."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProcurementResponse"
+        "400":
+          description: "Validation error (e.g. duplicate name)."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "401":
+          description: "Unauthorized."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: "Forbidden."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
+          description: "Procurement not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+        "422":
+          description: "Validation failed."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnprocessableEntityError"
+        "500":
+          description: "Internal server error."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+components:
+  schemas:
+    AllocationSchedule:
+      type: "object"
+      required:
+        - "total"
+        - "by_zone"
+      properties:
+        total:
+          $ref: "#/components/schemas/Schedule"
+          description: "Combined allocation schedule across all zones. Only includes current and future schedule."
+        by_zone:
+          type: "object"
+          description: "Allocation schedule on a zone-by-zone basis. Only includes current and future schedule."
+          additionalProperties:
+            $ref: "#/components/schemas/Schedule"
+          propertyNames:
+            type: "string"
+            example: "richmond"
+    AutomationStatus:
+      type: "string"
+      enum:
+        - "info"
+        - "warning"
+        - "error"
+    BadRequestError:
+      type: "object"
+      required:
+        - "error"
+      properties:
+        error:
+          type: "object"
+          required:
+            - "type"
+            - "message"
+          properties:
+            type:
+              type: "string"
+              const: "invalid_request_error"
+              default: "invalid_request_error"
+              readOnly: true
+            message:
+              type: "string"
+              x-speakeasy-error-message: true
+            details:
+              type: "array"
+              items:
+                $ref: "#/components/schemas/ErrorDetail"
+    CapacitiesCursor:
+      type: "string"
+      examples:
+        - "capc_gqXR7s0Kj5mHvE2wNpLc4Q"
+      pattern: "^capc_[A-Za-z0-9_-]+$"
+    CapacityExpand:
+      type: "string"
+      enum:
+        - "procurements"
+        - "deployments"
+    CapacityId:
+      type: "string"
+      examples:
+        - "cap_k3R-nX9vLm7Qp2Yw5Jd8F"
+      pattern: "cap_[0-9a-zA-Z_-]{1,21}"
+    CapacityKind:
+      type: "string"
+      description: "Capacity kind determines what operations are allowed on a capacity.\n- `Market`: User-created capacities. Fully manageable. - `Originating`: Provider capacities for selling compute. Cannot receive buy orders or be deleted. - `ReadOnly`: System-managed capacities. Cannot be modified through the API."
+      enum:
+        - "market"
+        - "originating"
+        - "read_only"
+    CapacityResponse:
+      type: "object"
+      required:
+        - "object"
+        - "id"
+        - "name"
+        - "owner"
+        - "workspace"
+        - "resource_path"
+        - "kind"
+        - "zones"
+        - "allocation_schedule"
+        - "created_at"
+      properties:
+        object:
+          type: "string"
+          const: "capacity"
+          default: "capacity"
+          readOnly: true
+        id:
+          $ref: "#/components/schemas/CapacityId"
+        name:
+          $ref: "#/components/schemas/Name"
+        owner:
+          type: "string"
+        workspace:
+          type: "string"
+        resource_path:
+          type: "string"
+        kind:
+          $ref: "#/components/schemas/CapacityKind"
+        zones:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ZoneName"
+          description: "Datacenter locations orders into this capacity can acquire compute from."
+          minItems: 1
+        allocation_schedule:
+          $ref: "#/components/schemas/AllocationSchedule"
+          description: "Allocation schedule of this capacity. Add to the schedule by placing buy orders into this capacity."
+        procurements:
+          $ref: "#/components/schemas/ExpandableList_ProcurementId_ProcurementSummary"
+          description: "Active procurements targeting this capacity. Returns IDs by default, or summaries when `expand=procurements` is set."
+        deployments:
+          $ref: "#/components/schemas/ExpandableList_DeploymentId_DeploymentSummary"
+          description: "Active deployments targeting this capacity. Returns IDs by default, or summaries when `expand=deployments` is set."
+        created_at:
+          $ref: "#/components/schemas/UnixEpoch"
+        tags:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Tags"
+              description: "Metadata tags attached to this capacity."
+    CapacitySummary:
+      type: "object"
+      required:
+        - "id"
+        - "name"
+      properties:
+        id:
+          $ref: "#/components/schemas/CapacityId"
+        name:
+          $ref: "#/components/schemas/Name"
+    CompleteUploadRequest:
+      type: "object"
+      description: "Complete a multipart image upload."
+      required:
+        - "sha256"
+      properties:
+        sha256:
+          type: "string"
+          description: "Not verified on upload; used during node boot to verify integrity."
+          maxLength: 64
+          minLength: 64
+          pattern: "^[a-f0-9]{64}$"
+    ConflictError:
+      type: "object"
+      required:
+        - "error"
+      properties:
+        error:
+          type: "object"
+          required:
+            - "type"
+            - "message"
+          properties:
+            type:
+              type: "string"
+              const: "conflict"
+              default: "conflict"
+              readOnly: true
+            message:
+              type: "string"
+              x-speakeasy-error-message: true
+            details:
+              type: "array"
+              items:
+                $ref: "#/components/schemas/ErrorDetail"
+    CreateCapacityRequest:
+      type: "object"
+      required:
+        - "workspace"
+        - "zones"
+      properties:
+        name:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Name"
+              description: "Unique name for this capacity."
+        workspace:
+          $ref: "#/components/schemas/ResourcePathOrId_WorkspaceId"
+          description: "Workspace to create this capacity in."
+        zones:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ZoneName"
+          description: "Datacenter locations orders into this capacity can acquire compute from."
+          example:
+            - "richmond"
+          minItems: 1
+        tags:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Tags"
+              description: "Optional metadata tags for this capacity."
+    CreateDeploymentRequest:
+      type: "object"
+      required:
+        - "capacity"
+        - "node_template"
+        - "target_node_count"
+      properties:
+        name:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Name"
+        capacity:
+          $ref: "#/components/schemas/ResourcePathOrId_CapacityId"
+        node_template:
+          $ref: "#/components/schemas/ResourcePathOrId_NodeTemplateId"
+        target_node_count:
+          type: "integer"
+          format: "int32"
+        node_name_template:
+          $ref: "#/components/schemas/NameTemplate"
+    CreateFeatureFlagRequest:
+      type: "object"
+      required:
+        - "feature_flag"
+        - "account_regex"
+        - "enabled"
+      properties:
+        feature_flag:
+          type: "string"
+        account_regex:
+          type: "string"
+        enabled:
+          type: "boolean"
+    CreateFeatureFlagResponse:
+      type: "object"
+      required:
+        - "object"
+        - "feature_flag_id"
+        - "feature_flag"
+        - "account_regex"
+        - "enabled"
+      properties:
+        object:
+          type: "string"
+          const: "feature_flag"
+          default: "feature_flag"
+          readOnly: true
+        feature_flag_id:
+          type: "string"
+        feature_flag:
+          type: "string"
+        account_regex:
+          type: "string"
+        enabled:
+          type: "boolean"
+    CreateNodeRequest:
+      type: "object"
+      required:
+        - "capacity"
+        - "image"
+      properties:
+        name:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Name"
+        capacity:
+          $ref: "#/components/schemas/ResourcePathOrId_CapacityId"
+        image:
+          $ref: "#/components/schemas/ResourcePathOrId_ImageId"
+        cloud_init_user_data:
+          type: "string"
+          format: "byte"
+          description: "Base64-encoded [cloud-init user data](https://cloudinit.readthedocs.io/en/latest/explanation/format/index.html). Maximum 64KB. Currently only the [User-Data Script](https://cloudinit.readthedocs.io/en/latest/explanation/format/user-data-script.html#user-data-script) format is supported."
+          example: "IyEvYmluL2Jhc2gKZWNobyBoZWxsbyB3b3JsZAo="
+          contentEncoding: "base64"
+        tags:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Tags"
+              description: "Optional metadata tags for this node."
+    CreateNodeTemplateRequest:
+      type: "object"
+      required:
+        - "workspace"
+        - "image"
+      properties:
+        name:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Name"
+        workspace:
+          $ref: "#/components/schemas/ResourcePathOrId_WorkspaceId"
+          description: "Workspace to create this template in."
+        image:
+          $ref: "#/components/schemas/ResourcePathOrId_ImageId"
+          description: "Machine image to use when starting nodes with this template. Accepts name or ID."
+        cloud_init_user_data:
+          type: "string"
+          format: "byte"
+          description: "Base64-encoded [cloud-init user data](https://cloudinit.readthedocs.io/en/latest/explanation/format/index.html). Maximum 64KB. Currently only the [User-Data Script](https://cloudinit.readthedocs.io/en/latest/explanation/format/user-data-script.html#user-data-script) format is supported."
+          example: "IyEvYmluL2Jhc2gKZWNobyBoZWxsbyB3b3JsZAo="
+          contentEncoding: "base64"
+    CreateProcurementRequest:
+      type: "object"
+      required:
+        - "target"
+        - "capacity"
+        - "min_sell_price_dollars_per_node_hour"
+        - "max_buy_price_dollars_per_node_hour"
+        - "managed_window_minutes"
+      properties:
+        name:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Name"
+        target:
+          $ref: "#/components/schemas/ProcurementTarget"
+        capacity:
+          type: "string"
+        min_sell_price_dollars_per_node_hour:
+          $ref: "#/components/schemas/DollarsPerNodeHour"
+          description: "Minimum price to sell compute for ($/node-hour). Must contain decimal point. Will be rounded to nearest multiple of $0.000060."
+        max_buy_price_dollars_per_node_hour:
+          $ref: "#/components/schemas/DollarsPerNodeHour"
+          description: "Maximum price to buy compute ($/node-hour). Must contain decimal point. Will be rounded to nearest multiple of $0.000060."
+        managed_window_minutes:
+          type: "integer"
+          format: "int32"
+          description: "How far ahead (in minutes) the procurement buys and sells compute. Higher values secure compute further in advance but commit to longer windows that may need to be sold when scaling down, potentially at a loss. Lower values reduce waste but risk compute being unavailable. Orders are placed in 1-hour blocks, so the furthest hour is secured up to `managed_window_minutes - 60` minutes before it begins."
+          maximum: 1440
+          minimum: 60
+        enabled:
+          type: "boolean"
+          description: "Enable/disable the procurement."
+          default: true
+    CreateTokenRequest:
+      type: "object"
+      required:
+        - "name"
+      properties:
+        name:
+          $ref: "#/components/schemas/Name"
+        expires_at:
+          type:
+            - "integer"
+            - "null"
+          format: "int64"
+          description: "Optional expiry as a Unix timestamp (seconds since epoch)."
+        role_ids:
+          type:
+            - "array"
+            - "null"
+          items:
+            $ref: "#/components/schemas/RoleId"
+          description: "Optional list of role IDs. A grant is created for each role in the same transaction."
+    DeleteFeatureFlagRequest:
+      type: "object"
+      required:
+        - "feature_flag_id"
+      properties:
+        feature_flag_id:
+          type: "string"
+    DeleteFeatureFlagResponse:
+      type: "object"
+      required:
+        - "object"
+        - "feature_flag_id"
+      properties:
+        object:
+          type: "string"
+          const: "feature_flag"
+          default: "feature_flag"
+          readOnly: true
+        feature_flag_id:
+          type: "string"
+    DeleteImageResponse:
+      type: "object"
+      required:
+        - "object"
+        - "deleted"
+        - "name"
+      properties:
+        object:
+          type: "string"
+          const: "image"
+          default: "image"
+          readOnly: true
+        deleted:
+          type: "boolean"
+        name:
+          $ref: "#/components/schemas/Name"
+    DeploymentExpand:
+      type: "string"
+      enum:
+        - "capacity"
+        - "node_template"
+    DeploymentId:
+      type: "string"
+      examples:
+        - "depl_k3R-nX9vLm7Qp2Yw5Jd8F"
+      pattern: "depl_[0-9a-zA-Z_-]{1,21}"
+    DeploymentResponse:
+      type: "object"
+      required:
+        - "object"
+        - "id"
+        - "name"
+        - "owner"
+        - "workspace"
+        - "resource_path"
+        - "capacity"
+        - "node_template"
+        - "target_node_count"
+        - "node_name_template"
+        - "status"
+        - "created_at"
+        - "updated_at"
+      properties:
+        object:
+          type: "string"
+          const: "deployment"
+          default: "deployment"
+          readOnly: true
+        id:
+          $ref: "#/components/schemas/DeploymentId"
+        name:
+          $ref: "#/components/schemas/Name"
+        owner:
+          type: "string"
+        workspace:
+          type: "string"
+        resource_path:
+          type: "string"
+        capacity:
+          $ref: "#/components/schemas/Expandable_CapacityId_CapacitySummary"
+        node_template:
+          $ref: "#/components/schemas/Expandable_NodeTemplateId_NodeTemplateSummary"
+        target_node_count:
+          type: "integer"
+          format: "int32"
+        node_name_template:
+          $ref: "#/components/schemas/NameTemplate"
+        status:
+          $ref: "#/components/schemas/ReconciliationStatus"
+        created_at:
+          $ref: "#/components/schemas/UnixEpoch"
+        updated_at:
+          $ref: "#/components/schemas/UnixEpoch"
+    DeploymentSummary:
+      type: "object"
+      required:
+        - "id"
+        - "name"
+      properties:
+        id:
+          $ref: "#/components/schemas/DeploymentId"
+        name:
+          $ref: "#/components/schemas/Name"
+    DeploymentsCursor:
+      type: "string"
+      examples:
+        - "deplc_gqXR7s0Kj5mHvE2wNpLc4Q"
+      pattern: "^deplc_[A-Za-z0-9_-]+$"
+    DollarsPerNodeHour:
+      type: "string"
+      description: "Price rate in dollars per node-hour."
+      examples:
+        - "2.500000"
+      pattern: "^\\d+\\.\\d+$"
+    ErrorContent:
+      type: "object"
+      required:
+        - "type"
+        - "message"
+      properties:
+        type:
+          $ref: "#/components/schemas/ErrorType"
+        message:
+          type: "string"
+        details:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ErrorDetail"
+    ErrorDetail:
+      type: "object"
+      required:
+        - "code"
+        - "message"
+      properties:
+        field:
+          type:
+            - "string"
+            - "null"
+          description: "The field that caused the error (for validation errors)"
+        code:
+          type: "string"
+          description: "Specific error code for this detail"
+        message:
+          type: "string"
+          description: "Human-readable error message"
+    ErrorType:
+      type: "string"
+      enum:
+        - "api_error"
+        - "invalid_request_error"
+        - "authentication_error"
+        - "idempotency_error"
+        - "conflict"
+        - "not_found"
+        - "request_timed_out"
+        - "forbidden"
+        - "not_implemented"
+        - "upgrade_required"
+        - "payment_required"
+        - "service_unavailable"
+        - "unprocessable_entity"
+        - "gone"
+    ExpandableList_DeploymentId_DeploymentSummary:
+      anyOf:
+        - type: "array"
+          items:
+            type: "string"
+            examples:
+              - "depl_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "depl_[0-9a-zA-Z_-]{1,21}"
+        - type: "array"
+          items:
+            type: "object"
+            required:
+              - "id"
+              - "name"
+            properties:
+              id:
+                $ref: "#/components/schemas/DeploymentId"
+              name:
+                $ref: "#/components/schemas/Name"
+      description: "Array of IDs (default) or expanded summaries when using expand parameter"
+    ExpandableList_ProcurementId_ProcurementSummary:
+      anyOf:
+        - type: "array"
+          items:
+            type: "string"
+            examples:
+              - "proc_k3R-nX9vLm7Qp2Yw5Jd8F"
+            pattern: "proc_[0-9a-zA-Z_-]{1,21}"
+        - type: "array"
+          items:
+            type: "object"
+            required:
+              - "id"
+              - "name"
+            properties:
+              id:
+                $ref: "#/components/schemas/ProcurementId"
+              name:
+                $ref: "#/components/schemas/Name"
+      description: "Array of IDs (default) or expanded summaries when using expand parameter"
+    Expandable_CapacityId_CapacitySummary:
+      anyOf:
+        - type: "string"
+          examples:
+            - "cap_k3R-nX9vLm7Qp2Yw5Jd8F"
+          pattern: "cap_[0-9a-zA-Z_-]{1,21}"
+        - type: "object"
+          required:
+            - "id"
+            - "name"
+          properties:
+            id:
+              $ref: "#/components/schemas/CapacityId"
+            name:
+              $ref: "#/components/schemas/Name"
+      description: "ID (default) or expanded summary when using expand parameter"
+    Expandable_DeploymentId_DeploymentSummary:
+      anyOf:
+        - type: "string"
+          examples:
+            - "depl_k3R-nX9vLm7Qp2Yw5Jd8F"
+          pattern: "depl_[0-9a-zA-Z_-]{1,21}"
+        - type: "object"
+          required:
+            - "id"
+            - "name"
+          properties:
+            id:
+              $ref: "#/components/schemas/DeploymentId"
+            name:
+              $ref: "#/components/schemas/Name"
+      description: "ID (default) or expanded summary when using expand parameter"
+    Expandable_ImageId_ImageSummary:
+      anyOf:
+        - type: "string"
+          examples:
+            - "image_k3R-nX9vLm7Qp2Yw5Jd8F"
+          pattern: "image_[0-9a-zA-Z_-]{1,21}"
+        - type: "object"
+          required:
+            - "id"
+            - "name"
+          properties:
+            id:
+              $ref: "#/components/schemas/ImageId"
+            name:
+              $ref: "#/components/schemas/Name"
+      description: "ID (default) or expanded summary when using expand parameter"
+    Expandable_NodeTemplateId_NodeTemplateSummary:
+      anyOf:
+        - type: "string"
+          examples:
+            - "ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F"
+          pattern: "ntmpl_[0-9a-zA-Z_-]{1,21}"
+        - type: "object"
+          required:
+            - "id"
+            - "name"
+          properties:
+            id:
+              $ref: "#/components/schemas/NodeTemplateId"
+            name:
+              $ref: "#/components/schemas/Name"
+      description: "ID (default) or expanded summary when using expand parameter"
+    ForbiddenError:
+      type: "object"
+      required:
+        - "error"
+      properties:
+        error:
+          type: "object"
+          required:
+            - "type"
+            - "message"
+          properties:
+            type:
+              type: "string"
+              const: "forbidden"
+              default: "forbidden"
+              readOnly: true
+            message:
+              type: "string"
+              x-speakeasy-error-message: true
+    ImageDownloadResponse:
+      type: "object"
+      required:
+        - "url"
+        - "expires_at"
+        - "sha256"
+        - "size"
+      properties:
+        url:
+          type: "string"
+          description: "Presigned download URL."
+        expires_at:
+          $ref: "#/components/schemas/UnixEpoch"
+        sha256:
+          type: "string"
+          description: "For integrity verification."
+          example: "e3b0c44298fc1c149af..."
+          maxLength: 64
+          minLength: 64
+          pattern: "^[a-f0-9]{64}$"
+        size:
+          type: "integer"
+          format: "u-int64"
+          description: "Image size in bytes."
+          minimum: 0
+    ImageId:
+      type: "string"
+      examples:
+        - "image_k3R-nX9vLm7Qp2Yw5Jd8F"
+      pattern: "image_[0-9a-zA-Z_-]{1,21}"
+    ImageListEntry:
+      type: "object"
+      required:
+        - "object"
+        - "id"
+        - "name"
+        - "owner"
+        - "workspace"
+        - "resource_path"
+        - "upload_status"
+        - "created_at"
+      properties:
+        object:
+          type: "string"
+          const: "image"
+          default: "image"
+          readOnly: true
+        id:
+          $ref: "#/components/schemas/ImageId"
+        name:
+          $ref: "#/components/schemas/Name"
+        owner:
+          type: "string"
+        workspace:
+          type: "string"
+        resource_path:
+          type: "string"
+        upload_status:
+          $ref: "#/components/schemas/ImageUploadStatus"
+        created_at:
+          $ref: "#/components/schemas/UnixEpoch"
+        provider:
+          type:
+            - "string"
+            - "null"
+        sha256:
+          type:
+            - "string"
+            - "null"
+          maxLength: 64
+          minLength: 64
+          pattern: "^[a-f0-9]{64}$"
+    ImageSummary:
+      type: "object"
+      required:
+        - "id"
+        - "name"
+      properties:
+        id:
+          $ref: "#/components/schemas/ImageId"
+        name:
+          $ref: "#/components/schemas/Name"
+    ImageUploadResponse:
+      type: "object"
+      required:
+        - "object"
+        - "id"
+        - "name"
+        - "owner"
+        - "workspace"
+        - "resource_path"
+        - "upload_status"
+        - "created_at"
+      properties:
+        object:
+          type: "string"
+          const: "image"
+          default: "image"
+          readOnly: true
+        id:
+          $ref: "#/components/schemas/ImageId"
+        name:
+          $ref: "#/components/schemas/Name"
+        owner:
+          type: "string"
+        workspace:
+          type: "string"
+        resource_path:
+          type: "string"
+        upload_status:
+          $ref: "#/components/schemas/ImageUploadStatus"
+        sha256:
+          type:
+            - "string"
+            - "null"
+          maxLength: 64
+          minLength: 64
+          pattern: "^[a-f0-9]{64}$"
+        created_at:
+          $ref: "#/components/schemas/UnixEpoch"
+    ImageUploadStatus:
+      type: "string"
+      enum:
+        - "started"
+        - "uploading"
+        - "completed"
+        - "failed"
+    ImagesCursor:
+      type: "string"
+      examples:
+        - "imagec_gqXR7s0Kj5mHvE2wNpLc4Q"
+      pattern: "^imagec_[A-Za-z0-9_-]+$"
+    InternalServerError:
+      type: "object"
+      required:
+        - "error"
+      properties:
+        error:
+          type: "object"
+          required:
+            - "type"
+            - "message"
+          properties:
+            type:
+              type: "string"
+              const: "api_error"
+              default: "api_error"
+              readOnly: true
+            message:
+              type: "string"
+              x-speakeasy-error-message: true
+    ListCapacitiesResponse:
+      type: "object"
+      required:
+        - "object"
+        - "has_more"
+        - "data"
+      properties:
+        object:
+          type: "string"
+          const: "list"
+          default: "list"
+          readOnly: true
+        cursor:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/CapacitiesCursor"
+              description: "Pass as `starting_after` or `ending_before` to paginate."
+        has_more:
+          type: "boolean"
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/CapacityResponse"
+    ListDeploymentsResponse:
+      type: "object"
+      required:
+        - "object"
+        - "has_more"
+        - "data"
+      properties:
+        object:
+          type: "string"
+          const: "list"
+          default: "list"
+          readOnly: true
+        cursor:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/DeploymentsCursor"
+        has_more:
+          type: "boolean"
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/DeploymentResponse"
+    ListImagesResponse:
+      type: "object"
+      required:
+        - "object"
+        - "has_more"
+        - "data"
+      properties:
+        object:
+          type: "string"
+          const: "list"
+          default: "list"
+          readOnly: true
+        cursor:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/ImagesCursor"
+        has_more:
+          type: "boolean"
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ImageListEntry"
+    ListNodeTemplatesResponse:
+      type: "object"
+      required:
+        - "object"
+        - "has_more"
+        - "data"
+      properties:
+        object:
+          type: "string"
+          const: "list"
+          default: "list"
+          readOnly: true
+        cursor:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/NodeTemplatesCursor"
+              description: "Pass as `starting_after` or `ending_before` to paginate."
+        has_more:
+          type: "boolean"
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/NodeTemplateResponse"
+    ListNodesResponse:
+      type: "object"
+      required:
+        - "object"
+        - "has_more"
+        - "data"
+      properties:
+        object:
+          type: "string"
+          const: "list"
+          default: "list"
+          readOnly: true
+        cursor:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/NodesCursor"
+              description: "Pass as `starting_after` or `ending_before` to paginate."
+        has_more:
+          type: "boolean"
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/NodeResponse"
+    ListProcurementsResponse:
+      type: "object"
+      required:
+        - "object"
+        - "has_more"
+        - "data"
+      properties:
+        object:
+          type: "string"
+          const: "list"
+          default: "list"
+          readOnly: true
+        cursor:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/ProcurementsCursor"
+        has_more:
+          type: "boolean"
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ProcurementResponse"
+    ListTokensResponse:
+      type: "object"
+      required:
+        - "object"
+        - "url"
+        - "data"
+        - "has_more"
+        - "total_count"
+      properties:
+        object:
+          type: "string"
+          const: "list"
+          default: "list"
+          readOnly: true
+        url:
+          type: "string"
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/TokenResponse"
+        has_more:
+          type: "boolean"
+        total_count:
+          type: "integer"
+          format: "int64"
+        cursor:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/TokensCursor"
+              description: "Pass as `starting_after` or `ending_before` to paginate."
+    Name:
+      type: "string"
+      examples:
+        - "my-resource-name"
+      maxLength: 255
+      minLength: 1
+      pattern: "[a-zA-Z0-9][a-zA-Z0-9._-]{0,254}"
+    NameTemplate:
+      type: "string"
+      description: "A name template using {{variable}} syntax. Available variables: {{adjective}} (~128 random adjectives), {{noun}} (~128 random nouns), {{nanoid(N)}} (N-character alphanumeric identifier, 1 ≤ N ≤ 21). The template must produce enough unique combinations to avoid collisions — equivalent to at least the default template {{adjective}}-{{noun}}-{{nanoid(6)}} (~1 quadrillion possibilities). Must start with an alphanumeric character. Resolved names are limited to 255 characters."
+      examples:
+        - "my-fleet-{{nanoid(9)}}"
+      maxLength: 512
+    NodeCountTag:
+      type: "string"
+      const: "node_count"
+      default: "node_count"
+      readOnly: true
+    NodeExpand:
+      type: "string"
+      enum:
+        - "capacity"
+        - "image"
+        - "deployment"
+    NodeId:
+      type: "string"
+      examples:
+        - "node_k3R-nX9vLm7Qp2Yw5Jd8F"
+      pattern: "node_[0-9a-zA-Z_-]{1,21}"
+    NodeInclude:
+      type: "string"
+      const: "cloud_init_user_data"
+      default: "cloud_init_user_data"
+      readOnly: true
+    NodeLogChunk:
+      type: "object"
+      required:
+        - "timestamp_realtime"
+        - "timestamp_monotonic_secs"
+        - "timestamp_monotonic_nanos"
+        - "seqnum"
+        - "data"
+      properties:
+        timestamp_realtime:
+          $ref: "#/components/schemas/UnixEpoch"
+          description: "Wall-clock time. Unix timestamp."
+        timestamp_monotonic_secs:
+          type: "integer"
+          format: "int64"
+          description: "Monotonic clock seconds."
+        timestamp_monotonic_nanos:
+          type: "integer"
+          format: "u-int32"
+          description: "Nanosecond component of the monotonic clock."
+          minimum: 0
+        seqnum:
+          type: "integer"
+          format: "u-int64"
+          minimum: 0
+        data:
+          type: "string"
+          format: "byte"
+          description: "Base-64 encoded raw console output."
+          example: "SGVsbG8gV29ybGQK"
+          contentEncoding: "base64"
+    NodeLogsResponse:
+      type: "object"
+      required:
+        - "object"
+        - "data"
+      properties:
+        object:
+          type: "string"
+          const: "list"
+          default: "list"
+          readOnly: true
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/NodeLogChunk"
+    NodeResponse:
+      type: "object"
+      required:
+        - "object"
+        - "id"
+        - "name"
+        - "owner"
+        - "workspace"
+        - "resource_path"
+        - "status"
+        - "capacity"
+        - "created_at"
+        - "image"
+        - "cloud_init_user_data_used"
+      properties:
+        object:
+          type: "string"
+          const: "node"
+          default: "node"
+          readOnly: true
+        id:
+          $ref: "#/components/schemas/NodeId"
+        name:
+          $ref: "#/components/schemas/Name"
+        owner:
+          type: "string"
+        workspace:
+          type: "string"
+        resource_path:
+          type: "string"
+        status:
+          $ref: "#/components/schemas/NodeStatus"
+        zone:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/ZoneName"
+              description: "Zone this node is running in. Only present when assigned to a physical node."
+        capacity:
+          $ref: "#/components/schemas/Expandable_CapacityId_CapacitySummary"
+          description: "Capacity this node is utilizing."
+        created_at:
+          $ref: "#/components/schemas/UnixEpoch"
+        image:
+          $ref: "#/components/schemas/Expandable_ImageId_ImageSummary"
+          description: "Image this node was launched from."
+        deployment:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Expandable_DeploymentId_DeploymentSummary"
+              description: "Deployment managing this node, if any."
+        cloud_init_user_data_used:
+          type: "boolean"
+          description: "Whether cloud-init user data is configured for this node."
+        cloud_init_user_data:
+          type: "string"
+          format: "byte"
+          description: "Base64-encoded [cloud-init user data](https://cloudinit.readthedocs.io/en/latest/explanation/format/index.html). Currently only the [User-Data Script](https://cloudinit.readthedocs.io/en/latest/explanation/format/user-data-script.html#user-data-script) format is supported."
+          example: "IyEvYmluL2Jhc2gKZWNobyBoZWxsbyB3b3JsZAo="
+          contentEncoding: "base64"
+        tags:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Tags"
+              description: "Metadata tags attached to this node."
+    NodeSshHostKey:
+      type: "object"
+      required:
+        - "key_type"
+        - "key"
+      properties:
+        key_type:
+          type: "string"
+          description: "Key algorithm."
+          examples:
+            - "ssh-ed25519"
+            - "ssh-rsa"
+        key:
+          type: "string"
+          format: "byte"
+          description: "Base64-encoded public key."
+          example: "AAAAC3NzaC1lZDI1NTE5AAAAI..."
+          contentEncoding: "base64"
+    NodeSshInfo:
+      type: "object"
+      required:
+        - "hostname"
+        - "port"
+        - "host_keys"
+      properties:
+        hostname:
+          type: "string"
+          examples:
+            - "24.125.89.203"
+        port:
+          type: "integer"
+          format: "u-int16"
+          examples:
+            - 22
+          minimum: 0
+        host_keys:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/NodeSshHostKey"
+        last_successful_key_update_at:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/UnixEpoch"
+              description: "Unix timestamp of the last successful host key refresh."
+        last_attempted_key_update_at:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/UnixEpoch"
+              description: "Unix timestamp of the last attempted host key refresh."
+    NodeStatus:
+      type: "string"
+      description: "`awaiting_allocation` when waiting for compute allocation on its capacity, `running` once assigned and physical node is running (still takes time for image to be downloaded and booted), `terminated` when stopped by user or after running out of allocation, `failed` on hardware fault."
+      enum:
+        - "awaiting_allocation"
+        - "running"
+        - "terminated"
+        - "failed"
+    NodeTemplateExpand:
+      type: "string"
+      const: "image"
+      default: "image"
+      readOnly: true
+    NodeTemplateId:
+      type: "string"
+      examples:
+        - "ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F"
+      pattern: "ntmpl_[0-9a-zA-Z_-]{1,21}"
+    NodeTemplateInclude:
+      type: "string"
+      const: "cloud_init_user_data"
+      default: "cloud_init_user_data"
+      readOnly: true
+    NodeTemplateResponse:
+      type: "object"
+      required:
+        - "object"
+        - "id"
+        - "name"
+        - "owner"
+        - "workspace"
+        - "resource_path"
+        - "image"
+        - "cloud_init_user_data_used"
+        - "created_at"
+      properties:
+        object:
+          type: "string"
+          const: "node_template"
+          default: "node_template"
+          readOnly: true
+        id:
+          $ref: "#/components/schemas/NodeTemplateId"
+        name:
+          $ref: "#/components/schemas/Name"
+        owner:
+          type: "string"
+        workspace:
+          type: "string"
+        resource_path:
+          type: "string"
+        image:
+          $ref: "#/components/schemas/Expandable_ImageId_ImageSummary"
+          description: "Machine image to use when starting nodes with this template."
+        cloud_init_user_data_used:
+          type: "boolean"
+          description: "Whether cloud-init user data is configured for this template."
+        created_at:
+          $ref: "#/components/schemas/UnixEpoch"
+        cloud_init_user_data:
+          type: "string"
+          format: "byte"
+          description: "Base64-encoded [cloud-init user data](https://cloudinit.readthedocs.io/en/latest/explanation/format/index.html). Currently only the [User-Data Script](https://cloudinit.readthedocs.io/en/latest/explanation/format/user-data-script.html#user-data-script) format is supported."
+          example: "IyEvYmluL2Jhc2gKZWNobyBoZWxsbyB3b3JsZAo="
+          contentEncoding: "base64"
+    NodeTemplateSummary:
+      type: "object"
+      required:
+        - "id"
+        - "name"
+      properties:
+        id:
+          $ref: "#/components/schemas/NodeTemplateId"
+        name:
+          $ref: "#/components/schemas/Name"
+    NodeTemplatesCursor:
+      type: "string"
+      examples:
+        - "ntmplc_gqXR7s0Kj5mHvE2wNpLc4Q"
+      pattern: "^ntmplc_[A-Za-z0-9_-]+$"
+    NodesCursor:
+      type: "string"
+      examples:
+        - "nodec_gqXR7s0Kj5mHvE2wNpLc4Q"
+      pattern: "^nodec_[A-Za-z0-9_-]+$"
+    NotFoundError:
+      type: "object"
+      required:
+        - "error"
+      properties:
+        error:
+          type: "object"
+          required:
+            - "type"
+            - "message"
+          properties:
+            type:
+              type: "string"
+              const: "not_found"
+              default: "not_found"
+              readOnly: true
+            message:
+              type: "string"
+              x-speakeasy-error-message: true
+    NotImplementedError:
+      type: "object"
+      required:
+        - "error"
+      properties:
+        error:
+          type: "object"
+          required:
+            - "type"
+            - "message"
+          properties:
+            type:
+              type: "string"
+              const: "not_implemented"
+              default: "not_implemented"
+              readOnly: true
+            message:
+              type: "string"
+              x-speakeasy-error-message: true
+    OrderExpand:
+      type: "string"
+      const: "capacity"
+      default: "capacity"
+      readOnly: true
+    OrderId:
+      type: "string"
+      examples:
+        - "ordr_k3R-nX9vLm7Qp2Yw5Jd8F"
+      pattern: "ordr_[0-9a-zA-Z_-]{1,21}"
+    OrderStatus:
+      type: "string"
+      description: "The status of an order in the system.\n`pending` = not resolved/processed yet.\n`filled` = order executed.\n`standing` = the order is waiting for a match.\n`cancelled` = the order was cancelled either automatically (not a standing order and didn't immediately fill, or current time past `end_at`) or by explicit cancellation.\n`rejected` = validation/system error occurred."
+      enum:
+        - "pending"
+        - "filled"
+        - "rejected"
+        - "cancelled"
+        - "standing"
+    OrdersCursor:
+      type: "string"
+      examples:
+        - "ordrc_gqXR7s0Kj5mHvE2wNpLc4Q"
+      pattern: "^ordrc_[A-Za-z0-9_-]+$"
+    PatchCapacityRequest:
+      type: "object"
+      properties:
+        name:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Name"
+        zones:
+          type:
+            - "array"
+            - "null"
+          items:
+            $ref: "#/components/schemas/ZoneName"
+          description: "Datacenter locations orders into this capacity can acquire compute from. Replaces existing zones. Does not affect already scheduled compute."
+          minItems: 1
+        tags:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Tags"
+              description: "Metadata tags. Full replacement semantics: replaces all existing tags. Omit to leave tags unchanged. Set to `null` to clear all tags."
+    PatchDeploymentRequest:
+      type: "object"
+      properties:
+        name:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Name"
+        node_template:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/ResourcePathOrId_NodeTemplateId"
+        target_node_count:
+          type:
+            - "integer"
+            - "null"
+          format: "int32"
+        node_name_template:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/NameTemplate"
+    PatchNodeRequest:
+      type: "object"
+      properties:
+        name:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Name"
+        tags:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Tags"
+              description: "Metadata tags. Full replacement semantics: replaces all existing tags. Omit to leave tags unchanged. Set to `null` to clear all tags."
+    PatchProcurementRequest:
+      type: "object"
+      properties:
+        name:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Name"
+        min_sell_price_dollars_per_node_hour:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/DollarsPerNodeHour"
+              description: "Minimum price to sell compute for ($/node-hour). Must contain decimal point. Will be rounded to nearest multiple of $0.000060."
+        max_buy_price_dollars_per_node_hour:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/DollarsPerNodeHour"
+              description: "Maximum price to buy compute ($/node-hour). Must contain decimal point. Will be rounded to nearest multiple of $0.000060."
+        managed_window_minutes:
+          type:
+            - "integer"
+            - "null"
+          format: "int32"
+          description: "How far ahead (in minutes) the procurement buys and sells compute. Higher values secure compute further in advance but commit to longer windows that may need to be sold when scaling down, potentially at a loss. Lower values reduce waste but risk compute being unavailable. Orders are placed in 1-hour blocks, so the furthest hour is secured up to `managed_window_minutes - 60` minutes before it begins."
+          maximum: 1440
+          minimum: 60
+        enabled:
+          type:
+            - "boolean"
+            - "null"
+    PaymentRequiredError:
+      type: "object"
+      required:
+        - "error"
+      properties:
+        error:
+          type: "object"
+          required:
+            - "type"
+            - "message"
+          properties:
+            type:
+              type: "string"
+              const: "payment_required"
+              default: "payment_required"
+              readOnly: true
+            message:
+              type: "string"
+              x-speakeasy-error-message: true
+    ProcurementExpand:
+      type: "string"
+      const: "capacity"
+      default: "capacity"
+      readOnly: true
+    ProcurementId:
+      type: "string"
+      examples:
+        - "proc_k3R-nX9vLm7Qp2Yw5Jd8F"
+      pattern: "proc_[0-9a-zA-Z_-]{1,21}"
+    ProcurementResponse:
+      type: "object"
+      required:
+        - "object"
+        - "id"
+        - "name"
+        - "owner"
+        - "workspace"
+        - "resource_path"
+        - "target"
+        - "capacity"
+        - "min_sell_price_dollars_per_node_hour"
+        - "max_buy_price_dollars_per_node_hour"
+        - "managed_window_minutes"
+        - "enabled"
+        - "status"
+        - "created_at"
+        - "updated_at"
+      properties:
+        object:
+          type: "string"
+          const: "procurement"
+          default: "procurement"
+          readOnly: true
+        id:
+          $ref: "#/components/schemas/ProcurementId"
+        name:
+          $ref: "#/components/schemas/Name"
+        owner:
+          type: "string"
+        workspace:
+          type: "string"
+        resource_path:
+          type: "string"
+        target:
+          $ref: "#/components/schemas/ProcurementTarget"
+        capacity:
+          $ref: "#/components/schemas/Expandable_CapacityId_CapacitySummary"
+        min_sell_price_dollars_per_node_hour:
+          $ref: "#/components/schemas/DollarsPerNodeHour"
+          description: "Minimum price to sell compute for ($/node-hour). Must contain decimal point. Will be rounded to nearest multiple of $0.000060."
+        max_buy_price_dollars_per_node_hour:
+          $ref: "#/components/schemas/DollarsPerNodeHour"
+          description: "Maximum price to buy compute ($/node-hour). Must contain decimal point. Will be rounded to nearest multiple of $0.000060."
+        managed_window_minutes:
+          type: "integer"
+          format: "int32"
+          description: "How far ahead (in minutes) the procurement buys and sells compute. Higher values secure compute further in advance but commit to longer windows that may need to be sold when scaling down, potentially at a loss. Lower values reduce waste but risk compute being unavailable. Orders are placed in 1-hour blocks, so the furthest hour is secured up to `managed_window_minutes - 60` minutes before it begins."
+          maximum: 1440
+          minimum: 60
+        enabled:
+          type: "boolean"
+          description: "Enable/disable the procurement. Disabling cancels all standing orders."
+        status:
+          $ref: "#/components/schemas/ReconciliationStatus"
+        created_at:
+          $ref: "#/components/schemas/UnixEpoch"
+        updated_at:
+          $ref: "#/components/schemas/UnixEpoch"
+    ProcurementSummary:
+      type: "object"
+      required:
+        - "id"
+        - "name"
+      properties:
+        id:
+          $ref: "#/components/schemas/ProcurementId"
+        name:
+          $ref: "#/components/schemas/Name"
+    ProcurementTarget:
+      oneOf:
+        - $ref: "#/components/schemas/NodeCountTag"
+        - type: "integer"
+          format: "u-int64"
+          minimum: 0
+    ProcurementsCursor:
+      type: "string"
+      examples:
+        - "procc_gqXR7s0Kj5mHvE2wNpLc4Q"
+      pattern: "^procc_[A-Za-z0-9_-]+$"
+    ReconciliationStatus:
+      type: "object"
+      required:
+        - "state"
+        - "message"
+      properties:
+        state:
+          $ref: "#/components/schemas/AutomationStatus"
+        message:
+          type: "string"
+    RequestTimedOutError:
+      type: "object"
+      required:
+        - "error"
+      properties:
+        error:
+          type: "object"
+          required:
+            - "type"
+            - "message"
+          properties:
+            type:
+              type: "string"
+              const: "request_timed_out"
+              default: "request_timed_out"
+              readOnly: true
+            message:
+              type: "string"
+              x-speakeasy-error-message: true
+    ResourcePathOrId_CapacityId:
+      type: "string"
+      description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+      examples:
+        - "cap_k3R-nX9vLm7Qp2Yw5Jd8F"
+      pattern: "(cap_[0-9a-zA-Z_-]{1,21})|(sfc:capacity:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+    ResourcePathOrId_ImageId:
+      type: "string"
+      description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+      examples:
+        - "image_k3R-nX9vLm7Qp2Yw5Jd8F"
+      pattern: "(image_[0-9a-zA-Z_-]{1,21})|(sfc:image:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+    ResourcePathOrId_NodeTemplateId:
+      type: "string"
+      description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+      examples:
+        - "ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F"
+      pattern: "(ntmpl_[0-9a-zA-Z_-]{1,21})|(sfc:node_template:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+    ResourcePathOrId_WorkspaceId:
+      type: "string"
+      description: "A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent."
+      examples:
+        - "wksp_k3R-nX9vLm7Qp2Yw5Jd8F"
+      pattern: "(wksp_[0-9a-zA-Z_-]{1,21})|(sfc:workspace:[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+){1,2})"
+    RoleId:
+      type: "string"
+      examples:
+        - "role_k3R-nX9vLm7Qp2Yw5Jd8F"
+      pattern: "role_[0-9a-zA-Z_-]{1,21}"
+    Schedule:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/ScheduleEntry"
+      description: "Capacity availability over time."
+    ScheduleEntry:
+      type: "object"
+      required:
+        - "effective_at"
+        - "node_allocation"
+      properties:
+        effective_at:
+          $ref: "#/components/schemas/UnixEpoch"
+        node_allocation:
+          type: "integer"
+          format: "int32"
+    ServiceUnavailableError:
+      type: "object"
+      required:
+        - "error"
+      properties:
+        error:
+          type: "object"
+          required:
+            - "type"
+            - "message"
+          properties:
+            type:
+              type: "string"
+              const: "service_unavailable"
+              default: "service_unavailable"
+              readOnly: true
+            message:
+              type: "string"
+              x-speakeasy-error-message: true
+    SetDefaultImageResponse:
+      type: "object"
+      required:
+        - "object"
+        - "id"
+        - "name"
+        - "owner"
+        - "workspace"
+        - "resource_path"
+        - "upload_status"
+        - "created_at"
+        - "is_default"
+      properties:
+        object:
+          type: "string"
+          const: "image"
+          default: "image"
+          readOnly: true
+        id:
+          $ref: "#/components/schemas/ImageId"
+        name:
+          $ref: "#/components/schemas/Name"
+        owner:
+          type: "string"
+        workspace:
+          type: "string"
+        resource_path:
+          type: "string"
+        upload_status:
+          $ref: "#/components/schemas/ImageUploadStatus"
+        created_at:
+          $ref: "#/components/schemas/UnixEpoch"
+        provider:
+          type:
+            - "string"
+            - "null"
+        sha256:
+          type:
+            - "string"
+            - "null"
+          maxLength: 64
+          minLength: 64
+          pattern: "^[a-f0-9]{64}$"
+        is_default:
+          type: "boolean"
+    Side:
+      type: "string"
+      enum:
+        - "sell"
+        - "buy"
+    StartUploadRequest:
+      type: "object"
+      description: "Start a multipart image upload. Max image size is 128 GiB."
+      required:
+        - "workspace"
+      properties:
+        name:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Name"
+        workspace:
+          $ref: "#/components/schemas/ResourcePathOrId_WorkspaceId"
+          description: "Workspace to create this image in."
+    Tags:
+      type: "object"
+      additionalProperties:
+        type: "string"
+        examples:
+          - "prod"
+        maxLength: 256
+        pattern: "^[^,=]{0,256}$"
+      propertyNames:
+        type: "string"
+        examples:
+          - "env"
+        maxLength: 128
+        minLength: 1
+        pattern: "^[^_,= ][^,= ]{0,127}$"
+      examples:
+        - env: "prod"
+          team: "infra"
+      maxProperties: 50
+    TokenResponse:
+      type: "object"
+      description: "Token metadata response. Never includes the raw token value."
+      required:
+        - "object"
+        - "resource_path"
+        - "name"
+        - "suffix"
+        - "created_at"
+      properties:
+        object:
+          type: "string"
+          const: "api_token"
+          default: "api_token"
+          readOnly: true
+        resource_path:
+          type: "string"
+        name:
+          $ref: "#/components/schemas/Name"
+        suffix:
+          type: "string"
+        expires_at:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/UnixEpoch"
+        created_at:
+          $ref: "#/components/schemas/UnixEpoch"
+    TokenWithValueResponse:
+      type: "object"
+      description: "Response returned only at creation time. Includes the one-time raw token value."
+      required:
+        - "object"
+        - "resource_path"
+        - "name"
+        - "token"
+        - "suffix"
+        - "created_at"
+      properties:
+        object:
+          type: "string"
+          const: "api_token"
+          default: "api_token"
+          readOnly: true
+        resource_path:
+          type: "string"
+        name:
+          $ref: "#/components/schemas/Name"
+        token:
+          type: "string"
+          description: "The token value. Only shown once at creation."
+        suffix:
+          type: "string"
+        expires_at:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/UnixEpoch"
+        created_at:
+          $ref: "#/components/schemas/UnixEpoch"
+    TokensCursor:
+      type: "string"
+      examples:
+        - "tokc_gqXR7s0Kj5mHvE2wNpLc4Q"
+      pattern: "^tokc_[A-Za-z0-9_-]+$"
+    UnauthorizedError:
+      type: "object"
+      required:
+        - "error"
+      properties:
+        error:
+          type: "object"
+          required:
+            - "type"
+            - "message"
+          properties:
+            type:
+              type: "string"
+              const: "authentication_error"
+              default: "authentication_error"
+              readOnly: true
+            message:
+              type: "string"
+              x-speakeasy-error-message: true
+    UnixEpoch:
+      type: "integer"
+      format: "int64"
+      description: "Unix timestamp."
+      example: 1738972800
+    UnprocessableEntityError:
+      type: "object"
+      required:
+        - "error"
+      properties:
+        error:
+          type: "object"
+          required:
+            - "type"
+            - "message"
+          properties:
+            type:
+              type: "string"
+              const: "unprocessable_entity"
+              default: "unprocessable_entity"
+              readOnly: true
+            message:
+              type: "string"
+              x-speakeasy-error-message: true
+            details:
+              type: "array"
+              items:
+                $ref: "#/components/schemas/ErrorDetail"
+    UpdateFeatureFlagRequest:
+      type: "object"
+      required:
+        - "feature_flag_id"
+      properties:
+        feature_flag_id:
+          type: "string"
+        account_regex:
+          type:
+            - "string"
+            - "null"
+        enabled:
+          type:
+            - "boolean"
+            - "null"
+    UpdateFeatureFlagResponse:
+      type: "object"
+      required:
+        - "object"
+        - "feature_flag_id"
+      properties:
+        object:
+          type: "string"
+          const: "feature_flag"
+          default: "feature_flag"
+          readOnly: true
+        feature_flag_id:
+          type: "string"
+    UpgradeRequiredError:
+      type: "object"
+      required:
+        - "error"
+      properties:
+        error:
+          type: "object"
+          required:
+            - "type"
+            - "message"
+          properties:
+            type:
+              type: "string"
+              const: "upgrade_required"
+              default: "upgrade_required"
+              readOnly: true
+            message:
+              type: "string"
+              x-speakeasy-error-message: true
+    UploadPartRequest:
+      type: "object"
+      required:
+        - "part_id"
+      properties:
+        part_id:
+          type: "integer"
+          format: "int32"
+          description: "Caller-assigned part number, starting at 1."
+          minimum: 1
+    UploadPartResponse:
+      type: "object"
+      required:
+        - "url"
+        - "expires_at"
+      properties:
+        url:
+          type: "string"
+          description: "Presigned URL to upload the part."
+        expires_at:
+          $ref: "#/components/schemas/UnixEpoch"
+    ZoneName:
+      type: "string"
+      example: "richmond"
+    v2.CreateOrderRequest:
+      type: "object"
+      required:
+        - "capacity"
+        - "side"
+        - "delta"
+        - "limit_price_dollars_per_node_hour"
+      properties:
+        capacity:
+          $ref: "#/components/schemas/ResourcePathOrId_CapacityId"
+          description: "Target capacity that receives compute when filled."
+        side:
+          $ref: "#/components/schemas/Side"
+        allow_standing:
+          type: "boolean"
+          description: "If true, the order stays in the order book until either fills, is explicitly cancelled, or the order end time is reached resulting in automatic cancellation. If false, the order is cancelled immediately if it doesn't fill."
+        delta:
+          oneOf:
+            - type: "object"
+              required:
+                - "node_count"
+                - "start_at"
+                - "end_at"
+                - "type"
+              properties:
+                node_count:
+                  type: "integer"
+                  format: "int32"
+                  description: "Number of nodes to buy or sell."
+                  minimum: 1
+                start_at:
+                  $ref: "#/components/schemas/UnixEpoch"
+                  description: "Compute period start. Must be now or on a future hour boundary."
+                end_at:
+                  $ref: "#/components/schemas/UnixEpoch"
+                  description: "Compute period end. Must be on an hour boundary."
+                type:
+                  type: "string"
+                  const: "rectangle"
+                  default: "rectangle"
+                  readOnly: true
+          description: "The desired change in capacity. Will be added if side is `buy`, subtracted if `side` is sell if the order fills."
+        limit_price_dollars_per_node_hour:
+          $ref: "#/components/schemas/DollarsPerNodeHour"
+          description: "Must contain decimal point. Will be rounded to nearest multiple of $0.000060."
+    v2.ListOrdersResponse:
+      type: "object"
+      required:
+        - "object"
+        - "has_more"
+        - "data"
+      properties:
+        object:
+          type: "string"
+          const: "list"
+          default: "list"
+          readOnly: true
+        cursor:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/OrdersCursor"
+              description: "Pass as `starting_after` or `ending_before` to paginate."
+        has_more:
+          type: "boolean"
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/v2.OrderResponse"
+    v2.OrderDelta:
+      oneOf:
+        - type: "object"
+          required:
+            - "node_count"
+            - "start_at"
+            - "end_at"
+            - "type"
+          properties:
+            node_count:
+              type: "integer"
+              format: "int32"
+              description: "Number of nodes to buy or sell."
+              minimum: 1
+            start_at:
+              $ref: "#/components/schemas/UnixEpoch"
+              description: "Compute period start. Must be now or on a future hour boundary."
+            end_at:
+              $ref: "#/components/schemas/UnixEpoch"
+              description: "Compute period end. Must be on an hour boundary."
+            type:
+              type: "string"
+              const: "rectangle"
+              default: "rectangle"
+              readOnly: true
+      description: "The desired change in capacity. Will be added if side is `buy`, subtracted if `side` is sell if the order fills."
+    v2.OrderResponse:
+      type: "object"
+      required:
+        - "object"
+        - "id"
+        - "capacity"
+        - "side"
+        - "allow_standing"
+        - "zones"
+        - "delta"
+        - "limit_price_dollars_per_node_hour"
+        - "status"
+        - "created_at"
+      properties:
+        object:
+          type: "string"
+          const: "order"
+          default: "order"
+          readOnly: true
+        id:
+          $ref: "#/components/schemas/OrderId"
+        capacity:
+          $ref: "#/components/schemas/Expandable_CapacityId_CapacitySummary"
+          description: "Target capacity that receives or loses compute if this order fills (depending on order type)."
+        side:
+          $ref: "#/components/schemas/Side"
+        allow_standing:
+          type: "boolean"
+          description: "If true, the order stays in the order book until either fills, is explicitly cancelled, or the order end time is reached resulting in automatic cancellation. If false, the order is cancelled immediately if it doesn't fill."
+        zones:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ZoneName"
+          description: "Datacenter locations this order can fill in (derived from target capacity at order creation by default)."
+          minItems: 1
+        delta:
+          oneOf:
+            - type: "object"
+              required:
+                - "node_count"
+                - "start_at"
+                - "end_at"
+                - "type"
+              properties:
+                node_count:
+                  type: "integer"
+                  format: "int32"
+                  description: "Number of nodes to buy or sell."
+                  minimum: 1
+                start_at:
+                  $ref: "#/components/schemas/UnixEpoch"
+                  description: "Compute period start. Must be now or on a future hour boundary."
+                end_at:
+                  $ref: "#/components/schemas/UnixEpoch"
+                  description: "Compute period end. Must be on an hour boundary."
+                type:
+                  type: "string"
+                  const: "rectangle"
+                  default: "rectangle"
+                  readOnly: true
+          description: "The desired change in capacity. Will be added if side is `buy`, subtracted if `side` is sell if the order fills."
+        limit_price_dollars_per_node_hour:
+          $ref: "#/components/schemas/DollarsPerNodeHour"
+        status:
+          $ref: "#/components/schemas/OrderStatus"
+        created_at:
+          $ref: "#/components/schemas/UnixEpoch"
+        filled_at:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/UnixEpoch"
+        filled_price_dollars_per_node_hour:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/DollarsPerNodeHour"
+        cancelled_at:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/UnixEpoch"
+    v2.OrderSortBy:
+      type: "string"
+      enum:
+        - "created_at"
+        - "-created_at"
+        - "start_at"
+        - "-start_at"
+  securitySchemes:
+    bearer_auth:
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: "JWT"
+      description: "Create an API token using `sf tokens create` or at https://sfcompute.com/account/api-keys."
+security:
+  - bearer_auth: []
+tags:
+  - name: "Capacities"
+    description: "A bucket of owned compute balance over time."
+  - name: "Orders"
+    description: "Place orders targeting a capacity to increase your reserved compute balance during some time period."
+  - name: "Node Templates"
+    description: "Reusable node configuration."
+  - name: "Images"
+    description: "Custom machine images for nodes."
+  - name: "Roles"
+    description: "TOML-based permission role definitions."
+  - name: "Grants"
+    description: "Bind principals (users or tokens) to roles on a workspace."
+  - name: "Tokens"
+    description: "Workspace-scoped API tokens."
+  - name: "Nodes"
+    description: "Spin up nodes in a capacity to use your available compute."
+  - name: "Procurements"
+    description: "Market automations that maintain capacity by placing buy/sell orders."
+  - name: "Deployments"
+    description: "Deployment automations that maintain a fleet of nodes on a capacity."
+  - name: "Workspaces"
+    description: "Resource containers scoped to an account."
+x-speakeasy-name-override:
+  - operationId: "^list_"
+    methodNameOverride: "list"
+  - operationId: "^create_"
+    methodNameOverride: "create"
+  - operationId: "^fetch_"
+    methodNameOverride: "fetch"
+  - operationId: "^update_"
+    methodNameOverride: "update"
+  - operationId: "^delete_"
+    methodNameOverride: "delete"

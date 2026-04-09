@@ -1,0 +1,9 @@
+# UnprocessableEntityError
+
+
+## Fields
+
+| Field                                                                                                | Type                                                                                                 | Required                                                                                             | Description                                                                                          |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `Error`                                                                                              | [components.UnprocessableEntityErrorError](../../models/components/unprocessableentityerrorerror.md) | :heavy_check_mark:                                                                                   | N/A                                                                                                  |
+| `HTTPMeta`                                                                                           | [components.HTTPMetadata](../../models/components/httpmetadata.md)                                   | :heavy_check_mark:                                                                                   | N/A                                                                                                  |

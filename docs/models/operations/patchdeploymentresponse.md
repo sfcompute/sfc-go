@@ -1,0 +1,9 @@
+# PatchDeploymentResponse
+
+
+## Fields
+
+| Field                                                                           | Type                                                                            | Required                                                                        | Description                                                                     |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `HTTPMeta`                                                                      | [components.HTTPMetadata](../../models/components/httpmetadata.md)              | :heavy_check_mark:                                                              | N/A                                                                             |
+| `DeploymentResponse`                                                            | [*components.DeploymentResponse](../../models/components/deploymentresponse.md) | :heavy_minus_sign:                                                              | Deployment updated.                                                             |

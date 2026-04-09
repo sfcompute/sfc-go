@@ -1,0 +1,11 @@
+# V2ListOrdersResponse
+
+
+## Fields
+
+| Field                                                                      | Type                                                                       | Required                                                                   | Description                                                                | Example                                                                    |
+| -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `Object`                                                                   | `*string`                                                                  | :heavy_minus_sign:                                                         | N/A                                                                        |                                                                            |
+| `Cursor`                                                                   | optionalnullable.OptionalNullable[`string`]                                | :heavy_minus_sign:                                                         | N/A                                                                        | ordrc_gqXR7s0Kj5mHvE2wNpLc4Q                                               |
+| `HasMore`                                                                  | `bool`                                                                     | :heavy_check_mark:                                                         | N/A                                                                        |                                                                            |
+| `Data`                                                                     | [][components.V2OrderResponse](../../models/components/v2orderresponse.md) | :heavy_check_mark:                                                         | N/A                                                                        |                                                                            |
