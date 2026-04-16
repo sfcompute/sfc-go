@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
-	"github.com/sfcompute/sfc-go-sdk/types"
+	"github.com/sfcompute/sfc-go/optionalnullable"
+	"github.com/sfcompute/sfc-go/types"
 )
 
 func GenerateURL(_ context.Context, serverURL, path string, pathParams interface{}, globals interface{}) (string, error) {

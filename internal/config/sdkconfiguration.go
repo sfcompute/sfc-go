@@ -4,7 +4,7 @@ package config
 
 import (
 	"context"
-	"github.com/sfcompute/sfc-go-sdk/retry"
+	"github.com/sfcompute/sfc-go/retry"
 	"net/http"
 	"time"
 )

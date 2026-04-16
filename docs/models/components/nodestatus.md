@@ -6,7 +6,7 @@
 
 ```go
 import (
-	"github.com/sfcompute/sfc-go-sdk/models/components"
+	"github.com/sfcompute/sfc-go/models/components"
 )
 
 value := components.NodeStatusAwaitingAllocation

@@ -3,14 +3,14 @@
 package components
 
 import (
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
+	"github.com/sfcompute/sfc-go/optionalnullable"
 )
 
 type CreateDeploymentRequest struct {
 	Name optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
-	// A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
+	// A resource path like 'sfc:capacity:acme:prod:my-capacity' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
 	Capacity string `json:"capacity"`
-	// A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
+	// A resource path like 'sfc:node_template:acme:prod:my-node_template' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
 	NodeTemplate    string `json:"node_template"`
 	TargetNodeCount int    `json:"target_node_count"`
 	// A name template using {{variable}} syntax. Available variables: {{adjective}} (~128 random adjectives), {{noun}} (~128 random nouns), {{nanoid(N)}} (N-character alphanumeric identifier, 1 ≤ N ≤ 21). The template must produce enough unique combinations to avoid collisions — equivalent to at least the default template {{adjective}}-{{noun}}-{{nanoid(6)}} (~1 quadrillion possibilities). Must start with an alphanumeric character. Resolved names are limited to 255 characters.

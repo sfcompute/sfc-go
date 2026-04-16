@@ -3,18 +3,19 @@
 package components
 
 import (
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
-	"github.com/sfcompute/sfc-go-sdk/types"
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/types"
 )
 
 type NodeTemplateResponse struct {
+	ID string `json:"id"`
+	// A resource path for a node_template resource. Format: sfc:node_template:<account>:<workspace>:<name>.
+	ResourcePath string `json:"resource_path"`
+	Owner        string `json:"owner"`
+	Workspace    string `json:"workspace"`
+	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object       *string `const:"node_template" json:"object"`
-	ID           string  `json:"id"`
-	Name         string  `json:"name"`
-	Owner        string  `json:"owner"`
-	Workspace    string  `json:"workspace"`
-	ResourcePath string  `json:"resource_path"`
+	object *string `const:"node_template" json:"object"`
 	// ID (default) or expanded summary when using expand parameter
 	Image ExpandableImageIDImageSummaryUnion `json:"image"`
 	// Whether cloud-init user data is configured for this template.
@@ -36,10 +37,6 @@ func (n *NodeTemplateResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (n *NodeTemplateResponse) GetObject() *string {
-	return types.Pointer("node_template")
-}
-
 func (n *NodeTemplateResponse) GetID() string {
 	if n == nil {
 		return ""
@@ -47,11 +44,11 @@ func (n *NodeTemplateResponse) GetID() string {
 	return n.ID
 }
 
-func (n *NodeTemplateResponse) GetName() string {
+func (n *NodeTemplateResponse) GetResourcePath() string {
 	if n == nil {
 		return ""
 	}
-	return n.Name
+	return n.ResourcePath
 }
 
 func (n *NodeTemplateResponse) GetOwner() string {
@@ -68,11 +65,15 @@ func (n *NodeTemplateResponse) GetWorkspace() string {
 	return n.Workspace
 }
 
-func (n *NodeTemplateResponse) GetResourcePath() string {
+func (n *NodeTemplateResponse) GetName() string {
 	if n == nil {
 		return ""
 	}
-	return n.ResourcePath
+	return n.Name
+}
+
+func (n *NodeTemplateResponse) GetObject() *string {
+	return types.Pointer("node_template")
 }
 
 func (n *NodeTemplateResponse) GetImage() ExpandableImageIDImageSummaryUnion {

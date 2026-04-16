@@ -3,21 +3,22 @@
 package components
 
 import (
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
-	"github.com/sfcompute/sfc-go-sdk/types"
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/optionalnullable"
+	"github.com/sfcompute/sfc-go/types"
 )
 
 type CapacityResponse struct {
+	ID string `json:"id"`
+	// A resource path for a capacity resource. Format: sfc:capacity:<account>:<workspace>:<name>.
+	ResourcePath string `json:"resource_path"`
+	Owner        string `json:"owner"`
+	Workspace    string `json:"workspace"`
+	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object       *string `const:"capacity" json:"object"`
-	ID           string  `json:"id"`
-	Name         string  `json:"name"`
-	Owner        string  `json:"owner"`
-	Workspace    string  `json:"workspace"`
-	ResourcePath string  `json:"resource_path"`
+	object *string `const:"capacity" json:"object"`
 	// Capacity kind determines what operations are allowed on a capacity.
-	// - `Market`: User-created capacities. Fully manageable. - `Originating`: Provider capacities for selling compute. Cannot receive buy orders or be deleted. - `ReadOnly`: System-managed capacities. Cannot be modified through the API.
+	// - `Market`: User-created capacities. - `Originating`: Provider capacities for selling compute. Cannot add compute   (buy orders/procurements). - `ReadOnly`: System-managed capacities used for legacy compute, bare metal   contracts, and other. Cannot be modified through the API.
 	Kind CapacityKind `json:"kind"`
 	// Datacenter locations orders into this capacity can acquire compute from.
 	Zones              []string           `json:"zones"`
@@ -42,10 +43,6 @@ func (c *CapacityResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *CapacityResponse) GetObject() *string {
-	return types.Pointer("capacity")
-}
-
 func (c *CapacityResponse) GetID() string {
 	if c == nil {
 		return ""
@@ -53,11 +50,11 @@ func (c *CapacityResponse) GetID() string {
 	return c.ID
 }
 
-func (c *CapacityResponse) GetName() string {
+func (c *CapacityResponse) GetResourcePath() string {
 	if c == nil {
 		return ""
 	}
-	return c.Name
+	return c.ResourcePath
 }
 
 func (c *CapacityResponse) GetOwner() string {
@@ -74,11 +71,15 @@ func (c *CapacityResponse) GetWorkspace() string {
 	return c.Workspace
 }
 
-func (c *CapacityResponse) GetResourcePath() string {
+func (c *CapacityResponse) GetName() string {
 	if c == nil {
 		return ""
 	}
-	return c.ResourcePath
+	return c.Name
+}
+
+func (c *CapacityResponse) GetObject() *string {
+	return types.Pointer("capacity")
 }
 
 func (c *CapacityResponse) GetKind() CapacityKind {

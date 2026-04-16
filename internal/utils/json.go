@@ -14,7 +14,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/sfcompute/sfc-go-sdk/types"
+	"github.com/sfcompute/sfc-go/types"
 )
 
 func MarshalJSON(v interface{}, tag reflect.StructTag, topLevel bool) ([]byte, error) {

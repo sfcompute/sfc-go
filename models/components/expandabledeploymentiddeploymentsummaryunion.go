@@ -5,7 +5,7 @@ package components
 import (
 	"encoding/json"
 	"errors"
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
+	"github.com/sfcompute/sfc-go/internal/utils"
 )
 
 type ExpandableDeploymentIDDeploymentSummary struct {

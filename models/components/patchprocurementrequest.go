@@ -3,7 +3,7 @@
 package components
 
 import (
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
+	"github.com/sfcompute/sfc-go/optionalnullable"
 )
 
 type PatchProcurementRequest struct {

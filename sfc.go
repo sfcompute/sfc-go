@@ -2,16 +2,16 @@
 
 package sfc
 
-// Generated from OpenAPI doc version 0.1.0 and generator version 2.879.6
+// Generated from OpenAPI doc version 0.1.0 and generator version 2.879.13
 
 import (
 	"context"
 	"fmt"
-	"github.com/sfcompute/sfc-go-sdk/internal/config"
-	"github.com/sfcompute/sfc-go-sdk/internal/hooks"
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
-	"github.com/sfcompute/sfc-go-sdk/models/components"
-	"github.com/sfcompute/sfc-go-sdk/retry"
+	"github.com/sfcompute/sfc-go/internal/config"
+	"github.com/sfcompute/sfc-go/internal/hooks"
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/models/components"
+	"github.com/sfcompute/sfc-go/retry"
 	"net/http"
 	"time"
 )
@@ -141,7 +141,7 @@ func New(opts ...SDKOption) *Sfc {
 	sdk := &Sfc{
 		SDKVersion: "0.0.1",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/go 0.0.1 2.879.6 0.1.0 github.com/sfcompute/sfc-go-sdk",
+			UserAgent:  "speakeasy-sdk/go 0.0.1 2.879.13 0.1.0 github.com/sfcompute/sfc-go",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sfcompute/sfc-go-sdk/types"
+	"github.com/sfcompute/sfc-go/types"
 )
 
 // UnionCandidate represents a candidate type during union deserialization

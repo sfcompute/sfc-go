@@ -3,12 +3,12 @@
 package operations
 
 import (
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
-	"github.com/sfcompute/sfc-go-sdk/models/components"
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/models/components"
 )
 
 type FetchImageRequest struct {
-	// Image ID, name, or resource path
+	// Image ID or resource path
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 

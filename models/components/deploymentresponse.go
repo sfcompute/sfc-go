@@ -3,18 +3,19 @@
 package components
 
 import (
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
-	"github.com/sfcompute/sfc-go-sdk/types"
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/types"
 )
 
 type DeploymentResponse struct {
+	ID string `json:"id"`
+	// A resource path for a deployment resource. Format: sfc:deployment:<account>:<workspace>:<name>.
+	ResourcePath string `json:"resource_path"`
+	Owner        string `json:"owner"`
+	Workspace    string `json:"workspace"`
+	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object       *string `const:"deployment" json:"object"`
-	ID           string  `json:"id"`
-	Name         string  `json:"name"`
-	Owner        string  `json:"owner"`
-	Workspace    string  `json:"workspace"`
-	ResourcePath string  `json:"resource_path"`
+	object *string `const:"deployment" json:"object"`
 	// ID (default) or expanded summary when using expand parameter
 	Capacity ExpandableCapacityIDCapacitySummaryUnion `json:"capacity"`
 	// ID (default) or expanded summary when using expand parameter
@@ -40,10 +41,6 @@ func (d *DeploymentResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (d *DeploymentResponse) GetObject() *string {
-	return types.Pointer("deployment")
-}
-
 func (d *DeploymentResponse) GetID() string {
 	if d == nil {
 		return ""
@@ -51,11 +48,11 @@ func (d *DeploymentResponse) GetID() string {
 	return d.ID
 }
 
-func (d *DeploymentResponse) GetName() string {
+func (d *DeploymentResponse) GetResourcePath() string {
 	if d == nil {
 		return ""
 	}
-	return d.Name
+	return d.ResourcePath
 }
 
 func (d *DeploymentResponse) GetOwner() string {
@@ -72,11 +69,15 @@ func (d *DeploymentResponse) GetWorkspace() string {
 	return d.Workspace
 }
 
-func (d *DeploymentResponse) GetResourcePath() string {
+func (d *DeploymentResponse) GetName() string {
 	if d == nil {
 		return ""
 	}
-	return d.ResourcePath
+	return d.Name
+}
+
+func (d *DeploymentResponse) GetObject() *string {
+	return types.Pointer("deployment")
 }
 
 func (d *DeploymentResponse) GetCapacity() ExpandableCapacityIDCapacitySummaryUnion {

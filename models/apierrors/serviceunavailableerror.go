@@ -4,7 +4,7 @@ package apierrors
 
 import (
 	"encoding/json"
-	"github.com/sfcompute/sfc-go-sdk/models/components"
+	"github.com/sfcompute/sfc-go/models/components"
 )
 
 type ServiceUnavailableError struct {

@@ -3,7 +3,7 @@
 package components
 
 // CapacityKind - Capacity kind determines what operations are allowed on a capacity.
-// - `Market`: User-created capacities. Fully manageable. - `Originating`: Provider capacities for selling compute. Cannot receive buy orders or be deleted. - `ReadOnly`: System-managed capacities. Cannot be modified through the API.
+// - `Market`: User-created capacities. - `Originating`: Provider capacities for selling compute. Cannot add compute   (buy orders/procurements). - `ReadOnly`: System-managed capacities used for legacy compute, bare metal   contracts, and other. Cannot be modified through the API.
 type CapacityKind string
 
 const (

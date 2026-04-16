@@ -6,13 +6,13 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/sfcompute/sfc-go-sdk/internal/config"
-	"github.com/sfcompute/sfc-go-sdk/internal/hooks"
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
-	"github.com/sfcompute/sfc-go-sdk/models/apierrors"
-	"github.com/sfcompute/sfc-go-sdk/models/components"
-	"github.com/sfcompute/sfc-go-sdk/models/operations"
-	"github.com/sfcompute/sfc-go-sdk/retry"
+	"github.com/sfcompute/sfc-go/internal/config"
+	"github.com/sfcompute/sfc-go/internal/hooks"
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/models/apierrors"
+	"github.com/sfcompute/sfc-go/models/components"
+	"github.com/sfcompute/sfc-go/models/operations"
+	"github.com/sfcompute/sfc-go/retry"
 	"github.com/spyzhov/ajson"
 	"net/http"
 	"net/url"
@@ -651,7 +651,7 @@ func (s *NodeTemplates) Create(ctx context.Context, request components.CreateNod
 }
 
 // Fetch - Get node template
-// Retrieve a node template by ID, resource path, or name.
+// Retrieve a node template by ID or resource path.
 func (s *NodeTemplates) Fetch(ctx context.Context, id string, expand []string, opts ...operations.Option) (*operations.FetchNodeTemplateResponse, error) {
 	request := operations.FetchNodeTemplateRequest{
 		ID:     id,

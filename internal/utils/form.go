@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
-	"github.com/sfcompute/sfc-go-sdk/types"
+	"github.com/sfcompute/sfc-go/optionalnullable"
+	"github.com/sfcompute/sfc-go/types"
 )
 
 func populateForm(paramName string, explode bool, objType reflect.Type, objValue reflect.Value, delimiter string, defaultValue *string, allowEmptyValue map[string]struct{}, getFieldName func(reflect.StructField) string) url.Values {

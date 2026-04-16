@@ -3,19 +3,20 @@
 package components
 
 import (
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
-	"github.com/sfcompute/sfc-go-sdk/types"
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/optionalnullable"
+	"github.com/sfcompute/sfc-go/types"
 )
 
 type NodeResponse struct {
+	ID string `json:"id"`
+	// A resource path for a node resource. Format: sfc:node:<account>:<workspace>:<name>.
+	ResourcePath string `json:"resource_path"`
+	Owner        string `json:"owner"`
+	Workspace    string `json:"workspace"`
+	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object       *string `const:"node" json:"object"`
-	ID           string  `json:"id"`
-	Name         string  `json:"name"`
-	Owner        string  `json:"owner"`
-	Workspace    string  `json:"workspace"`
-	ResourcePath string  `json:"resource_path"`
+	object *string `const:"node" json:"object"`
 	// `awaiting_allocation` when waiting for compute allocation on its capacity, `running` once assigned and physical node is running (still takes time for image to be downloaded and booted), `terminated` when stopped by user or after running out of allocation, `failed` on hardware fault.
 	Status NodeStatus                                `json:"status"`
 	Zone   optionalnullable.OptionalNullable[string] `json:"zone,omitzero"`
@@ -44,10 +45,6 @@ func (n *NodeResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (n *NodeResponse) GetObject() *string {
-	return types.Pointer("node")
-}
-
 func (n *NodeResponse) GetID() string {
 	if n == nil {
 		return ""
@@ -55,11 +52,11 @@ func (n *NodeResponse) GetID() string {
 	return n.ID
 }
 
-func (n *NodeResponse) GetName() string {
+func (n *NodeResponse) GetResourcePath() string {
 	if n == nil {
 		return ""
 	}
-	return n.Name
+	return n.ResourcePath
 }
 
 func (n *NodeResponse) GetOwner() string {
@@ -76,11 +73,15 @@ func (n *NodeResponse) GetWorkspace() string {
 	return n.Workspace
 }
 
-func (n *NodeResponse) GetResourcePath() string {
+func (n *NodeResponse) GetName() string {
 	if n == nil {
 		return ""
 	}
-	return n.ResourcePath
+	return n.Name
+}
+
+func (n *NodeResponse) GetObject() *string {
+	return types.Pointer("node")
 }
 
 func (n *NodeResponse) GetStatus() NodeStatus {

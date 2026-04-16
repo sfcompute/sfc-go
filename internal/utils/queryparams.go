@@ -12,8 +12,8 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
-	"github.com/sfcompute/sfc-go-sdk/types"
+	"github.com/sfcompute/sfc-go/optionalnullable"
+	"github.com/sfcompute/sfc-go/types"
 )
 
 func PopulateQueryParams(_ context.Context, req *http.Request, queryParams interface{}, globals interface{}, allowEmptyValue map[string]struct{}) error {

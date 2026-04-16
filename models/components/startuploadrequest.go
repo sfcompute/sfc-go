@@ -3,13 +3,13 @@
 package components
 
 import (
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
+	"github.com/sfcompute/sfc-go/optionalnullable"
 )
 
 // StartUploadRequest - Start a multipart image upload. Max image size is 128 GiB.
 type StartUploadRequest struct {
 	Name optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
-	// A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
+	// A resource path like 'sfc:workspace:acme:prod:my-workspace' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
 	Workspace string `json:"workspace"`
 }
 

@@ -3,9 +3,9 @@
 package operations
 
 import (
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
-	"github.com/sfcompute/sfc-go-sdk/models/components"
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/models/components"
+	"github.com/sfcompute/sfc-go/optionalnullable"
 )
 
 type CreateOrderRequest struct {

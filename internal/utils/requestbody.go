@@ -15,7 +15,7 @@ import (
 	"reflect"
 	"regexp"
 
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
+	"github.com/sfcompute/sfc-go/optionalnullable"
 )
 
 const (

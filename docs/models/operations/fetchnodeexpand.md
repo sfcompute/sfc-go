@@ -4,7 +4,7 @@
 
 ```go
 import (
-	"github.com/sfcompute/sfc-go-sdk/models/operations"
+	"github.com/sfcompute/sfc-go/models/operations"
 )
 
 value := operations.FetchNodeExpandCapacity

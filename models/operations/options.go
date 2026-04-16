@@ -4,8 +4,8 @@ package operations
 
 import (
 	"errors"
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
-	"github.com/sfcompute/sfc-go-sdk/retry"
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/retry"
 	"time"
 )
 

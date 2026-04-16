@@ -3,19 +3,20 @@
 package components
 
 import (
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
-	"github.com/sfcompute/sfc-go-sdk/types"
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/types"
 )
 
 type ProcurementResponse struct {
+	ID string `json:"id"`
+	// A resource path for a procurement resource. Format: sfc:procurement:<account>:<workspace>:<name>.
+	ResourcePath string `json:"resource_path"`
+	Owner        string `json:"owner"`
+	Workspace    string `json:"workspace"`
+	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object       *string           `const:"procurement" json:"object"`
-	ID           string            `json:"id"`
-	Name         string            `json:"name"`
-	Owner        string            `json:"owner"`
-	Workspace    string            `json:"workspace"`
-	ResourcePath string            `json:"resource_path"`
-	Target       ProcurementTarget `json:"target"`
+	object *string           `const:"procurement" json:"object"`
+	Target ProcurementTarget `json:"target"`
 	// ID (default) or expanded summary when using expand parameter
 	Capacity ExpandableCapacityIDCapacitySummaryUnion `json:"capacity"`
 	// Price rate in dollars per node-hour.
@@ -44,10 +45,6 @@ func (p *ProcurementResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (p *ProcurementResponse) GetObject() *string {
-	return types.Pointer("procurement")
-}
-
 func (p *ProcurementResponse) GetID() string {
 	if p == nil {
 		return ""
@@ -55,11 +52,11 @@ func (p *ProcurementResponse) GetID() string {
 	return p.ID
 }
 
-func (p *ProcurementResponse) GetName() string {
+func (p *ProcurementResponse) GetResourcePath() string {
 	if p == nil {
 		return ""
 	}
-	return p.Name
+	return p.ResourcePath
 }
 
 func (p *ProcurementResponse) GetOwner() string {
@@ -76,11 +73,15 @@ func (p *ProcurementResponse) GetWorkspace() string {
 	return p.Workspace
 }
 
-func (p *ProcurementResponse) GetResourcePath() string {
+func (p *ProcurementResponse) GetName() string {
 	if p == nil {
 		return ""
 	}
-	return p.ResourcePath
+	return p.Name
+}
+
+func (p *ProcurementResponse) GetObject() *string {
+	return types.Pointer("procurement")
 }
 
 func (p *ProcurementResponse) GetTarget() ProcurementTarget {

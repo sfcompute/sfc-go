@@ -6,7 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/sfcompute/sfc-go-sdk/retry"
+	"github.com/sfcompute/sfc-go/retry"
 	"io"
 	"math"
 	"math/rand"

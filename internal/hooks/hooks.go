@@ -5,7 +5,7 @@ package hooks
 import (
 	"context"
 	"errors"
-	"github.com/sfcompute/sfc-go-sdk/internal/config"
+	"github.com/sfcompute/sfc-go/internal/config"
 	"net/http"
 )
 

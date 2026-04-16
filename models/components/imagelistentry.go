@@ -3,19 +3,20 @@
 package components
 
 import (
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
-	"github.com/sfcompute/sfc-go-sdk/types"
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/optionalnullable"
+	"github.com/sfcompute/sfc-go/types"
 )
 
 type ImageListEntry struct {
+	ID string `json:"id"`
+	// A resource path for a image resource. Format: sfc:image:<account>:<workspace>:<name>.
+	ResourcePath string `json:"resource_path"`
+	Owner        string `json:"owner"`
+	Workspace    string `json:"workspace"`
+	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	object       *string           `const:"image" json:"object"`
-	ID           string            `json:"id"`
-	Name         string            `json:"name"`
-	Owner        string            `json:"owner"`
-	Workspace    string            `json:"workspace"`
-	ResourcePath string            `json:"resource_path"`
 	UploadStatus ImageUploadStatus `json:"upload_status"`
 	// Unix timestamp.
 	CreatedAt int64                                     `json:"created_at"`
@@ -34,10 +35,6 @@ func (i *ImageListEntry) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *ImageListEntry) GetObject() *string {
-	return types.Pointer("image")
-}
-
 func (i *ImageListEntry) GetID() string {
 	if i == nil {
 		return ""
@@ -45,11 +42,11 @@ func (i *ImageListEntry) GetID() string {
 	return i.ID
 }
 
-func (i *ImageListEntry) GetName() string {
+func (i *ImageListEntry) GetResourcePath() string {
 	if i == nil {
 		return ""
 	}
-	return i.Name
+	return i.ResourcePath
 }
 
 func (i *ImageListEntry) GetOwner() string {
@@ -66,11 +63,15 @@ func (i *ImageListEntry) GetWorkspace() string {
 	return i.Workspace
 }
 
-func (i *ImageListEntry) GetResourcePath() string {
+func (i *ImageListEntry) GetName() string {
 	if i == nil {
 		return ""
 	}
-	return i.ResourcePath
+	return i.Name
+}
+
+func (i *ImageListEntry) GetObject() *string {
+	return types.Pointer("image")
 }
 
 func (i *ImageListEntry) GetUploadStatus() ImageUploadStatus {

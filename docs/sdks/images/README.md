@@ -27,8 +27,8 @@ package main
 import(
 	"context"
 	"os"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/models/operations"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
 )
 
@@ -102,9 +102,9 @@ package main
 import(
 	"context"
 	"os"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
-	"github.com/sfcompute/sfc-go-sdk/models/components"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/optionalnullable"
+	"github.com/sfcompute/sfc-go/models/components"
 	"log"
 )
 
@@ -163,7 +163,7 @@ package main
 import(
 	"context"
 	"os"
-	sfc "github.com/sfcompute/sfc-go-sdk"
+	sfc "github.com/sfcompute/sfc-go"
 	"log"
 )
 
@@ -189,7 +189,7 @@ func main() {
 | Parameter                                                | Type                                                     | Required                                                 | Description                                              | Example                                                  |
 | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
 | `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |                                                          |
-| `id`                                                     | `string`                                                 | :heavy_check_mark:                                       | Image ID, name, or resource path                         | image_k3R-nX9vLm7Qp2Yw5Jd8F                              |
+| `id`                                                     | `string`                                                 | :heavy_check_mark:                                       | Image ID or resource path                                | image_k3R-nX9vLm7Qp2Yw5Jd8F                              |
 | `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |                                                          |
 
 ### Response
@@ -218,7 +218,7 @@ package main
 import(
 	"context"
 	"os"
-	sfc "github.com/sfcompute/sfc-go-sdk"
+	sfc "github.com/sfcompute/sfc-go"
 	"log"
 )
 
@@ -274,8 +274,8 @@ package main
 import(
 	"context"
 	"os"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/models/components"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/components"
 	"log"
 )
 
@@ -334,7 +334,7 @@ package main
 import(
 	"context"
 	"os"
-	sfc "github.com/sfcompute/sfc-go-sdk"
+	sfc "github.com/sfcompute/sfc-go"
 	"log"
 )
 
@@ -390,8 +390,8 @@ package main
 import(
 	"context"
 	"os"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/models/components"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/components"
 	"log"
 )
 

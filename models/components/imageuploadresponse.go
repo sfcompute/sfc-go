@@ -3,19 +3,20 @@
 package components
 
 import (
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
-	"github.com/sfcompute/sfc-go-sdk/types"
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/optionalnullable"
+	"github.com/sfcompute/sfc-go/types"
 )
 
 type ImageUploadResponse struct {
+	ID string `json:"id"`
+	// A resource path for a image resource. Format: sfc:image:<account>:<workspace>:<name>.
+	ResourcePath string `json:"resource_path"`
+	Owner        string `json:"owner"`
+	Workspace    string `json:"workspace"`
+	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	object       *string                                   `const:"image" json:"object"`
-	ID           string                                    `json:"id"`
-	Name         string                                    `json:"name"`
-	Owner        string                                    `json:"owner"`
-	Workspace    string                                    `json:"workspace"`
-	ResourcePath string                                    `json:"resource_path"`
 	UploadStatus ImageUploadStatus                         `json:"upload_status"`
 	Sha256       optionalnullable.OptionalNullable[string] `json:"sha256,omitzero"`
 	// Unix timestamp.
@@ -33,10 +34,6 @@ func (i *ImageUploadResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *ImageUploadResponse) GetObject() *string {
-	return types.Pointer("image")
-}
-
 func (i *ImageUploadResponse) GetID() string {
 	if i == nil {
 		return ""
@@ -44,11 +41,11 @@ func (i *ImageUploadResponse) GetID() string {
 	return i.ID
 }
 
-func (i *ImageUploadResponse) GetName() string {
+func (i *ImageUploadResponse) GetResourcePath() string {
 	if i == nil {
 		return ""
 	}
-	return i.Name
+	return i.ResourcePath
 }
 
 func (i *ImageUploadResponse) GetOwner() string {
@@ -65,11 +62,15 @@ func (i *ImageUploadResponse) GetWorkspace() string {
 	return i.Workspace
 }
 
-func (i *ImageUploadResponse) GetResourcePath() string {
+func (i *ImageUploadResponse) GetName() string {
 	if i == nil {
 		return ""
 	}
-	return i.ResourcePath
+	return i.Name
+}
+
+func (i *ImageUploadResponse) GetObject() *string {
+	return types.Pointer("image")
 }
 
 func (i *ImageUploadResponse) GetUploadStatus() ImageUploadStatus {

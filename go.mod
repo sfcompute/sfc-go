@@ -1,4 +1,4 @@
-module github.com/sfcompute/sfc-go-sdk
+module github.com/sfcompute/sfc-go
 
 go 1.22
 

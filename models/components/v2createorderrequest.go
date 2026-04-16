@@ -5,7 +5,7 @@ package components
 import (
 	"errors"
 	"fmt"
-	"github.com/sfcompute/sfc-go-sdk/internal/utils"
+	"github.com/sfcompute/sfc-go/internal/utils"
 )
 
 type V2CreateOrderRequestDeltaRectangle struct {
@@ -117,7 +117,7 @@ func (u V2CreateOrderRequestDeltaUnion) MarshalJSON() ([]byte, error) {
 }
 
 type V2CreateOrderRequest struct {
-	// A resource path like 'sfc:capacity:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
+	// A resource path like 'sfc:capacity:acme:prod:my-capacity' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
 	Capacity string `json:"capacity"`
 	Side     Side   `json:"side"`
 	// If true, the order stays in the order book until either fills, is explicitly cancelled, or the order end time is reached resulting in automatic cancellation. If false, the order is cancelled immediately if it doesn't fill.

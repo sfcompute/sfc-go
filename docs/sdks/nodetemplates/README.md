@@ -24,8 +24,8 @@ package main
 import(
 	"context"
 	"os"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/models/operations"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
 )
 
@@ -99,9 +99,9 @@ package main
 import(
 	"context"
 	"os"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/optionalnullable"
-	"github.com/sfcompute/sfc-go-sdk/models/components"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/optionalnullable"
+	"github.com/sfcompute/sfc-go/models/components"
 	"log"
 )
 
@@ -158,7 +158,7 @@ func main() {
 
 ## Fetch
 
-Retrieve a node template by ID, resource path, or name.
+Retrieve a node template by ID or resource path.
 
 ### Example Usage
 
@@ -169,9 +169,9 @@ package main
 import(
 	"context"
 	"os"
-	sfc "github.com/sfcompute/sfc-go-sdk"
+	sfc "github.com/sfcompute/sfc-go"
 	"log"
-	"github.com/sfcompute/sfc-go-sdk/models/components"
+	"github.com/sfcompute/sfc-go/models/components"
 )
 
 func main() {
@@ -234,7 +234,7 @@ package main
 import(
 	"context"
 	"os"
-	sfc "github.com/sfcompute/sfc-go-sdk"
+	sfc "github.com/sfcompute/sfc-go"
 	"log"
 )
 

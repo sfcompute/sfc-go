@@ -1,4 +1,4 @@
-# sfc [EXPERIMENTAL GO SDK]
+# sfc
 
 Developer-friendly & type-safe Go SDK specifically catered to leverage *sfc* API.
 
@@ -40,7 +40,7 @@ Developer-friendly & type-safe Go SDK specifically catered to leverage *sfc* API
 
 To add the SDK as a dependency to your project:
 ```bash
-go get github.com/sfcompute/sfc-go-sdk
+go get github.com/sfcompute/sfc-go
 ```
 <!-- End SDK Installation [installation] -->
 
@@ -54,8 +54,8 @@ package main
 
 import (
 	"context"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/models/operations"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
 	"os"
 )
@@ -115,8 +115,8 @@ package main
 
 import (
 	"context"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/models/operations"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
 	"os"
 )
@@ -239,8 +239,8 @@ package main
 
 import (
 	"context"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/models/operations"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
 	"os"
 )
@@ -294,9 +294,9 @@ package main
 
 import (
 	"context"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/models/operations"
-	"github.com/sfcompute/sfc-go-sdk/retry"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/operations"
+	"github.com/sfcompute/sfc-go/retry"
 	"log"
 	"models/operations"
 	"os"
@@ -355,9 +355,9 @@ package main
 
 import (
 	"context"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/models/operations"
-	"github.com/sfcompute/sfc-go-sdk/retry"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/operations"
+	"github.com/sfcompute/sfc-go/retry"
 	"log"
 	"os"
 )
@@ -435,9 +435,9 @@ package main
 import (
 	"context"
 	"errors"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/models/apierrors"
-	"github.com/sfcompute/sfc-go-sdk/models/operations"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/apierrors"
+	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
 	"os"
 )
@@ -499,8 +499,8 @@ package main
 
 import (
 	"context"
-	sfc "github.com/sfcompute/sfc-go-sdk"
-	"github.com/sfcompute/sfc-go-sdk/models/operations"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
 	"os"
 )
@@ -562,7 +562,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/sfcompute/sfc-go-sdk"
+	"github.com/sfcompute/sfc-go"
 )
 
 var (
