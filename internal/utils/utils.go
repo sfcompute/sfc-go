@@ -9,7 +9,6 @@ import (
 	"io"
 	"math/big"
 	"net/http"
-	"os"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -101,49 +100,6 @@ func AsSecuritySource(security interface{}) func(context.Context) (interface{}, 
 	return func(context.Context) (interface{}, error) {
 		return security, nil
 	}
-}
-
-func getCaseInsensitiveEnvVar(envVar string) string {
-	if value := os.Getenv(envVar); value != "" {
-		return value
-	}
-
-	if value := os.Getenv(strings.ToUpper(envVar)); value != "" {
-		return value
-	}
-
-	return ""
-}
-
-func ValueFromEnvVar(envVar string, field interface{}) interface{} {
-	value := getCaseInsensitiveEnvVar(envVar)
-	if value == "" {
-		return nil
-	}
-
-	t := reflect.TypeOf(field)
-	if t.Kind() != reflect.Ptr {
-		return nil
-	}
-	t = t.Elem()
-
-	switch t.Kind() {
-	case reflect.String:
-		return value
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		if i, err := strconv.ParseInt(value, 10, 64); err == nil {
-			return i
-		}
-	case reflect.Float32, reflect.Float64:
-		if f, err := strconv.ParseFloat(value, 64); err == nil {
-			return f
-		}
-	case reflect.Bool:
-		if b, err := strconv.ParseBool(value); err == nil {
-			return b
-		}
-	}
-	return nil
 }
 
 func parseConstTag(field reflect.StructField) *string {
@@ -306,55 +262,6 @@ func isEmptyContainer(typ reflect.Type, val reflect.Value) bool {
 	default:
 		return false
 	}
-}
-
-func isZeroValue(v reflect.Value) bool {
-	switch v.Kind() {
-	case reflect.String:
-		return v.String() == ""
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr,
-		reflect.Float32, reflect.Float64:
-		return v.IsZero()
-	default:
-		return false
-	}
-}
-
-func setFieldValue(fieldVal reflect.Value, value string) bool {
-	if !fieldVal.CanSet() {
-		return false
-	}
-
-	switch fieldVal.Kind() {
-	case reflect.String:
-		fieldVal.SetString(value)
-		return true
-	case reflect.Bool:
-		if boolValue, err := strconv.ParseBool(value); err == nil {
-			fieldVal.SetBool(boolValue)
-			return true
-		}
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		if intValue, err := strconv.ParseInt(value, 10, 64); err == nil {
-			fieldVal.SetInt(intValue)
-			return true
-		}
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		if uintValue, err := strconv.ParseUint(value, 10, 64); err == nil {
-			fieldVal.SetUint(uintValue)
-			return true
-		}
-	case reflect.Float32, reflect.Float64:
-		if floatValue, err := strconv.ParseFloat(value, 64); err == nil {
-			fieldVal.SetFloat(floatValue)
-			return true
-		}
-	default:
-		return false
-	}
-
-	return false
 }
 
 func contains(arr []string, str string) bool {

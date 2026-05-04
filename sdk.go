@@ -2,7 +2,7 @@
 
 package sfc
 
-// Generated from OpenAPI doc version 0.1.0 and generator version 2.879.13
+// Generated from OpenAPI doc version 0.1.0 and generator version 2.881.17
 
 import (
 	"context"
@@ -47,18 +47,19 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-type Sfc struct {
-	SDKVersion string
+type SDK struct {
+	SDKVersion   string
+	InstanceSKUs *InstanceSKUs
 	// A bucket of owned compute balance over time.
 	Capacities *Capacities
-	// Deployment automations that maintain a fleet of nodes on a capacity.
+	// Deployment automations that maintain a fleet of instances on a capacity.
 	Deployments *Deployments
-	// Custom machine images for nodes.
+	// Custom machine images for instances.
 	Images *Images
-	// Reusable node configuration.
-	NodeTemplates *NodeTemplates
-	// Spin up nodes in a capacity to use your available compute.
-	Nodes *Nodes
+	// Reusable instance configuration.
+	InstanceTemplates *InstanceTemplates
+	// Spin up instances in a capacity to use your available compute.
+	Instances *Instances
 	// Place orders targeting a capacity to increase your reserved compute balance during some time period.
 	Orders *Orders
 	// Market automations that maintain capacity by placing buy/sell orders.
@@ -68,18 +69,18 @@ type Sfc struct {
 	hooks            *hooks.Hooks
 }
 
-type SDKOption func(*Sfc)
+type SDKOption func(*SDK)
 
 // WithServerURL allows providing an alternative server URL
 func WithServerURL(serverURL string) SDKOption {
-	return func(sdk *Sfc) {
+	return func(sdk *SDK) {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 }
 
 // WithTemplatedServerURL allows the overriding of the default server URL with a templated URL populated with the provided parameters
 func WithTemplatedServerURL(serverURL string, params map[string]string) SDKOption {
-	return func(sdk *Sfc) {
+	return func(sdk *SDK) {
 		if params != nil {
 			serverURL = utils.ReplaceParameters(serverURL, params)
 		}
@@ -90,7 +91,7 @@ func WithTemplatedServerURL(serverURL string, params map[string]string) SDKOptio
 
 // WithServerIndex allows the overriding of the default server by index
 func WithServerIndex(serverIndex int) SDKOption {
-	return func(sdk *Sfc) {
+	return func(sdk *SDK) {
 		if serverIndex < 0 || serverIndex >= len(ServerList) {
 			panic(fmt.Errorf("server index %d out of range", serverIndex))
 		}
@@ -101,22 +102,22 @@ func WithServerIndex(serverIndex int) SDKOption {
 
 // WithClient allows the overriding of the default HTTP client used by the SDK
 func WithClient(client HTTPClient) SDKOption {
-	return func(sdk *Sfc) {
+	return func(sdk *SDK) {
 		sdk.sdkConfiguration.Client = client
 	}
 }
 
 // WithSecurity configures the SDK to use the provided security details
 func WithSecurity(bearerAuth string) SDKOption {
-	return func(sdk *Sfc) {
-		security := components.Security{BearerAuth: &bearerAuth}
+	return func(sdk *SDK) {
+		security := components.Security{BearerAuth: bearerAuth}
 		sdk.sdkConfiguration.Security = utils.AsSecuritySource(&security)
 	}
 }
 
 // WithSecuritySource configures the SDK to invoke the Security Source function on each method call to determine authentication
 func WithSecuritySource(security func(context.Context) (components.Security, error)) SDKOption {
-	return func(sdk *Sfc) {
+	return func(sdk *SDK) {
 		sdk.sdkConfiguration.Security = func(ctx context.Context) (interface{}, error) {
 			return security(ctx)
 		}
@@ -124,37 +125,30 @@ func WithSecuritySource(security func(context.Context) (components.Security, err
 }
 
 func WithRetryConfig(retryConfig retry.Config) SDKOption {
-	return func(sdk *Sfc) {
+	return func(sdk *SDK) {
 		sdk.sdkConfiguration.RetryConfig = &retryConfig
 	}
 }
 
 // WithTimeout Optional request timeout applied to each operation
 func WithTimeout(timeout time.Duration) SDKOption {
-	return func(sdk *Sfc) {
+	return func(sdk *SDK) {
 		sdk.sdkConfiguration.Timeout = &timeout
 	}
 }
 
 // New creates a new instance of the SDK with the provided options
-func New(opts ...SDKOption) *Sfc {
-	sdk := &Sfc{
+func New(opts ...SDKOption) *SDK {
+	sdk := &SDK{
 		SDKVersion: "0.0.1",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/go 0.0.1 2.879.13 0.1.0 github.com/sfcompute/sfc-go",
+			UserAgent:  "speakeasy-sdk/go 0.0.1 2.881.17 0.1.0 github.com/sfcompute/sfc-go",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
 	}
 	for _, opt := range opts {
 		opt(sdk)
-	}
-
-	if sdk.sdkConfiguration.Security == nil {
-		var envVarSecurity components.Security
-		if utils.PopulateSecurityFromEnv(&envVarSecurity) {
-			sdk.sdkConfiguration.Security = utils.AsSecuritySource(envVarSecurity)
-		}
 	}
 
 	// Use WithClient to override the default client if you would like to customize the timeout
@@ -164,11 +158,12 @@ func New(opts ...SDKOption) *Sfc {
 
 	sdk.sdkConfiguration = sdk.hooks.SDKInit(sdk.sdkConfiguration)
 
+	sdk.InstanceSKUs = newInstanceSKUs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Capacities = newCapacities(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Deployments = newDeployments(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Images = newImages(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.NodeTemplates = newNodeTemplates(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Nodes = newNodes(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.InstanceTemplates = newInstanceTemplates(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Instances = newInstances(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Orders = newOrders(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Procurements = newProcurements(sdk, sdk.sdkConfiguration, sdk.hooks)
 

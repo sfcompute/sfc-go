@@ -15,13 +15,11 @@ type CapacityResponse struct {
 	Owner        string `json:"owner"`
 	Workspace    string `json:"workspace"`
 	Name         string `json:"name"`
-	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object *string `const:"capacity" json:"object"`
 	// Capacity kind determines what operations are allowed on a capacity.
 	// - `Market`: User-created capacities. - `Originating`: Provider capacities for selling compute. Cannot add compute   (buy orders/procurements). - `ReadOnly`: System-managed capacities used for legacy compute, bare metal   contracts, and other. Cannot be modified through the API.
 	Kind CapacityKind `json:"kind"`
-	// Datacenter locations orders into this capacity can acquire compute from.
-	Zones              []string           `json:"zones"`
+	//lint:ignore U1000 accessed via reflection for JSON marshaling
+	object             *string            `const:"capacity" json:"object"`
 	AllocationSchedule AllocationSchedule `json:"allocation_schedule"`
 	// Array of IDs (default) or expanded summaries when using expand parameter
 	Procurements *ExpandableListProcurementIDProcurementSummaryUnion `json:"procurements,omitzero"`
@@ -78,10 +76,6 @@ func (c *CapacityResponse) GetName() string {
 	return c.Name
 }
 
-func (c *CapacityResponse) GetObject() *string {
-	return types.Pointer("capacity")
-}
-
 func (c *CapacityResponse) GetKind() CapacityKind {
 	if c == nil {
 		return CapacityKind("")
@@ -89,11 +83,8 @@ func (c *CapacityResponse) GetKind() CapacityKind {
 	return c.Kind
 }
 
-func (c *CapacityResponse) GetZones() []string {
-	if c == nil {
-		return []string{}
-	}
-	return c.Zones
+func (c *CapacityResponse) GetObject() *string {
+	return types.Pointer("capacity")
 }
 
 func (c *CapacityResponse) GetAllocationSchedule() AllocationSchedule {

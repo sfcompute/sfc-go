@@ -1,0 +1,9 @@
+# CreateCapacityTransferRequest
+
+
+## Fields
+
+| Field                                                                                                    | Type                                                                                                     | Required                                                                                                 | Description                                                                                              |
+| -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `IdempotencyKey`                                                                                         | optionalnullable.OptionalNullable[`string`]                                                              | :heavy_minus_sign:                                                                                       | Unique key for idempotent transfer creation.                                                             |
+| `Body`                                                                                                   | [components.V2CreateCapacityTransferRequest](../../models/components/v2createcapacitytransferrequest.md) | :heavy_check_mark:                                                                                       | N/A                                                                                                      |

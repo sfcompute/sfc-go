@@ -5,8 +5,8 @@ package components
 type AllocationSchedule struct {
 	// Capacity availability over time.
 	Total []ScheduleEntry `json:"total"`
-	// Allocation schedule on a zone-by-zone basis. Only includes current and future schedule.
-	ByZone map[string][]ScheduleEntry `json:"by_zone"`
+	// Allocation schedule keyed by instance SKU. Only includes current and future schedule.
+	ByInstanceSku map[string][]ScheduleEntry `json:"by_instance_sku"`
 }
 
 func (a *AllocationSchedule) GetTotal() []ScheduleEntry {
@@ -16,9 +16,9 @@ func (a *AllocationSchedule) GetTotal() []ScheduleEntry {
 	return a.Total
 }
 
-func (a *AllocationSchedule) GetByZone() map[string][]ScheduleEntry {
+func (a *AllocationSchedule) GetByInstanceSku() map[string][]ScheduleEntry {
 	if a == nil {
 		return map[string][]ScheduleEntry{}
 	}
-	return a.ByZone
+	return a.ByInstanceSku
 }

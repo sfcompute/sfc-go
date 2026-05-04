@@ -1,0 +1,9 @@
+# FetchCapacityTransferResponse
+
+
+## Fields
+
+| Field                                                                                           | Type                                                                                            | Required                                                                                        | Description                                                                                     |
+| ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `HTTPMeta`                                                                                      | [components.HTTPMetadata](../../models/components/httpmetadata.md)                              | :heavy_check_mark:                                                                              | N/A                                                                                             |
+| `V2CapacityTransferResponse`                                                                    | [*components.V2CapacityTransferResponse](../../models/components/v2capacitytransferresponse.md) | :heavy_minus_sign:                                                                              | Capacity transfer details.                                                                      |

@@ -20,14 +20,14 @@ import (
 	"strings"
 )
 
-// Images - Custom machine images for nodes.
+// Images - Custom machine images for instances.
 type Images struct {
-	rootSDK          *Sfc
+	rootSDK          *SDK
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newImages(rootSDK *Sfc, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Images {
+func newImages(rootSDK *SDK, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Images {
 	return &Images{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
@@ -56,7 +56,7 @@ func (s *Images) List(ctx context.Context, request operations.ListImagesRequest,
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/v2/images")
+	opURL, err := url.JoinPath(baseURL, "/preview/v2/images")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -176,7 +176,7 @@ func (s *Images) List(ctx context.Context, request operations.ListImagesRequest,
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -384,7 +384,7 @@ func (s *Images) StartUpload(ctx context.Context, request components.StartUpload
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/v2/images")
+	opURL, err := url.JoinPath(baseURL, "/preview/v2/images")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -507,7 +507,7 @@ func (s *Images) StartUpload(ctx context.Context, request components.StartUpload
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "409", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -700,7 +700,7 @@ func (s *Images) Fetch(ctx context.Context, id string, opts ...operations.Option
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/v2/images/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/preview/v2/images/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -816,7 +816,7 @@ func (s *Images) Fetch(ctx context.Context, id string, opts ...operations.Option
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"401", "404", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -984,7 +984,7 @@ func (s *Images) Delete(ctx context.Context, id string, opts ...operations.Optio
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/v2/images/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/preview/v2/images/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1100,7 +1100,7 @@ func (s *Images) Delete(ctx context.Context, id string, opts ...operations.Optio
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"401", "404", "409", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -1294,7 +1294,7 @@ func (s *Images) CompleteUpload(ctx context.Context, id string, body components.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/v2/images/{id}/complete", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/preview/v2/images/{id}/complete", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1417,7 +1417,7 @@ func (s *Images) CompleteUpload(ctx context.Context, id string, body components.
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "404", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -1610,7 +1610,7 @@ func (s *Images) Download(ctx context.Context, id string, opts ...operations.Opt
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/v2/images/{id}/download", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/preview/v2/images/{id}/download", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1726,7 +1726,7 @@ func (s *Images) Download(ctx context.Context, id string, opts ...operations.Opt
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"401", "404", "409", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -1920,7 +1920,7 @@ func (s *Images) UploadPart(ctx context.Context, id string, body components.Uplo
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/v2/images/{id}/parts", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/preview/v2/images/{id}/parts", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2043,7 +2043,7 @@ func (s *Images) UploadPart(ctx context.Context, id string, body components.Uplo
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "404", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err

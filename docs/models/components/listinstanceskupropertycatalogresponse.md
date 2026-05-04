@@ -1,0 +1,13 @@
+# ListInstanceSkuPropertyCatalogResponse
+
+Paginated list of property-catalog entries returned by `GET /v2/instance_sku_property_catalog`.
+
+
+## Fields
+
+| Field                                                                                                  | Type                                                                                                   | Required                                                                                               | Description                                                                                            |
+| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `Object`                                                                                               | `*string`                                                                                              | :heavy_minus_sign:                                                                                     | N/A                                                                                                    |
+| `Cursor`                                                                                               | optionalnullable.OptionalNullable[`string`]                                                            | :heavy_minus_sign:                                                                                     | Pass as `starting_after` or `ending_before` to paginate.                                               |
+| `HasMore`                                                                                              | `bool`                                                                                                 | :heavy_check_mark:                                                                                     | N/A                                                                                                    |
+| `Data`                                                                                                 | [][components.InstanceSkuPropertyDefinition](../../models/components/instanceskupropertydefinition.md) | :heavy_check_mark:                                                                                     | N/A                                                                                                    |

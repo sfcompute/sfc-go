@@ -158,9 +158,8 @@ type V2OrderResponse struct {
 	Capacity ExpandableCapacityIDCapacitySummaryUnion `json:"capacity"`
 	Side     Side                                     `json:"side"`
 	// If true, the order stays in the order book until either fills, is explicitly cancelled, or the order end time is reached resulting in automatic cancellation. If false, the order is cancelled immediately if it doesn't fill.
-	AllowStanding bool `json:"allow_standing"`
-	// Datacenter locations this order can fill in (derived from target capacity at order creation by default).
-	Zones []string `json:"zones"`
+	AllowStanding bool                                                  `json:"allow_standing"`
+	InstanceSku   optionalnullable.OptionalNullable[InstanceSkuSummary] `json:"instance_sku,omitzero"`
 	// The desired change in capacity. Will be added if side is `buy`, subtracted if `side` is sell if the order fills.
 	Delta V2OrderResponseDeltaUnion `json:"delta"`
 	// Price rate in dollars per node-hour.
@@ -222,11 +221,11 @@ func (v *V2OrderResponse) GetAllowStanding() bool {
 	return v.AllowStanding
 }
 
-func (v *V2OrderResponse) GetZones() []string {
+func (v *V2OrderResponse) GetInstanceSku() optionalnullable.OptionalNullable[InstanceSkuSummary] {
 	if v == nil {
-		return []string{}
+		return nil
 	}
-	return v.Zones
+	return v.InstanceSku
 }
 
 func (v *V2OrderResponse) GetDelta() V2OrderResponseDeltaUnion {

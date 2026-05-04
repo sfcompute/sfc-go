@@ -8,6 +8,7 @@ import (
 
 type PatchProcurementRequest struct {
 	Name                           optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
+	InstanceSku                    optionalnullable.OptionalNullable[string] `json:"instance_sku,omitzero"`
 	MinSellPriceDollarsPerNodeHour optionalnullable.OptionalNullable[string] `json:"min_sell_price_dollars_per_node_hour,omitzero"`
 	MaxBuyPriceDollarsPerNodeHour  optionalnullable.OptionalNullable[string] `json:"max_buy_price_dollars_per_node_hour,omitzero"`
 	// How far ahead (in minutes) the procurement buys and sells compute. Higher values secure compute further in advance but commit to longer windows that may need to be sold when scaling down, potentially at a loss. Lower values reduce waste but risk compute being unavailable. Orders are placed in 1-hour blocks, so the furthest hour is secured up to `managed_window_minutes - 60` minutes before it begins.
@@ -20,6 +21,13 @@ func (p *PatchProcurementRequest) GetName() optionalnullable.OptionalNullable[st
 		return nil
 	}
 	return p.Name
+}
+
+func (p *PatchProcurementRequest) GetInstanceSku() optionalnullable.OptionalNullable[string] {
+	if p == nil {
+		return nil
+	}
+	return p.InstanceSku
 }
 
 func (p *PatchProcurementRequest) GetMinSellPriceDollarsPerNodeHour() optionalnullable.OptionalNullable[string] {

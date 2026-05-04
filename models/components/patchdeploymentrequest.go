@@ -7,10 +7,10 @@ import (
 )
 
 type PatchDeploymentRequest struct {
-	Name             optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
-	NodeTemplate     optionalnullable.OptionalNullable[string] `json:"node_template,omitzero"`
-	TargetNodeCount  optionalnullable.OptionalNullable[int]    `json:"target_node_count,omitzero"`
-	NodeNameTemplate optionalnullable.OptionalNullable[string] `json:"node_name_template,omitzero"`
+	Name                 optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
+	InstanceTemplate     optionalnullable.OptionalNullable[string] `json:"instance_template,omitzero"`
+	TargetInstanceCount  optionalnullable.OptionalNullable[int]    `json:"target_instance_count,omitzero"`
+	InstanceNameTemplate optionalnullable.OptionalNullable[string] `json:"instance_name_template,omitzero"`
 }
 
 func (p *PatchDeploymentRequest) GetName() optionalnullable.OptionalNullable[string] {
@@ -20,23 +20,23 @@ func (p *PatchDeploymentRequest) GetName() optionalnullable.OptionalNullable[str
 	return p.Name
 }
 
-func (p *PatchDeploymentRequest) GetNodeTemplate() optionalnullable.OptionalNullable[string] {
+func (p *PatchDeploymentRequest) GetInstanceTemplate() optionalnullable.OptionalNullable[string] {
 	if p == nil {
 		return nil
 	}
-	return p.NodeTemplate
+	return p.InstanceTemplate
 }
 
-func (p *PatchDeploymentRequest) GetTargetNodeCount() optionalnullable.OptionalNullable[int] {
+func (p *PatchDeploymentRequest) GetTargetInstanceCount() optionalnullable.OptionalNullable[int] {
 	if p == nil {
 		return nil
 	}
-	return p.TargetNodeCount
+	return p.TargetInstanceCount
 }
 
-func (p *PatchDeploymentRequest) GetNodeNameTemplate() optionalnullable.OptionalNullable[string] {
+func (p *PatchDeploymentRequest) GetInstanceNameTemplate() optionalnullable.OptionalNullable[string] {
 	if p == nil {
 		return nil
 	}
-	return p.NodeNameTemplate
+	return p.InstanceNameTemplate
 }

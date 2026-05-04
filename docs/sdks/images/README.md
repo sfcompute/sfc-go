@@ -2,7 +2,7 @@
 
 ## Overview
 
-Custom machine images for nodes.
+Custom machine images for instances.
 
 ### Available Operations
 
@@ -20,13 +20,12 @@ List all images owned by the authenticated user.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="list_images" method="get" path="/v2/images" -->
+<!-- UsageSnippet language="go" operationID="list_images" method="get" path="/preview/v2/images" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
@@ -36,7 +35,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Images.List(ctx, operations.ListImagesRequest{
@@ -95,13 +94,12 @@ Create an image and start a multipart upload.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="create_image" method="post" path="/v2/images" -->
+<!-- UsageSnippet language="go" operationID="create_image" method="post" path="/preview/v2/images" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/optionalnullable"
 	"github.com/sfcompute/sfc-go/models/components"
@@ -112,7 +110,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Images.StartUpload(ctx, components.StartUploadRequest{
@@ -156,13 +154,12 @@ Retrieve an image by ID. Returns both user-owned and public images.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="fetch_image" method="get" path="/v2/images/{id}" -->
+<!-- UsageSnippet language="go" operationID="fetch_image" method="get" path="/preview/v2/images/{id}" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
 )
@@ -171,7 +168,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Images.Fetch(ctx, "image_k3R-nX9vLm7Qp2Yw5Jd8F")
@@ -211,13 +208,12 @@ Delete an image.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="delete_image" method="delete" path="/v2/images/{id}" -->
+<!-- UsageSnippet language="go" operationID="delete_image" method="delete" path="/preview/v2/images/{id}" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
 )
@@ -226,7 +222,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Images.Delete(ctx, "image_k3R-nX9vLm7Qp2Yw5Jd8F")
@@ -267,13 +263,12 @@ Finalize a multipart image upload.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="complete_image_upload" method="post" path="/v2/images/{id}/complete" -->
+<!-- UsageSnippet language="go" operationID="complete_image_upload" method="post" path="/preview/v2/images/{id}/complete" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/models/components"
 	"log"
@@ -283,7 +278,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Images.CompleteUpload(ctx, "image_k3R-nX9vLm7Qp2Yw5Jd8F", components.CompleteUploadRequest{
@@ -327,13 +322,12 @@ Get a presigned URL to download an image.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="download_image" method="get" path="/v2/images/{id}/download" -->
+<!-- UsageSnippet language="go" operationID="download_image" method="get" path="/preview/v2/images/{id}/download" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
 )
@@ -342,7 +336,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Images.Download(ctx, "image_k3R-nX9vLm7Qp2Yw5Jd8F")
@@ -383,13 +377,12 @@ Get a presigned URL to upload one part of a multipart image upload.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="create_image_upload_part_url" method="post" path="/v2/images/{id}/parts" -->
+<!-- UsageSnippet language="go" operationID="create_image_upload_part_url" method="post" path="/preview/v2/images/{id}/parts" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/models/components"
 	"log"
@@ -399,7 +392,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Images.UploadPart(ctx, "image_k3R-nX9vLm7Qp2Yw5Jd8F", components.UploadPartRequest{

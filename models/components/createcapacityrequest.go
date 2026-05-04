@@ -10,10 +10,8 @@ import (
 type CreateCapacityRequest struct {
 	Name optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
 	// A resource path like 'sfc:workspace:acme:prod:my-workspace' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
-	Workspace string `json:"workspace"`
-	// Datacenter locations orders into this capacity can acquire compute from.
-	Zones []string                                             `json:"zones"`
-	Tags  optionalnullable.OptionalNullable[map[string]string] `json:"tags,omitzero"`
+	Workspace string                                               `json:"workspace"`
+	Tags      optionalnullable.OptionalNullable[map[string]string] `json:"tags,omitzero"`
 }
 
 func (c CreateCapacityRequest) MarshalJSON() ([]byte, error) {
@@ -39,13 +37,6 @@ func (c *CreateCapacityRequest) GetWorkspace() string {
 		return ""
 	}
 	return c.Workspace
-}
-
-func (c *CreateCapacityRequest) GetZones() []string {
-	if c == nil {
-		return []string{}
-	}
-	return c.Zones
 }
 
 func (c *CreateCapacityRequest) GetTags() optionalnullable.OptionalNullable[map[string]string] {

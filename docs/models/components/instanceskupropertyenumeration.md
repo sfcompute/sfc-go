@@ -1,0 +1,10 @@
+# InstanceSkuPropertyEnumeration
+
+
+## Fields
+
+| Field                                                                                            | Type                                                                                             | Required                                                                                         | Description                                                                                      |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| `Key`                                                                                            | [components.InstanceSkuPropertyKey](../../models/components/instanceskupropertykey.md)           | :heavy_check_mark:                                                                               | A property key describing something about an instance SKU (e.g. `accelerator_type`, `zone`).     |
+| `Value`                                                                                          | [components.InstanceSkuEnumerationValue](../../models/components/instanceskuenumerationvalue.md) | :heavy_check_mark:                                                                               | One allowed value for an enumeration-typed property key.                                         |
+| `Type`                                                                                           | `*string`                                                                                        | :heavy_minus_sign:                                                                               | N/A                                                                                              |

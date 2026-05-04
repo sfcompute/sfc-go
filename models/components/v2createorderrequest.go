@@ -121,7 +121,8 @@ type V2CreateOrderRequest struct {
 	Capacity string `json:"capacity"`
 	Side     Side   `json:"side"`
 	// If true, the order stays in the order book until either fills, is explicitly cancelled, or the order end time is reached resulting in automatic cancellation. If false, the order is cancelled immediately if it doesn't fill.
-	AllowStanding *bool `json:"allow_standing,omitzero"`
+	AllowStanding *bool  `json:"allow_standing,omitzero"`
+	InstanceSku   string `json:"instance_sku"`
 	// The desired change in capacity. Will be added if side is `buy`, subtracted if `side` is sell if the order fills.
 	Delta V2CreateOrderRequestDeltaUnion `json:"delta"`
 	// Price rate in dollars per node-hour.
@@ -147,6 +148,13 @@ func (v *V2CreateOrderRequest) GetAllowStanding() *bool {
 		return nil
 	}
 	return v.AllowStanding
+}
+
+func (v *V2CreateOrderRequest) GetInstanceSku() string {
+	if v == nil {
+		return ""
+	}
+	return v.InstanceSku
 }
 
 func (v *V2CreateOrderRequest) GetDelta() V2CreateOrderRequestDeltaUnion {

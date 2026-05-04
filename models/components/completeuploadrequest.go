@@ -4,7 +4,7 @@ package components
 
 // CompleteUploadRequest - Complete a multipart image upload.
 type CompleteUploadRequest struct {
-	// Not verified on upload; used during node boot to verify integrity.
+	// Not verified on upload; used during instance boot to verify integrity.
 	Sha256 string `json:"sha256"`
 }
 

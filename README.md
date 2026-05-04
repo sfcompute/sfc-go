@@ -55,43 +55,24 @@ package main
 import (
 	"context"
 	sfc "github.com/sfcompute/sfc-go"
-	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
-	"os"
 )
 
 func main() {
 	ctx := context.Background()
 
 	s := sfc.New(
-		sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.Capacities.List(ctx, operations.ListCapacitiesRequest{
-		Workspace: "wksp_k3R-nX9vLm7Qp2Yw5Jd8F",
-		ID: []string{
-			"cap_k3R-nX9vLm7Qp2Yw5Jd8F",
-		},
-		StartingAfter: sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
-		EndingBefore:  sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
+	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+		"my-resource-name",
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	if res.ListCapacitiesResponse != nil {
-		for {
-			// handle items
-
-			res, err = res.Next()
-
-			if err != nil {
-				// handle error
-			}
-
-			if res == nil {
-				break
-			}
-		}
+	if res.ListAvailabilityResponse != nil {
+		// handle response
 	}
 }
 
@@ -105,9 +86,9 @@ func main() {
 
 This SDK supports the following security scheme globally:
 
-| Name         | Type | Scheme      | Environment Variable |
-| ------------ | ---- | ----------- | -------------------- |
-| `BearerAuth` | http | HTTP Bearer | `SFC_BEARER_AUTH`    |
+| Name         | Type | Scheme      |
+| ------------ | ---- | ----------- |
+| `BearerAuth` | http | HTTP Bearer |
 
 You can configure it using the `WithSecurity` option when initializing the SDK client instance. For example:
 ```go
@@ -116,43 +97,24 @@ package main
 import (
 	"context"
 	sfc "github.com/sfcompute/sfc-go"
-	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
-	"os"
 )
 
 func main() {
 	ctx := context.Background()
 
 	s := sfc.New(
-		sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.Capacities.List(ctx, operations.ListCapacitiesRequest{
-		Workspace: "wksp_k3R-nX9vLm7Qp2Yw5Jd8F",
-		ID: []string{
-			"cap_k3R-nX9vLm7Qp2Yw5Jd8F",
-		},
-		StartingAfter: sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
-		EndingBefore:  sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
+	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+		"my-resource-name",
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	if res.ListCapacitiesResponse != nil {
-		for {
-			// handle items
-
-			res, err = res.Next()
-
-			if err != nil {
-				// handle error
-			}
-
-			if res == nil {
-				break
-			}
-		}
+	if res.ListAvailabilityResponse != nil {
+		// handle response
 	}
 }
 
@@ -172,6 +134,9 @@ func main() {
 * [Fetch](docs/sdks/capacities/README.md#fetch) - Get capacity
 * [Delete](docs/sdks/capacities/README.md#delete) - Delete capacity
 * [Update](docs/sdks/capacities/README.md#update) - Update capacity
+* [ListCapacityTransfers](docs/sdks/capacities/README.md#listcapacitytransfers) - List capacity transfers
+* [CreateCapacityTransfer](docs/sdks/capacities/README.md#createcapacitytransfer) - Create capacity transfer
+* [FetchCapacityTransfer](docs/sdks/capacities/README.md#fetchcapacitytransfer) - Get capacity transfer
 
 ### [Deployments](docs/sdks/deployments/README.md)
 
@@ -191,22 +156,29 @@ func main() {
 * [Download](docs/sdks/images/README.md#download) - Download image
 * [UploadPart](docs/sdks/images/README.md#uploadpart) - Get upload part URL
 
-### [NodeTemplates](docs/sdks/nodetemplates/README.md)
+### [InstanceSKUs](docs/sdks/instanceskus/README.md)
 
-* [List](docs/sdks/nodetemplates/README.md#list) - List node templates
-* [Create](docs/sdks/nodetemplates/README.md#create) - Create node template
-* [Fetch](docs/sdks/nodetemplates/README.md#fetch) - Get node template
-* [Delete](docs/sdks/nodetemplates/README.md#delete) - Delete node template
+* [List](docs/sdks/instanceskus/README.md#list) - List grouped instance-SKU availability
+* [ListInstanceSKUPropertyCatalog](docs/sdks/instanceskus/README.md#listinstanceskupropertycatalog) - List instance SKU property catalog
+* [ListInstanceSKUs](docs/sdks/instanceskus/README.md#listinstanceskus) - List instance SKUs
+* [GetInstanceSku](docs/sdks/instanceskus/README.md#getinstancesku) - Get instance SKU
 
-### [Nodes](docs/sdks/nodes/README.md)
+### [InstanceTemplates](docs/sdks/instancetemplates/README.md)
 
-* [List](docs/sdks/nodes/README.md#list) - List nodes
-* [Create](docs/sdks/nodes/README.md#create) - Create node
-* [Fetch](docs/sdks/nodes/README.md#fetch) - Get node
-* [Delete](docs/sdks/nodes/README.md#delete) - Delete node
-* [GetLogsForNode](docs/sdks/nodes/README.md#getlogsfornode) - Get node logs
-* [GetSSHInfoForNode](docs/sdks/nodes/README.md#getsshinfofornode) - Get node SSH info
-* [TerminateNode](docs/sdks/nodes/README.md#terminatenode) - Terminate node
+* [List](docs/sdks/instancetemplates/README.md#list) - List instance templates
+* [Create](docs/sdks/instancetemplates/README.md#create) - Create instance template
+* [Fetch](docs/sdks/instancetemplates/README.md#fetch) - Get instance template
+* [Delete](docs/sdks/instancetemplates/README.md#delete) - Delete instance template
+
+### [Instances](docs/sdks/instances/README.md)
+
+* [List](docs/sdks/instances/README.md#list) - List instances
+* [Create](docs/sdks/instances/README.md#create) - Create instance
+* [Fetch](docs/sdks/instances/README.md#fetch) - Get instance
+* [Delete](docs/sdks/instances/README.md#delete) - Delete instance
+* [GetLogsForInstance](docs/sdks/instances/README.md#getlogsforinstance) - Get instance logs
+* [GetSSHInfoForInstance](docs/sdks/instances/README.md#getsshinfoforinstance) - Get instance SSH info
+* [TerminateInstance](docs/sdks/instances/README.md#terminateinstance) - Terminate instance
 
 ### [Orders](docs/sdks/orders/README.md)
 
@@ -240,30 +212,21 @@ package main
 import (
 	"context"
 	sfc "github.com/sfcompute/sfc-go"
-	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
-	"os"
 )
 
 func main() {
 	ctx := context.Background()
 
 	s := sfc.New(
-		sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.Capacities.List(ctx, operations.ListCapacitiesRequest{
-		Workspace: "wksp_k3R-nX9vLm7Qp2Yw5Jd8F",
-		ID: []string{
-			"cap_k3R-nX9vLm7Qp2Yw5Jd8F",
-		},
-		StartingAfter: sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
-		EndingBefore:  sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
-	})
+	res, err := s.InstanceSKUs.ListInstanceSKUPropertyCatalog(ctx, sfc.Pointer[int64](50), nil, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if res.ListCapacitiesResponse != nil {
+	if res.ListInstanceSkuPropertyCatalogResponse != nil {
 		for {
 			// handle items
 
@@ -295,27 +258,20 @@ package main
 import (
 	"context"
 	sfc "github.com/sfcompute/sfc-go"
-	"github.com/sfcompute/sfc-go/models/operations"
 	"github.com/sfcompute/sfc-go/retry"
 	"log"
 	"models/operations"
-	"os"
 )
 
 func main() {
 	ctx := context.Background()
 
 	s := sfc.New(
-		sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.Capacities.List(ctx, operations.ListCapacitiesRequest{
-		Workspace: "wksp_k3R-nX9vLm7Qp2Yw5Jd8F",
-		ID: []string{
-			"cap_k3R-nX9vLm7Qp2Yw5Jd8F",
-		},
-		StartingAfter: sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
-		EndingBefore:  sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
+	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+		"my-resource-name",
 	}, operations.WithRetries(
 		retry.Config{
 			Strategy: "backoff",
@@ -330,20 +286,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if res.ListCapacitiesResponse != nil {
-		for {
-			// handle items
-
-			res, err = res.Next()
-
-			if err != nil {
-				// handle error
-			}
-
-			if res == nil {
-				break
-			}
-		}
+	if res.ListAvailabilityResponse != nil {
+		// handle response
 	}
 }
 
@@ -356,10 +300,8 @@ package main
 import (
 	"context"
 	sfc "github.com/sfcompute/sfc-go"
-	"github.com/sfcompute/sfc-go/models/operations"
 	"github.com/sfcompute/sfc-go/retry"
 	"log"
-	"os"
 )
 
 func main() {
@@ -377,34 +319,17 @@ func main() {
 				},
 				RetryConnectionErrors: false,
 			}),
-		sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.Capacities.List(ctx, operations.ListCapacitiesRequest{
-		Workspace: "wksp_k3R-nX9vLm7Qp2Yw5Jd8F",
-		ID: []string{
-			"cap_k3R-nX9vLm7Qp2Yw5Jd8F",
-		},
-		StartingAfter: sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
-		EndingBefore:  sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
+	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+		"my-resource-name",
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	if res.ListCapacitiesResponse != nil {
-		for {
-			// handle items
-
-			res, err = res.Next()
-
-			if err != nil {
-				// handle error
-			}
-
-			if res == nil {
-				break
-			}
-		}
+	if res.ListAvailabilityResponse != nil {
+		// handle response
 	}
 }
 
@@ -437,25 +362,18 @@ import (
 	"errors"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/models/apierrors"
-	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
-	"os"
 )
 
 func main() {
 	ctx := context.Background()
 
 	s := sfc.New(
-		sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.Capacities.List(ctx, operations.ListCapacitiesRequest{
-		Workspace: "wksp_k3R-nX9vLm7Qp2Yw5Jd8F",
-		ID: []string{
-			"cap_k3R-nX9vLm7Qp2Yw5Jd8F",
-		},
-		StartingAfter: sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
-		EndingBefore:  sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
+	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+		"my-resource-name",
 	})
 	if err != nil {
 
@@ -500,9 +418,7 @@ package main
 import (
 	"context"
 	sfc "github.com/sfcompute/sfc-go"
-	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
-	"os"
 )
 
 func main() {
@@ -510,34 +426,17 @@ func main() {
 
 	s := sfc.New(
 		sfc.WithServerURL("https://api.sfcompute.com"),
-		sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.Capacities.List(ctx, operations.ListCapacitiesRequest{
-		Workspace: "wksp_k3R-nX9vLm7Qp2Yw5Jd8F",
-		ID: []string{
-			"cap_k3R-nX9vLm7Qp2Yw5Jd8F",
-		},
-		StartingAfter: sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
-		EndingBefore:  sfc.Pointer("capc_gqXR7s0Kj5mHvE2wNpLc4Q"),
+	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+		"my-resource-name",
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	if res.ListCapacitiesResponse != nil {
-		for {
-			// handle items
-
-			res, err = res.Next()
-
-			if err != nil {
-				// handle error
-			}
-
-			if res == nil {
-				break
-			}
-		}
+	if res.ListAvailabilityResponse != nil {
+		// handle response
 	}
 }
 

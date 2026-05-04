@@ -13,7 +13,7 @@ value := operations.ListDeploymentsExpandCapacity
 
 ## Values
 
-| Name                                | Value                               |
-| ----------------------------------- | ----------------------------------- |
-| `ListDeploymentsExpandCapacity`     | capacity                            |
-| `ListDeploymentsExpandNodeTemplate` | node_template                       |
+| Name                                    | Value                                   |
+| --------------------------------------- | --------------------------------------- |
+| `ListDeploymentsExpandCapacity`         | capacity                                |
+| `ListDeploymentsExpandInstanceTemplate` | instance_template                       |

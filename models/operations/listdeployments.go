@@ -12,8 +12,8 @@ import (
 type ListDeploymentsExpand string
 
 const (
-	ListDeploymentsExpandCapacity     ListDeploymentsExpand = "capacity"
-	ListDeploymentsExpandNodeTemplate ListDeploymentsExpand = "node_template"
+	ListDeploymentsExpandCapacity         ListDeploymentsExpand = "capacity"
+	ListDeploymentsExpandInstanceTemplate ListDeploymentsExpand = "instance_template"
 )
 
 func (e ListDeploymentsExpand) ToPointer() *ListDeploymentsExpand {
@@ -27,7 +27,7 @@ func (e *ListDeploymentsExpand) UnmarshalJSON(data []byte) error {
 	switch v {
 	case "capacity":
 		fallthrough
-	case "node_template":
+	case "instance_template":
 		*e = ListDeploymentsExpand(v)
 		return nil
 	default:

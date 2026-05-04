@@ -2,7 +2,7 @@
 
 ## Overview
 
-Deployment automations that maintain a fleet of nodes on a capacity.
+Deployment automations that maintain a fleet of instances on a capacity.
 
 ### Available Operations
 
@@ -18,13 +18,12 @@ List all deployments.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="list_deployments" method="get" path="/v2/deployments" -->
+<!-- UsageSnippet language="go" operationID="list_deployments" method="get" path="/preview/v2/deployments" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
@@ -34,7 +33,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Deployments.List(ctx, operations.ListDeploymentsRequest{
@@ -91,13 +90,12 @@ Create a deployment for bulk node management.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="create_deployment" method="post" path="/v2/deployments" -->
+<!-- UsageSnippet language="go" operationID="create_deployment" method="post" path="/preview/v2/deployments" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/optionalnullable"
 	"github.com/sfcompute/sfc-go/models/components"
@@ -108,15 +106,15 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Deployments.Create(ctx, components.CreateDeploymentRequest{
         Name: optionalnullable.From(sfc.Pointer("my-resource-name")),
         Capacity: "cap_k3R-nX9vLm7Qp2Yw5Jd8F",
-        NodeTemplate: "ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F",
-        TargetNodeCount: 384760,
-        NodeNameTemplate: sfc.Pointer("my-fleet-{{nanoid(9)}}"),
+        InstanceTemplate: "ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F",
+        TargetInstanceCount: 384760,
+        InstanceNameTemplate: sfc.Pointer("my-fleet-{{nanoid(9)}}"),
     })
     if err != nil {
         log.Fatal(err)
@@ -165,13 +163,12 @@ Retrieve a deployment by ID or name.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="get_deployment" method="get" path="/v2/deployments/{id}" -->
+<!-- UsageSnippet language="go" operationID="get_deployment" method="get" path="/preview/v2/deployments/{id}" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
 	"github.com/sfcompute/sfc-go/models/components"
@@ -181,7 +178,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Deployments.GetDeployment(ctx, "depl_k3R-nX9vLm7Qp2Yw5Jd8F", nil)
@@ -230,13 +227,12 @@ Delete a deployment.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="delete_deployment" method="delete" path="/v2/deployments/{id}" -->
+<!-- UsageSnippet language="go" operationID="delete_deployment" method="delete" path="/preview/v2/deployments/{id}" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
 )
@@ -245,7 +241,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Deployments.Delete(ctx, "depl_k3R-nX9vLm7Qp2Yw5Jd8F")
@@ -286,13 +282,12 @@ Update a deployment's configuration.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="patch_deployment" method="patch" path="/v2/deployments/{id}" -->
+<!-- UsageSnippet language="go" operationID="patch_deployment" method="patch" path="/preview/v2/deployments/{id}" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/optionalnullable"
 	"github.com/sfcompute/sfc-go/models/components"
@@ -303,13 +298,13 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Deployments.PatchDeployment(ctx, "depl_k3R-nX9vLm7Qp2Yw5Jd8F", components.PatchDeploymentRequest{
         Name: optionalnullable.From(sfc.Pointer("my-resource-name")),
-        NodeTemplate: optionalnullable.From(sfc.Pointer("ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F")),
-        NodeNameTemplate: optionalnullable.From(sfc.Pointer("my-fleet-{{nanoid(9)}}")),
+        InstanceTemplate: optionalnullable.From(sfc.Pointer("ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F")),
+        InstanceNameTemplate: optionalnullable.From(sfc.Pointer("my-fleet-{{nanoid(9)}}")),
     })
     if err != nil {
         log.Fatal(err)

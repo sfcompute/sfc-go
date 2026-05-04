@@ -10,11 +10,11 @@ type CreateDeploymentRequest struct {
 	Name optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
 	// A resource path like 'sfc:capacity:acme:prod:my-capacity' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
 	Capacity string `json:"capacity"`
-	// A resource path like 'sfc:node_template:acme:prod:my-node_template' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
-	NodeTemplate    string `json:"node_template"`
-	TargetNodeCount int    `json:"target_node_count"`
+	// A resource path like 'sfc:instance_template:acme:prod:my-instance_template' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
+	InstanceTemplate    string `json:"instance_template"`
+	TargetInstanceCount int    `json:"target_instance_count"`
 	// A name template using {{variable}} syntax. Available variables: {{adjective}} (~128 random adjectives), {{noun}} (~128 random nouns), {{nanoid(N)}} (N-character alphanumeric identifier, 1 ≤ N ≤ 21). The template must produce enough unique combinations to avoid collisions — equivalent to at least the default template {{adjective}}-{{noun}}-{{nanoid(6)}} (~1 quadrillion possibilities). Must start with an alphanumeric character. Resolved names are limited to 255 characters.
-	NodeNameTemplate *string `json:"node_name_template,omitzero"`
+	InstanceNameTemplate *string `json:"instance_name_template,omitzero"`
 }
 
 func (c *CreateDeploymentRequest) GetName() optionalnullable.OptionalNullable[string] {
@@ -31,23 +31,23 @@ func (c *CreateDeploymentRequest) GetCapacity() string {
 	return c.Capacity
 }
 
-func (c *CreateDeploymentRequest) GetNodeTemplate() string {
+func (c *CreateDeploymentRequest) GetInstanceTemplate() string {
 	if c == nil {
 		return ""
 	}
-	return c.NodeTemplate
+	return c.InstanceTemplate
 }
 
-func (c *CreateDeploymentRequest) GetTargetNodeCount() int {
+func (c *CreateDeploymentRequest) GetTargetInstanceCount() int {
 	if c == nil {
 		return 0
 	}
-	return c.TargetNodeCount
+	return c.TargetInstanceCount
 }
 
-func (c *CreateDeploymentRequest) GetNodeNameTemplate() *string {
+func (c *CreateDeploymentRequest) GetInstanceNameTemplate() *string {
 	if c == nil {
 		return nil
 	}
-	return c.NodeNameTemplate
+	return c.InstanceNameTemplate
 }

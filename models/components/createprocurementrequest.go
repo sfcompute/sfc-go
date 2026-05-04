@@ -8,9 +8,10 @@ import (
 )
 
 type CreateProcurementRequest struct {
-	Name     optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
-	Target   ProcurementTarget                         `json:"target"`
-	Capacity string                                    `json:"capacity"`
+	Name        optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
+	Target      ProcurementTarget                         `json:"target"`
+	Capacity    string                                    `json:"capacity"`
+	InstanceSku string                                    `json:"instance_sku"`
 	// Price rate in dollars per node-hour.
 	MinSellPriceDollarsPerNodeHour string `json:"min_sell_price_dollars_per_node_hour"`
 	// Price rate in dollars per node-hour.
@@ -51,6 +52,13 @@ func (c *CreateProcurementRequest) GetCapacity() string {
 		return ""
 	}
 	return c.Capacity
+}
+
+func (c *CreateProcurementRequest) GetInstanceSku() string {
+	if c == nil {
+		return ""
+	}
+	return c.InstanceSku
 }
 
 func (c *CreateProcurementRequest) GetMinSellPriceDollarsPerNodeHour() string {

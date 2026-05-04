@@ -22,12 +22,12 @@ import (
 
 // Procurements - Market automations that maintain capacity by placing buy/sell orders.
 type Procurements struct {
-	rootSDK          *Sfc
+	rootSDK          *SDK
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newProcurements(rootSDK *Sfc, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Procurements {
+func newProcurements(rootSDK *SDK, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Procurements {
 	return &Procurements{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
@@ -56,7 +56,7 @@ func (s *Procurements) List(ctx context.Context, request operations.ListProcurem
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/v2/procurements")
+	opURL, err := url.JoinPath(baseURL, "/preview/v2/procurements")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -176,7 +176,7 @@ func (s *Procurements) List(ctx context.Context, request operations.ListProcurem
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"401", "422", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -384,7 +384,7 @@ func (s *Procurements) Create(ctx context.Context, request components.CreateProc
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/v2/procurements")
+	opURL, err := url.JoinPath(baseURL, "/preview/v2/procurements")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -507,7 +507,7 @@ func (s *Procurements) Create(ctx context.Context, request components.CreateProc
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "409", "422", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -751,7 +751,7 @@ func (s *Procurements) GetProcurement(ctx context.Context, id string, expand []s
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/v2/procurements/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/preview/v2/procurements/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -871,7 +871,7 @@ func (s *Procurements) GetProcurement(ctx context.Context, id string, expand []s
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"401", "404", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -1039,7 +1039,7 @@ func (s *Procurements) Delete(ctx context.Context, id string, opts ...operations
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/v2/procurements/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/preview/v2/procurements/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1155,7 +1155,7 @@ func (s *Procurements) Delete(ctx context.Context, id string, opts ...operations
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"401", "403", "404", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -1330,7 +1330,7 @@ func (s *Procurements) PatchProcurement(ctx context.Context, id string, body com
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/v2/procurements/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/preview/v2/procurements/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1453,7 +1453,7 @@ func (s *Procurements) PatchProcurement(ctx context.Context, id string, body com
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "404", "422", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err

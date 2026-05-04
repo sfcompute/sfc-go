@@ -23,12 +23,12 @@ import (
 
 // Orders - Place orders targeting a capacity to increase your reserved compute balance during some time period.
 type Orders struct {
-	rootSDK          *Sfc
+	rootSDK          *SDK
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newOrders(rootSDK *Sfc, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Orders {
+func newOrders(rootSDK *SDK, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Orders {
 	return &Orders{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
@@ -57,7 +57,7 @@ func (s *Orders) List(ctx context.Context, request operations.ListOrdersRequest,
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/v2/orders")
+	opURL, err := url.JoinPath(baseURL, "/preview/v2/orders")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -177,7 +177,7 @@ func (s *Orders) List(ctx context.Context, request operations.ListOrdersRequest,
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"401", "422", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -365,7 +365,7 @@ func (s *Orders) List(ctx context.Context, request operations.ListOrdersRequest,
 }
 
 // Create order
-// Place a buy or sell order. Orders fill completely or not at all. All nodes fill in a single zone. Order filling is asynchronous; poll `GET /v2/orders/{id}` to check status.
+// Place a buy or sell order. Orders fill completely or not at all. All nodes fill on a single instance SKU matching the order's `requirements`. Order filling is asynchronous; poll `GET /v2/orders/{id}` to check status.
 func (s *Orders) Create(ctx context.Context, body components.V2CreateOrderRequest, idempotencyKey optionalnullable.OptionalNullable[string], opts ...operations.Option) (*operations.CreateOrderResponse, error) {
 	request := operations.CreateOrderRequest{
 		IdempotencyKey: idempotencyKey,
@@ -390,7 +390,7 @@ func (s *Orders) Create(ctx context.Context, body components.V2CreateOrderReques
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/v2/orders")
+	opURL, err := url.JoinPath(baseURL, "/preview/v2/orders")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -515,7 +515,7 @@ func (s *Orders) Create(ctx context.Context, body components.V2CreateOrderReques
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"401", "402", "403", "404", "422", "4XX", "500", "503", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -784,7 +784,7 @@ func (s *Orders) Fetch(ctx context.Context, id string, expand []string, opts ...
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/v2/orders/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/preview/v2/orders/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -904,7 +904,7 @@ func (s *Orders) Fetch(ctx context.Context, id string, expand []string, opts ...
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"401", "404", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -1072,7 +1072,7 @@ func (s *Orders) Cancel(ctx context.Context, id string, opts ...operations.Optio
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/v2/orders/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/preview/v2/orders/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1188,7 +1188,7 @@ func (s *Orders) Cancel(ctx context.Context, id string, opts ...operations.Optio
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"401", "404", "422", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err

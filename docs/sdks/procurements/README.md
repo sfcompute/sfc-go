@@ -18,13 +18,12 @@ List all procurements.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="list_procurements" method="get" path="/v2/procurements" -->
+<!-- UsageSnippet language="go" operationID="list_procurements" method="get" path="/preview/v2/procurements" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
@@ -34,7 +33,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Procurements.List(ctx, operations.ListProcurementsRequest{
@@ -91,13 +90,12 @@ Create a market automation that maintains capacity by placing buy/sell orders.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="create_procurement" method="post" path="/v2/procurements" -->
+<!-- UsageSnippet language="go" operationID="create_procurement" method="post" path="/preview/v2/procurements" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/optionalnullable"
 	"github.com/sfcompute/sfc-go/models/components"
@@ -108,7 +106,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Procurements.Create(ctx, components.CreateProcurementRequest{
@@ -117,6 +115,7 @@ func main() {
             "<value>",
         ),
         Capacity: "<value>",
+        InstanceSku: "isku_k3R-nX9vLm7Qp2Yw5Jd8F",
         MinSellPriceDollarsPerNodeHour: "2.500000",
         MaxBuyPriceDollarsPerNodeHour: "2.500000",
         ManagedWindowMinutes: 423588,
@@ -168,13 +167,12 @@ Retrieve a procurement by ID or name.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="get_procurement" method="get" path="/v2/procurements/{id}" -->
+<!-- UsageSnippet language="go" operationID="get_procurement" method="get" path="/preview/v2/procurements/{id}" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
 	"github.com/sfcompute/sfc-go/models/components"
@@ -184,7 +182,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Procurements.GetProcurement(ctx, "proc_k3R-nX9vLm7Qp2Yw5Jd8F", nil)
@@ -233,13 +231,12 @@ Delete a procurement. Standing orders are cancelled automatically.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="delete_procurement" method="delete" path="/v2/procurements/{id}" -->
+<!-- UsageSnippet language="go" operationID="delete_procurement" method="delete" path="/preview/v2/procurements/{id}" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
 )
@@ -248,7 +245,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Procurements.Delete(ctx, "proc_k3R-nX9vLm7Qp2Yw5Jd8F")
@@ -289,13 +286,12 @@ Update a procurement's configuration.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="patch_procurement" method="patch" path="/v2/procurements/{id}" -->
+<!-- UsageSnippet language="go" operationID="patch_procurement" method="patch" path="/preview/v2/procurements/{id}" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/optionalnullable"
 	"github.com/sfcompute/sfc-go/models/components"
@@ -306,11 +302,12 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Procurements.PatchProcurement(ctx, "proc_k3R-nX9vLm7Qp2Yw5Jd8F", components.PatchProcurementRequest{
         Name: optionalnullable.From(sfc.Pointer("my-resource-name")),
+        InstanceSku: optionalnullable.From(sfc.Pointer("isku_k3R-nX9vLm7Qp2Yw5Jd8F")),
         MinSellPriceDollarsPerNodeHour: optionalnullable.From(sfc.Pointer("2.500000")),
         MaxBuyPriceDollarsPerNodeHour: optionalnullable.From(sfc.Pointer("2.500000")),
     })

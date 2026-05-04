@@ -13,7 +13,7 @@ value := operations.GetDeploymentExpandCapacity
 
 ## Values
 
-| Name                              | Value                             |
-| --------------------------------- | --------------------------------- |
-| `GetDeploymentExpandCapacity`     | capacity                          |
-| `GetDeploymentExpandNodeTemplate` | node_template                     |
+| Name                                  | Value                                 |
+| ------------------------------------- | ------------------------------------- |
+| `GetDeploymentExpandCapacity`         | capacity                              |
+| `GetDeploymentExpandInstanceTemplate` | instance_template                     |

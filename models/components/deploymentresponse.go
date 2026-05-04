@@ -19,11 +19,11 @@ type DeploymentResponse struct {
 	// ID (default) or expanded summary when using expand parameter
 	Capacity ExpandableCapacityIDCapacitySummaryUnion `json:"capacity"`
 	// ID (default) or expanded summary when using expand parameter
-	NodeTemplate    ExpandableNodeTemplateIDNodeTemplateSummaryUnion `json:"node_template"`
-	TargetNodeCount int                                              `json:"target_node_count"`
+	InstanceTemplate    ExpandableInstanceTemplateIDInstanceTemplateSummaryUnion `json:"instance_template"`
+	TargetInstanceCount int                                                      `json:"target_instance_count"`
 	// A name template using {{variable}} syntax. Available variables: {{adjective}} (~128 random adjectives), {{noun}} (~128 random nouns), {{nanoid(N)}} (N-character alphanumeric identifier, 1 ≤ N ≤ 21). The template must produce enough unique combinations to avoid collisions — equivalent to at least the default template {{adjective}}-{{noun}}-{{nanoid(6)}} (~1 quadrillion possibilities). Must start with an alphanumeric character. Resolved names are limited to 255 characters.
-	NodeNameTemplate string               `json:"node_name_template"`
-	Status           ReconciliationStatus `json:"status"`
+	InstanceNameTemplate string               `json:"instance_name_template"`
+	Status               ReconciliationStatus `json:"status"`
 	// Unix timestamp.
 	CreatedAt int64 `json:"created_at"`
 	// Unix timestamp.
@@ -87,25 +87,25 @@ func (d *DeploymentResponse) GetCapacity() ExpandableCapacityIDCapacitySummaryUn
 	return d.Capacity
 }
 
-func (d *DeploymentResponse) GetNodeTemplate() ExpandableNodeTemplateIDNodeTemplateSummaryUnion {
+func (d *DeploymentResponse) GetInstanceTemplate() ExpandableInstanceTemplateIDInstanceTemplateSummaryUnion {
 	if d == nil {
-		return ExpandableNodeTemplateIDNodeTemplateSummaryUnion{}
+		return ExpandableInstanceTemplateIDInstanceTemplateSummaryUnion{}
 	}
-	return d.NodeTemplate
+	return d.InstanceTemplate
 }
 
-func (d *DeploymentResponse) GetTargetNodeCount() int {
+func (d *DeploymentResponse) GetTargetInstanceCount() int {
 	if d == nil {
 		return 0
 	}
-	return d.TargetNodeCount
+	return d.TargetInstanceCount
 }
 
-func (d *DeploymentResponse) GetNodeNameTemplate() string {
+func (d *DeploymentResponse) GetInstanceNameTemplate() string {
 	if d == nil {
 		return ""
 	}
-	return d.NodeNameTemplate
+	return d.InstanceNameTemplate
 }
 
 func (d *DeploymentResponse) GetStatus() ReconciliationStatus {

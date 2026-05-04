@@ -1,0 +1,14 @@
+# ListInstanceTemplatesRequest
+
+
+## Fields
+
+| Field                                                      | Type                                                       | Required                                                   | Description                                                | Example                                                    |
+| ---------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
+| `Workspace`                                                | `string`                                                   | :heavy_check_mark:                                         | Filter by workspace.                                       | wksp_k3R-nX9vLm7Qp2Yw5Jd8F                                 |
+| `ID`                                                       | []`string`                                                 | :heavy_minus_sign:                                         | Filter by instance template ID or name (repeatable).       |                                                            |
+| `Limit`                                                    | `*int64`                                                   | :heavy_minus_sign:                                         | N/A                                                        |                                                            |
+| `StartingAfter`                                            | `*string`                                                  | :heavy_minus_sign:                                         | Set to the response's `cursor` to fetch the next page.     | itmplc_gqXR7s0Kj5mHvE2wNpLc4Q                              |
+| `EndingBefore`                                             | `*string`                                                  | :heavy_minus_sign:                                         | Set to the response's `cursor` to fetch the previous page. | itmplc_gqXR7s0Kj5mHvE2wNpLc4Q                              |
+| `Include`                                                  | []`string`                                                 | :heavy_minus_sign:                                         | Additional fields to include in the response.              |                                                            |
+| `Expand`                                                   | []`string`                                                 | :heavy_minus_sign:                                         | N/A                                                        |                                                            |

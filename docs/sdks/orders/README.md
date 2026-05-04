@@ -17,13 +17,12 @@ List all orders.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="list_orders" method="get" path="/v2/orders" -->
+<!-- UsageSnippet language="go" operationID="list_orders" method="get" path="/preview/v2/orders" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
@@ -33,7 +32,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Orders.List(ctx, operations.ListOrdersRequest{
@@ -90,17 +89,16 @@ func main() {
 
 ## Create
 
-Place a buy or sell order. Orders fill completely or not at all. All nodes fill in a single zone. Order filling is asynchronous; poll `GET /v2/orders/{id}` to check status.
+Place a buy or sell order. Orders fill completely or not at all. All nodes fill on a single instance SKU matching the order's `requirements`. Order filling is asynchronous; poll `GET /v2/orders/{id}` to check status.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="create_order" method="post" path="/v2/orders" -->
+<!-- UsageSnippet language="go" operationID="create_order" method="post" path="/preview/v2/orders" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"github.com/sfcompute/sfc-go/models/components"
 	"github.com/sfcompute/sfc-go/optionalnullable"
@@ -111,12 +109,13 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Orders.Create(ctx, components.V2CreateOrderRequest{
         Capacity: "cap_k3R-nX9vLm7Qp2Yw5Jd8F",
         Side: components.SideSell,
+        InstanceSku: "isku_k3R-nX9vLm7Qp2Yw5Jd8F",
         Delta: components.CreateV2CreateOrderRequestDeltaUnionV2CreateOrderRequestDeltaRectangle(
             components.V2CreateOrderRequestDeltaRectangle{
                 NodeCount: 387888,
@@ -175,13 +174,12 @@ Retrieve an order by ID.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="fetch_order" method="get" path="/v2/orders/{id}" -->
+<!-- UsageSnippet language="go" operationID="fetch_order" method="get" path="/preview/v2/orders/{id}" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
 	"github.com/sfcompute/sfc-go/models/components"
@@ -191,7 +189,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Orders.Fetch(ctx, "ordr_xyz789", nil)
@@ -240,13 +238,12 @@ Request cancellation of an order. This is asynchronous — poll `GET /v2/orders/
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="cancel_order" method="delete" path="/v2/orders/{id}" -->
+<!-- UsageSnippet language="go" operationID="cancel_order" method="delete" path="/preview/v2/orders/{id}" -->
 ```go
 package main
 
 import(
 	"context"
-	"os"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
 )
@@ -255,7 +252,7 @@ func main() {
     ctx := context.Background()
 
     s := sfc.New(
-        sfc.WithSecurity(os.Getenv("SFC_BEARER_AUTH")),
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
     res, err := s.Orders.Cancel(ctx, "ordr_xyz789")

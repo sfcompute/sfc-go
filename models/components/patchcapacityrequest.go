@@ -8,10 +8,8 @@ import (
 )
 
 type PatchCapacityRequest struct {
-	Name optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
-	// Datacenter locations orders into this capacity can acquire compute from. Replaces existing zones. Does not affect already scheduled compute.
-	Zones optionalnullable.OptionalNullable[[]string]          `json:"zones,omitzero"`
-	Tags  optionalnullable.OptionalNullable[map[string]string] `json:"tags,omitzero"`
+	Name optionalnullable.OptionalNullable[string]            `json:"name,omitzero"`
+	Tags optionalnullable.OptionalNullable[map[string]string] `json:"tags,omitzero"`
 }
 
 func (p PatchCapacityRequest) MarshalJSON() ([]byte, error) {
@@ -30,13 +28,6 @@ func (p *PatchCapacityRequest) GetName() optionalnullable.OptionalNullable[strin
 		return nil
 	}
 	return p.Name
-}
-
-func (p *PatchCapacityRequest) GetZones() optionalnullable.OptionalNullable[[]string] {
-	if p == nil {
-		return nil
-	}
-	return p.Zones
 }
 
 func (p *PatchCapacityRequest) GetTags() optionalnullable.OptionalNullable[map[string]string] {

@@ -4,6 +4,7 @@ package components
 
 import (
 	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/optionalnullable"
 	"github.com/sfcompute/sfc-go/types"
 )
 
@@ -18,7 +19,8 @@ type ProcurementResponse struct {
 	object *string           `const:"procurement" json:"object"`
 	Target ProcurementTarget `json:"target"`
 	// ID (default) or expanded summary when using expand parameter
-	Capacity ExpandableCapacityIDCapacitySummaryUnion `json:"capacity"`
+	Capacity    ExpandableCapacityIDCapacitySummaryUnion              `json:"capacity"`
+	InstanceSku optionalnullable.OptionalNullable[InstanceSkuSummary] `json:"instance_sku,omitzero"`
 	// Price rate in dollars per node-hour.
 	MinSellPriceDollarsPerNodeHour string `json:"min_sell_price_dollars_per_node_hour"`
 	// Price rate in dollars per node-hour.
@@ -96,6 +98,13 @@ func (p *ProcurementResponse) GetCapacity() ExpandableCapacityIDCapacitySummaryU
 		return ExpandableCapacityIDCapacitySummaryUnion{}
 	}
 	return p.Capacity
+}
+
+func (p *ProcurementResponse) GetInstanceSku() optionalnullable.OptionalNullable[InstanceSkuSummary] {
+	if p == nil {
+		return nil
+	}
+	return p.InstanceSku
 }
 
 func (p *ProcurementResponse) GetMinSellPriceDollarsPerNodeHour() string {
