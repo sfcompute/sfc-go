@@ -56,6 +56,8 @@ type SDK struct {
 	Deployments *Deployments
 	// Custom machine images for instances.
 	Images *Images
+	// Browse available instance SKU property definitions.
+	InstanceSKUCatalog *InstanceSKUCatalog
 	// Reusable instance configuration.
 	InstanceTemplates *InstanceTemplates
 	// Spin up instances in a capacity to use your available compute.
@@ -64,6 +66,8 @@ type SDK struct {
 	Orders *Orders
 	// Market automations that maintain capacity by placing buy/sell orders.
 	Procurements *Procurements
+	// Resource containers scoped to an account.
+	Workspaces *Workspaces
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -162,10 +166,12 @@ func New(opts ...SDKOption) *SDK {
 	sdk.Capacities = newCapacities(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Deployments = newDeployments(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Images = newImages(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.InstanceSKUCatalog = newInstanceSKUCatalog(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.InstanceTemplates = newInstanceTemplates(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Instances = newInstances(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Orders = newOrders(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Procurements = newProcurements(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

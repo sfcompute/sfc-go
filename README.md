@@ -156,10 +156,13 @@ func main() {
 * [Download](docs/sdks/images/README.md#download) - Download image
 * [UploadPart](docs/sdks/images/README.md#uploadpart) - Get upload part URL
 
+### [InstanceSKUCatalog](docs/sdks/instanceskucatalog/README.md)
+
+* [List](docs/sdks/instanceskucatalog/README.md#list) - List instance SKU property catalog
+
 ### [InstanceSKUs](docs/sdks/instanceskus/README.md)
 
 * [List](docs/sdks/instanceskus/README.md#list) - List grouped instance-SKU availability
-* [ListInstanceSKUPropertyCatalog](docs/sdks/instanceskus/README.md#listinstanceskupropertycatalog) - List instance SKU property catalog
 * [ListInstanceSKUs](docs/sdks/instanceskus/README.md#listinstanceskus) - List instance SKUs
 * [GetInstanceSku](docs/sdks/instanceskus/README.md#getinstancesku) - Get instance SKU
 
@@ -195,6 +198,14 @@ func main() {
 * [Delete](docs/sdks/procurements/README.md#delete) - Delete procurement
 * [PatchProcurement](docs/sdks/procurements/README.md#patchprocurement) - Update procurement
 
+### [Workspaces](docs/sdks/workspaces/README.md)
+
+* [List](docs/sdks/workspaces/README.md#list) - List workspaces
+* [Create](docs/sdks/workspaces/README.md#create) - Create workspace
+* [GetWorkspaceHandler](docs/sdks/workspaces/README.md#getworkspacehandler) - Get workspace
+* [Delete](docs/sdks/workspaces/README.md#delete) - Delete workspace
+* [PatchWorkspaceHandler](docs/sdks/workspaces/README.md#patchworkspacehandler) - Update workspace
+
 </details>
 <!-- End Available Resources and Operations [operations] -->
 
@@ -222,11 +233,11 @@ func main() {
 		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.InstanceSKUs.ListInstanceSKUPropertyCatalog(ctx, sfc.Pointer[int64](50), nil, nil)
+	res, err := s.InstanceSKUs.ListInstanceSKUs(ctx, sfc.Pointer[int64](50), sfc.Pointer("iskuc_gqXR7s0Kj5mHvE2wNpLc4Q"), sfc.Pointer("iskuc_gqXR7s0Kj5mHvE2wNpLc4Q"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	if res.ListInstanceSkuPropertyCatalogResponse != nil {
+	if res.ListInstanceSkusResponse != nil {
 		for {
 			// handle items
 

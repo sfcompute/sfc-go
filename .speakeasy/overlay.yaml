@@ -1,51 +1,6 @@
 overlay: 1.0.0
 info:
   title: SFC API SDK Fixes
-  version: 0.0.1
-  # Workarounds for spec issues that block SDK generation. Remove each entry once the
-  # underlying spec bug is fixed upstream.
+  version: 0.0.2
 
-actions:
-  # capacity_transfers endpoints are tagged "Capacities" but Speakeasy generates the same
-  # method names as the base /capacities endpoints. Override to give them distinct names.
-  - target: "$.paths['/preview/v2/capacity_transfers'].get"
-    update:
-      x-speakeasy-name-override: listCapacityTransfers
-  - target: "$.paths['/preview/v2/capacity_transfers'].post"
-    update:
-      x-speakeasy-name-override: createCapacityTransfer
-  - target: "$.paths['/preview/v2/capacity_transfers/{id}'].get"
-    update:
-      x-speakeasy-name-override: fetchCapacityTransfer
-
-  # instance_sku_property_catalog and instance_skus are both tagged "Instance SKUs" and
-  # collide with list_availability (also "Instance SKUs") on the generated List() method.
-  - target: "$.paths['/preview/v2/instance_sku_property_catalog'].get"
-    update:
-      x-speakeasy-name-override: listInstanceSKUPropertyCatalog
-  - target: "$.paths['/preview/v2/instance_skus'].get"
-    update:
-      x-speakeasy-name-override: listInstanceSKUs
-
-  # ListAdminInstanceSku*Response schemas reference these types but they are not defined.
-  # No API paths use these admin schemas; adding stubs unblocks generation.
-  - target: "$.components.schemas"
-    update:
-      AdminInstanceSkusCursor:
-        type: string
-      AdminInstanceSkuPropertyKeysCursor:
-        type: string
-      AdminInstanceSkuPropertyValuesCursor:
-        type: string
-      AdminInstanceSkuPropertyKeyDetail:
-        type: object
-        properties:
-          key:
-            type: string
-      AdminInstanceSkuEnumerationValue:
-        type: string
-      AdminInstanceSku:
-        type: object
-        properties:
-          id:
-            type: string
+actions: []
