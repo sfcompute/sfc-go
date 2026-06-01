@@ -65,7 +65,7 @@ func main() {
 		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+	res, err := s.InstanceSKUs.ListAvailability(ctx, nil, []string{
 		"my-resource-name",
 	})
 	if err != nil {
@@ -107,7 +107,7 @@ func main() {
 		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+	res, err := s.InstanceSKUs.ListAvailability(ctx, nil, []string{
 		"my-resource-name",
 	})
 	if err != nil {
@@ -162,7 +162,7 @@ func main() {
 
 ### [InstanceSKUs](docs/sdks/instanceskus/README.md)
 
-* [List](docs/sdks/instanceskus/README.md#list) - List grouped instance-SKU availability
+* [ListAvailability](docs/sdks/instanceskus/README.md#listavailability) - List grouped instance-SKU availability
 * [ListInstanceSKUs](docs/sdks/instanceskus/README.md#listinstanceskus) - List instance SKUs
 * [GetInstanceSku](docs/sdks/instanceskus/README.md#getinstancesku) - Get instance SKU
 
@@ -183,8 +183,15 @@ func main() {
 * [GetSSHInfoForInstance](docs/sdks/instances/README.md#getsshinfoforinstance) - Get instance SSH info
 * [TerminateInstance](docs/sdks/instances/README.md#terminateinstance) - Terminate instance
 
+### [Orderbook](docs/sdks/orderbook/README.md)
+
+* [GetOrderbookDepth](docs/sdks/orderbook/README.md#getorderbookdepth) - Get market depth
+* [GetOrderbookQuote](docs/sdks/orderbook/README.md#getorderbookquote) - Get market quote
+* [List](docs/sdks/orderbook/README.md#list) - List market windows
+
 ### [Orders](docs/sdks/orders/README.md)
 
+* [GetOrderEstimate](docs/sdks/orders/README.md#getorderestimate) - Estimate an order
 * [List](docs/sdks/orders/README.md#list) - List orders
 * [Create](docs/sdks/orders/README.md#create) - Create order
 * [Fetch](docs/sdks/orders/README.md#fetch) - Get order
@@ -281,7 +288,7 @@ func main() {
 		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+	res, err := s.InstanceSKUs.ListAvailability(ctx, nil, []string{
 		"my-resource-name",
 	}, operations.WithRetries(
 		retry.Config{
@@ -333,7 +340,7 @@ func main() {
 		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+	res, err := s.InstanceSKUs.ListAvailability(ctx, nil, []string{
 		"my-resource-name",
 	})
 	if err != nil {
@@ -354,7 +361,7 @@ Handling errors in this SDK should largely match your expectations. All operatio
 
 By Default, an API error will return `apierrors.APIError`. When custom error responses are specified for an operation, the SDK may also return their associated error. You can refer to respective *Errors* tables in SDK docs for more details on possible error types for each operation.
 
-For example, the `List` function may return the following errors:
+For example, the `ListAvailability` function may return the following errors:
 
 | Error Type                         | Status Code | Content Type     |
 | ---------------------------------- | ----------- | ---------------- |
@@ -383,7 +390,7 @@ func main() {
 		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+	res, err := s.InstanceSKUs.ListAvailability(ctx, nil, []string{
 		"my-resource-name",
 	})
 	if err != nil {
@@ -440,7 +447,7 @@ func main() {
 		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+	res, err := s.InstanceSKUs.ListAvailability(ctx, nil, []string{
 		"my-resource-name",
 	})
 	if err != nil {

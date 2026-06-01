@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: ba52c53e-a4b1-4a1d-a094-43409c7b8345
 management:
-  docChecksum: 9b3d3ec6d8f8a7fbcec3e5307006536d
+  docChecksum: 45fae2cb9242dc85d9ada144881b48d1
   docVersion: 0.1.0
   speakeasyVersion: 1.761.11
   generationVersion: 2.881.17
-  releaseVersion: 0.0.1
-  configChecksum: 5fb06c09167f98fa38c7e4957b77370c
+  releaseVersion: 0.0.2
+  configChecksum: c676225b99c43962e055d13c4b999155
 persistentEdits:
-  generation_id: d5fc78af-813e-4fd9-a85d-98670299293a
-  pristine_commit_hash: 80c6cd06583cd5e8ee2a29490874c48876ee7a79
-  pristine_tree_hash: 7d0468378b4f62727354dfa4dfb66f90c5361cd9
+  generation_id: 5bada0be-879c-431a-94fa-70b33ad91d09
+  pristine_commit_hash: 7b3c3c21079d4c18cbdf70860793bf6e4d608be7
+  pristine_tree_hash: d3024a8c05f8712707f99902e76ae5a449a730f7
 features:
   go:
     additionalDependencies: 0.1.0
@@ -40,8 +40,8 @@ trackedFiles:
     pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
   USAGE.md:
     id: 3aed33ce6e6f
-    last_write_checksum: sha1:3dc5aec5ff1963b48f00ab91c67fe4c45aecddf8
-    pristine_git_object: 864e494bd5fb20e43a2822b2089ec5d12f41fd8a
+    last_write_checksum: sha1:20cea80502ec35fa735662098297a1c0cd04ca84
+    pristine_git_object: ab8d6b7715017414008f9b04cb6354d988b038bc
   capacities.go:
     id: 44878f47ace2
     last_write_checksum: sha1:bcd6a1783acf833b81c75b3be86f0182051a9d8a
@@ -88,8 +88,8 @@ trackedFiles:
     pristine_git_object: dd34e1c9813b9602dbaae3fcfd07bec44e62e17c
   docs/models/components/allocationschedule.md:
     id: 365331b7cdea
-    last_write_checksum: sha1:7100ffce4859e586be5c80a955b36d6f4c1057a3
-    pristine_git_object: da779e03216305100f9673f4c6097362e49f8359
+    last_write_checksum: sha1:e05cb0f885e94d579c09f704d0ad5758d88657e1
+    pristine_git_object: 4e6cd8b3270974fa2e9d4f2c56e3423387af36f3
   docs/models/components/automationstatus.md:
     id: aefaf871bf92
     last_write_checksum: sha1:645169637f30e8c7ad020c57b12b2e1160de0d1e
@@ -260,16 +260,16 @@ trackedFiles:
     pristine_git_object: 470eb625cdf3bcba2e78c34047707e3e308da05e
   docs/models/components/instanceskupropertydefinitionenumeration.md:
     id: b3e4ac53bc28
-    last_write_checksum: sha1:c33a03b6724bf872e4de8793b790a1778f538bce
-    pristine_git_object: 65e1c5a9cdc0e80a01728434c5e35de0ffb403fe
+    last_write_checksum: sha1:a6ab21d9acac69fdf721255af44a595fce2d03a0
+    pristine_git_object: a1cb5afc09a87e0905eedaadbbc746493d70431a
   docs/models/components/instanceskupropertyenumeration.md:
     id: 97f88f768253
-    last_write_checksum: sha1:3569d351550279bcbed19e60189c10fc865d09fc
-    pristine_git_object: 97491b8b61ac098af764e0fa67ae893c4a8d1486
+    last_write_checksum: sha1:787b75fefd80c1b67119d4c357fb25041d9b02bf
+    pristine_git_object: 38373e4c340ae756490d27708e06ddd674f38ac1
   docs/models/components/instanceskupropertykey.md:
     id: fd6417ee024c
-    last_write_checksum: sha1:0aabd3c8be448e02f37c84c24a43d27980a159c0
-    pristine_git_object: 58b00146991a8878cb4e0cfd1bf237ddc8356692
+    last_write_checksum: sha1:0913eb85ea5dee5af9360d0ecf9f98c06e3c0399
+    pristine_git_object: 093781a5404d2beb649b22c31cf2ea1eda38f11b
   docs/models/components/instanceskusummary.md:
     id: 6548a23b2e7f
     last_write_checksum: sha1:582685aa4d0833fa43c9a54615f8c2016f410d51
@@ -326,6 +326,10 @@ trackedFiles:
     id: 15bb2f0502b8
     last_write_checksum: sha1:479575e1d556a1b00a261a5733e7cd577882d734
     pristine_git_object: 01bb7ba8b85f9db6a8b3663a5619ce58b4f8c5a9
+  docs/models/components/listorderbookwindowsresponse.md:
+    id: 9e1f937fe86e
+    last_write_checksum: sha1:c0712850fea3cb2cb29e4c493a55c7ff50093f38
+    pristine_git_object: 0f7b2fec48ccd498e1b87e539c48ca93575d6e2a
   docs/models/components/listprocurementsresponse.md:
     id: 759750b3161f
     last_write_checksum: sha1:5d7232319ef0fb6913e8825cd7fc74a5ca228d98
@@ -338,6 +342,18 @@ trackedFiles:
     id: 611d98101536
     last_write_checksum: sha1:87668cc0fa0ce68f6c663ab0cdc7acd16130f761
     pristine_git_object: 5cc3d98c388ecb3bed777fcbef35594f792d865f
+  docs/models/components/orderbookdepthresponse.md:
+    id: 4fbc7c11a540
+    last_write_checksum: sha1:0b60f567cdbc4015fbc0ec72ff738394feafea50
+    pristine_git_object: 5b0e07abec6eb1fc939babc0beddc44974c4036a
+  docs/models/components/orderbookquoteresponse.md:
+    id: d64a6e2a9a29
+    last_write_checksum: sha1:e44fae4a2763743066bceed01202bc9236def96a
+    pristine_git_object: dcf99c2665f891355ebd7b9f6a826313a313b3ce
+  docs/models/components/orderbookwindow.md:
+    id: b585a3715df4
+    last_write_checksum: sha1:9169f6cd21b69e6b1db323e58902af222051ce80
+    pristine_git_object: 7438e3ddad420c8b3c2e278bc5ee2671e3a8f0e8
   docs/models/components/orderstatus.md:
     id: c6259553e519
     last_write_checksum: sha1:5366b612b3023dfee4e6774a6e02fb4c763ed307
@@ -362,6 +378,10 @@ trackedFiles:
     id: 418cecf87258
     last_write_checksum: sha1:4547d8a03cd4424490d8b9de091d9f6cc24a23b0
     pristine_git_object: 73a315e2b815fb6293af482258ddda736c134214
+  docs/models/components/pricelevel.md:
+    id: 4188d8572b35
+    last_write_checksum: sha1:1a7cb4ad9f593c578380d2503567653ec96f63e4
+    pristine_git_object: 333ebaa56f9be786abd3cc1aac65d776ac9d1b3d
   docs/models/components/procurementresponse.md:
     id: 26695c378838
     last_write_checksum: sha1:1cd0aecb1ea0fe45af0de2441b2d09c047cf96a2
@@ -376,8 +396,8 @@ trackedFiles:
     pristine_git_object: d05948cd55f5992d029389da22b0ce116d6ddaa6
   docs/models/components/scheduleentry.md:
     id: a0ba4d98c422
-    last_write_checksum: sha1:73782cf4af3994aacf4ff3609ea87dd3bdc5e4e9
-    pristine_git_object: 29f854993d0f0ae0e50887ae19be25f15f7db780
+    last_write_checksum: sha1:c340ef820ddb454cecb6b86ceac59d1ebac84235
+    pristine_git_object: 61142576f63e1a4b8fb200bf4d80bf34126a7e4a
   docs/models/components/security.md:
     id: 54906b49ea28
     last_write_checksum: sha1:dc53bd30731b586496a3a8803cce7f376d14c01e
@@ -410,30 +430,18 @@ trackedFiles:
     id: f3f052a72cec
     last_write_checksum: sha1:1a0a895c19c52b2ef71ecc8fffcc5b616b3d9002
     pristine_git_object: 785394a59c2ae8b20f3e8e0071380d66c199debb
-  docs/models/components/v2allocationscheduledelta.md:
-    id: c9ee914ee4b2
-    last_write_checksum: sha1:172b76f8ead505c32fe85c63d7354f03f1d40015
-    pristine_git_object: 5c386f5bc2fbb9b97032464b391469d47a1bde2a
   docs/models/components/v2capacitytransferresponse.md:
     id: bf3af5debcd4
-    last_write_checksum: sha1:64942ea2f4c57934a5cc28cfe6ba035b8eada58a
-    pristine_git_object: f4f66c49f3e2d6a928b528818f86240a21706a4e
+    last_write_checksum: sha1:5bda945f58c8e98d88d1feac9d36cee4a4dbd022
+    pristine_git_object: adc5625348a162aa31b6aab4929c838183457980
   docs/models/components/v2createcapacitytransferrequest.md:
     id: 9964a877a6a4
-    last_write_checksum: sha1:e6f1891a4f4ff6951161ed08ba2cfbd56d6b6026
-    pristine_git_object: 0a1513d05d2cecbe2997fc78426fd4cc05067baf
+    last_write_checksum: sha1:55054b28f0b8c6738f82b6a68b6f3da16f9157d4
+    pristine_git_object: 41d4b2f4878038ad16c2b17ebf54118fa02ed8c5
   docs/models/components/v2createorderrequest.md:
     id: 4fc86f23446f
-    last_write_checksum: sha1:b26142078839ed45955071c6518f0c2b09f7f86b
-    pristine_git_object: 8272df8e95c9e64c5e6c725ed0cab18459b684f4
-  docs/models/components/v2createorderrequestdeltarectangle.md:
-    id: 824b62c84897
-    last_write_checksum: sha1:2065a7ea400cbb1be525de850c4e6e80ff8bd7d1
-    pristine_git_object: 198925c9f0d6806994e5c27d0bc2444089670629
-  docs/models/components/v2createorderrequestdeltaunion.md:
-    id: b033331766ee
-    last_write_checksum: sha1:a72dc2f614021e18f0bf76872fd20e493194b930
-    pristine_git_object: 2a24c0aa4ee0620db94f38c6345bddc72c776169
+    last_write_checksum: sha1:b63cd14d0cb7efe63a29369e238792ebfbc8ba28
+    pristine_git_object: 8f12a526dc21aee7d3f734e2307ca88f7564254c
   docs/models/components/v2listcapacitytransfersresponse.md:
     id: c38ac4d77f9b
     last_write_checksum: sha1:00b525b12aab0aea0c1ad95c539326b3d96b640e
@@ -442,18 +450,54 @@ trackedFiles:
     id: 4fa3c1ce16fe
     last_write_checksum: sha1:b29ed449472d472542c5080f3e09c886689c8913
     pristine_git_object: 5b58ee1e8467a5712573734d65aaa74453c8fec8
+  docs/models/components/v2maintenancenoticetype.md:
+    id: a88e6c2e1949
+    last_write_checksum: sha1:db26aa4789a6e692703fbc3ddf397992a5426410
+    pristine_git_object: ba006447079fad44c122b11642ff5e9ff76ee718
+  docs/models/components/v2orderestimatenotice.md:
+    id: 992603acb4d9
+    last_write_checksum: sha1:734154db9e024c48e334126dbdd43636e9d99972
+    pristine_git_object: 79d9c672234e36ea480540d8ea2df449aa21f64b
+  docs/models/components/v2orderestimatenoticemaintenancewindow.md:
+    id: afd7fd24112b
+    last_write_checksum: sha1:660c59f28c2219ee6e8365d5fdbde0ff32f82bc7
+    pristine_git_object: 7446316f90ea4fb2d1daa30a1b30b86ae7944a98
+  docs/models/components/v2orderestimaterequest.md:
+    id: 9d43238bcf38
+    last_write_checksum: sha1:2c95fd43dd5bb070b50ce16861b744effa5f8541
+    pristine_git_object: 5a352660ec63e1d033a38c3ff5ef714c8aa10aca
+  docs/models/components/v2orderestimaterequestbuy.md:
+    id: cb5249a5eb1b
+    last_write_checksum: sha1:8ba6075bfb56050cc6aa2366f231b6b0c637d795
+    pristine_git_object: db648be34f21eb148fb95a3e7e87ee30d3418bea
+  docs/models/components/v2orderestimaterequestsell.md:
+    id: f3a616dd84a7
+    last_write_checksum: sha1:bde606fefd20138f6766c9e20c5dd05f718cb1d9
+    pristine_git_object: d93df6362c240ec4c902a38d9d6ea4e03ea5977c
+  docs/models/components/v2orderestimateresponse.md:
+    id: 31035bd01a93
+    last_write_checksum: sha1:3363247d38f518208b367cda51631a65a3f0a923
+    pristine_git_object: 28bfbb1be73e09b89068382fa21b91829c130097
+  docs/models/components/v2orderestimateresponsesuccess.md:
+    id: e329f45edf07
+    last_write_checksum: sha1:5a663fc541d3177016d7a34939a12d446462ae0a
+    pristine_git_object: 4b2a519195889bdf454b1092d436188995d39208
+  docs/models/components/v2orderestimateresponseunavailable.md:
+    id: 26a7f9397bd2
+    last_write_checksum: sha1:caa7c818d956527b827c20e4ef83d74f1d39b7a9
+    pristine_git_object: 83c703deffa561b51165b49f68d06f512ec85b2c
+  docs/models/components/v2orderestimateunavailablereason.md:
+    id: 4fcd6c19ed7e
+    last_write_checksum: sha1:9993f50d505a2469122e20a7c7b721022324ec77
+    pristine_git_object: 771ac5a6a37baeeba2cd4d43ca61eb506bf35c37
+  docs/models/components/v2orderproposal.md:
+    id: 2e8016773ed5
+    last_write_checksum: sha1:c275ef745d5b7a0d543d68cd2bb008b784ffdbe4
+    pristine_git_object: 26c8b7d78311294232c0b0d45833a9df6ab45eda
   docs/models/components/v2orderresponse.md:
     id: d8fe7e8f98d9
-    last_write_checksum: sha1:a405cc4fd6764b57497dff8f266e724243084b5a
-    pristine_git_object: eb5b0bfdcbe982946bff5809ab724ec0ad571fc7
-  docs/models/components/v2orderresponsedeltarectangle.md:
-    id: be8bea0ce397
-    last_write_checksum: sha1:5ccfc3a3ee14547e3429bf4194431ed5ea2d616b
-    pristine_git_object: 6d9487dbf6edc19e4e013057cd31a64305f6df31
-  docs/models/components/v2orderresponsedeltaunion.md:
-    id: 49a5865d1fcb
-    last_write_checksum: sha1:b2ff83ef7ec534a8bb515c8cdff3070d652f88e1
-    pristine_git_object: b17698de3ec5f238c27aeb838ad45954ac65cee4
+    last_write_checksum: sha1:0c90d5dea45adb54025fdb76d4c1567db9e55268
+    pristine_git_object: eba1948c92a1e055f90d345bfdf44df78301d1a6
   docs/models/components/v2ordersortby.md:
     id: dace908fcb83
     last_write_checksum: sha1:f99cbb4c43a5fe786ba8e624db24fda2b045bb38
@@ -690,6 +734,26 @@ trackedFiles:
     id: deb465b931d0
     last_write_checksum: sha1:588eb5e49ee72968193529eb714fe1c3d52d0e4a
     pristine_git_object: 5310bda3aa9256514c35f3a6648b9f9e39db17d8
+  docs/models/operations/getorderbookdepthrequest.md:
+    id: 9e2ee15655f5
+    last_write_checksum: sha1:1903264b09bac4b87fcdc24cebae6314f35a29dc
+    pristine_git_object: f011d7c55c6625a440d8531c2878a21420fa58cd
+  docs/models/operations/getorderbookdepthresponse.md:
+    id: 30e0c8b1b388
+    last_write_checksum: sha1:6443147b72499c2971edbdd1c4f9db6d78061c14
+    pristine_git_object: d16f10e3ea5ad55d02a00fab8710ffab2fb3727e
+  docs/models/operations/getorderbookquoterequest.md:
+    id: c2eb3fdeaef7
+    last_write_checksum: sha1:a0fd696ca6369db2acaa85c4388144f1b3e53edc
+    pristine_git_object: 170b9f19a4d38506ff90f8126fe5582ec12b50f1
+  docs/models/operations/getorderbookquoteresponse.md:
+    id: 1848b0c475ed
+    last_write_checksum: sha1:366c730a8936e8180b2a8e23bbfe6405cf61e544
+    pristine_git_object: 1268adc608ecc38ede7df6d1a3ba61c04cc84b5b
+  docs/models/operations/getorderestimateresponse.md:
+    id: 79a017023124
+    last_write_checksum: sha1:c0b8b016dc0f9fa7bcf403af3cd2fc5c715c3d55
+    pristine_git_object: bdde2eea380f8e013819615d2cac76f050931380
   docs/models/operations/getprocurementrequest.md:
     id: 0ffc24923906
     last_write_checksum: sha1:33ad98a6001b48c0e52612976e8eec7fe4d20193
@@ -708,8 +772,8 @@ trackedFiles:
     pristine_git_object: 9149d0dbd2a1f17921ea2e862bbaffc207020bd1
   docs/models/operations/listavailabilityrequest.md:
     id: 294ac1f3e9eb
-    last_write_checksum: sha1:07039c733cade22a36d8f95550607fe0585be13f
-    pristine_git_object: 3911f867ee3f678574672e688ee7455b82ce2ac1
+    last_write_checksum: sha1:e1ad9a0dde7ba37842234282de8c86476afa98ff
+    pristine_git_object: 27d87437dbdb4fab745877e106fcb7062b547036
   docs/models/operations/listavailabilityresponse.md:
     id: e0fc5f54d91f
     last_write_checksum: sha1:39d0d3745fa874c1ab184478d7b8b7b6eb21f6da
@@ -790,6 +854,14 @@ trackedFiles:
     id: 8dc3676dc06d
     last_write_checksum: sha1:1c9212f9dbf1bebf71160d7bbe21b8a724a2115c
     pristine_git_object: 044c63c7d7e278ec36265febe578d3cd3f94fbc1
+  docs/models/operations/listorderbookwindowsrequest.md:
+    id: 330d095c222a
+    last_write_checksum: sha1:b9a86d91f33b0f53ba06bc3c7a8398475fea841a
+    pristine_git_object: 8f8b20aa34fa7d6ef912b99e3034573d2f1699e6
+  docs/models/operations/listorderbookwindowsresponse.md:
+    id: aa3e01e73796
+    last_write_checksum: sha1:91706b5fc637ef2c64d56092da838c040f7a4704
+    pristine_git_object: 0ff8a524e8e5eafe94a92a74279f1801350e1a65
   docs/models/operations/listordersrequest.md:
     id: fbc8f6407a92
     last_write_checksum: sha1:fafc81bc5fc1c2d30b9681281bc023154f0192e5
@@ -860,8 +932,8 @@ trackedFiles:
     pristine_git_object: a9ae7e8e610bfb90e95aba6fa0eb3b48e256d869
   docs/sdks/capacities/README.md:
     id: 75e7e81ee9ab
-    last_write_checksum: sha1:131d830d85609d8565871495a271c862710d574d
-    pristine_git_object: e04b1b649748dfaf907474cccdbf80f309a55dde
+    last_write_checksum: sha1:ef869b094dfc7941b029b290d11fda223b618b74
+    pristine_git_object: b4908ccc7b93ef4371dbf6205dd2dd07c7cdf4ee
   docs/sdks/deployments/README.md:
     id: e7c5559ab768
     last_write_checksum: sha1:fba9ca30285cffe32acbc95fe5de7f25ece45369
@@ -880,16 +952,20 @@ trackedFiles:
     pristine_git_object: bb84754d207846fec048de6ea7d7be7703900bfc
   docs/sdks/instanceskus/README.md:
     id: 32f29c9c9833
-    last_write_checksum: sha1:c206dc6391a85ca442b52b06410d44eacaca2586
-    pristine_git_object: 27a3d6e31e049ec9a1e4c49cc8d2b1af79854e91
+    last_write_checksum: sha1:81e779af3b655c3c4097831bb1ad5e50da154c0d
+    pristine_git_object: 932bbb99fba52311ca3ff70fd16974d7f4530e50
   docs/sdks/instancetemplates/README.md:
     id: cd970f902e3c
     last_write_checksum: sha1:13f0204f13a8fd5f77aca89bdeb67915bbbf2eee
     pristine_git_object: 57ed92159756921fa4a23e666c40b962e42ed08d
+  docs/sdks/orderbook/README.md:
+    id: 21adfcbc6f32
+    last_write_checksum: sha1:c40eb5646b80fd6af8ee55ad4be98951d7f1a7eb
+    pristine_git_object: 52db8c2dd9e1887ab37a345ef9ebe7803b4daae0
   docs/sdks/orders/README.md:
     id: fc5b2caf3cb2
-    last_write_checksum: sha1:e01f27cba3176877d3c027e8a045ad7156f4cc45
-    pristine_git_object: fd659e219e3d00e6aea85286825db700b7bb5eb3
+    last_write_checksum: sha1:cb05bcdc747d521f53c1d2fc16f8e2eda21a7269
+    pristine_git_object: 637fe23a201c486e4c22f926954895215c2949b2
   docs/sdks/procurements/README.md:
     id: 74927a5596fd
     last_write_checksum: sha1:b76db961feec0a84dffcfd9d8eaea153fd6593a2
@@ -916,8 +992,8 @@ trackedFiles:
     pristine_git_object: 4f4ac4a146efafbfd9a56f6a8970727fe00a83f5
   instanceskus.go:
     id: c9cbd7bf6ce8
-    last_write_checksum: sha1:1fff0fe2cdf8795a0b888e9a66a5bc82a1b37640
-    pristine_git_object: e4c40cc051f19cec39d5f5f40ae8c2f227f00473
+    last_write_checksum: sha1:30bccfce0a0dcc6a28dafc74eb13fcda09d1fb06
+    pristine_git_object: a764016fe4b6058d976ee5339cc34880d866bf35
   instancetemplates.go:
     id: 8fd5752d3eab
     last_write_checksum: sha1:17a3315071cbe4ac7a7b18d9676ef8fbfeb13435
@@ -1024,8 +1100,8 @@ trackedFiles:
     pristine_git_object: 9c97b6173d08424b2009143576a25953b69185a1
   models/components/allocationschedule.go:
     id: 7952498469ae
-    last_write_checksum: sha1:9f1b27bd61c39b09bf23605e98e24c6868b336b0
-    pristine_git_object: b6138a4e33b3ec409ba1c065bb0d866586c54de6
+    last_write_checksum: sha1:6b22520d8bc8d1dc1dfe059c2cec35516c52b8ff
+    pristine_git_object: fa3de00c054ae944af0eac95f3ee2a27e3e94710
   models/components/automationstatus.go:
     id: b1da99f08504
     last_write_checksum: sha1:b7a265e95da898a182f44fce4f01d4525de175c6
@@ -1164,16 +1240,16 @@ trackedFiles:
     pristine_git_object: 96970dc59508c95f7ad953a8cec6f323451bb929
   models/components/instanceskuproperty.go:
     id: 44522af8e898
-    last_write_checksum: sha1:c438cfb79b5909608b875ccfc92da3b5c8f3a23b
-    pristine_git_object: 961495d32250edc3d2db67f3ec1bb16c56c26ff7
+    last_write_checksum: sha1:d6561038335ec12a4abf75673b8cdaf847de8ef5
+    pristine_git_object: 7185895fd942b136e33b78acfd0416775f6bad33
   models/components/instanceskupropertydefinition.go:
     id: 1199cf9e4d63
-    last_write_checksum: sha1:bc5f36a792a5b5e78793970a4882a8b13f85b761
-    pristine_git_object: 06daede16a92ce8ec622e2eaca44e0ab56e41848
+    last_write_checksum: sha1:f7db9a349f2135d71c9673825aa7f5ca33316ea4
+    pristine_git_object: 7518252e2a6e52b6d7af74520dbce7690a7aa840
   models/components/instanceskupropertykey.go:
     id: 42c62d46d58f
-    last_write_checksum: sha1:62f60f48028efe01f0bf79d95d4c7bc4063791d8
-    pristine_git_object: c820be3da2c876ff0a341a905c25ca5a6618e85d
+    last_write_checksum: sha1:8102f67b57f5ff2f1c1d65b1518ba6e9bb0f24ec
+    pristine_git_object: 4e52d329c38b90846cc7a2ca6717d1aa40f0836d
   models/components/instanceskusummary.go:
     id: 3f9c4bcc66d3
     last_write_checksum: sha1:0af0483fa67ad9cf13590753cfee2a35c3f5cdab
@@ -1230,6 +1306,10 @@ trackedFiles:
     id: f32aebdbbde3
     last_write_checksum: sha1:f4d28d82219840818e889b07659cd2377000f3fd
     pristine_git_object: 89b7550f00606f9a6f1b7fa5b473a81216f70ef6
+  models/components/listorderbookwindowsresponse.go:
+    id: 55d196f33cdd
+    last_write_checksum: sha1:2d50b833169e858860a49b8fe81da5444eca118a
+    pristine_git_object: 6b83771164f60b459bacb4ac3a665c02ef77f89f
   models/components/listprocurementsresponse.go:
     id: f12d9ab1efe5
     last_write_checksum: sha1:473f3b4e1bff92a4a05a64073a4681d83710b12b
@@ -1242,6 +1322,18 @@ trackedFiles:
     id: 3fe20428ea8c
     last_write_checksum: sha1:0a2c6eff9856dac4d17d5c9e1b4b6d87f3842f96
     pristine_git_object: 1cf953c2d9e8fcc6090e2455261e7a1f05eeb8b2
+  models/components/orderbookdepthresponse.go:
+    id: 814cdc6ef158
+    last_write_checksum: sha1:bc9df5488f8f548eadbe6bfa0a1d232c6d8a846f
+    pristine_git_object: 20c9d17bc3a539f6c81adda0f08357335cb39797
+  models/components/orderbookquoteresponse.go:
+    id: 528f7e1b5933
+    last_write_checksum: sha1:894b8ce629ccb58822515d9a83d8c803767365f1
+    pristine_git_object: e3384be5ca48645c126f71c9e03928ba4084d2ad
+  models/components/orderbookwindow.go:
+    id: f6ff467471b5
+    last_write_checksum: sha1:76fe6054e3339ba74c126670fa9bf8866244fb79
+    pristine_git_object: b7c834186c9e50e61d133a104ea30fa3e9a985db
   models/components/orderstatus.go:
     id: c0f1c20ad005
     last_write_checksum: sha1:71f82a28e3492388715face153720c2d2cec008d
@@ -1266,6 +1358,10 @@ trackedFiles:
     id: 8c5c96477625
     last_write_checksum: sha1:bc755fb1b13e819de04c85d0a9dbb5e96bc1d672
     pristine_git_object: b02b173df9e27bc37b4a6fbc6b5d0b057e527d78
+  models/components/pricelevel.go:
+    id: 1acce23b09ec
+    last_write_checksum: sha1:d0239b403fc06a35f339f29adcdf3bbbad025341
+    pristine_git_object: 2430cc4bf79ab3d652ea12b891eb112d82a5a4f5
   models/components/procurementresponse.go:
     id: e8729ff2b1ce
     last_write_checksum: sha1:04f0a8d6c2d78c2f0263e8269c43056ba160b769
@@ -1280,8 +1376,8 @@ trackedFiles:
     pristine_git_object: d668889dcea6717f8244f73b89dbc86458ba9e3d
   models/components/scheduleentry.go:
     id: 87b72de2c76a
-    last_write_checksum: sha1:825e7ca7e1aec808dfd5bd474e8c337c215f02d0
-    pristine_git_object: b5adbde0323d27a409cb2c0296d881f144a854f3
+    last_write_checksum: sha1:0ecaa17b6bdb96834213bf4ad34cc0a9bcd5aff2
+    pristine_git_object: deb1115457c38edce7c604edb76f531dfcd356d6
   models/components/security.go:
     id: 3a5eba5fe9e0
     last_write_checksum: sha1:4014b6a8bd76fb56465994151c97abc70c680327
@@ -1314,22 +1410,18 @@ trackedFiles:
     id: a1a4566d203c
     last_write_checksum: sha1:91ccf545c69ef01c31651b8672a4fb35c4f0222e
     pristine_git_object: 82f9d484395510c9ca170599ec735039287748fa
-  models/components/v2allocationscheduledelta.go:
-    id: 4a69a0e28aa7
-    last_write_checksum: sha1:7d7083e7b1cc5792f0ff452792fcff4f301a1bf3
-    pristine_git_object: 791da5baa244e0e93087254c9d2fabfca9896bd2
   models/components/v2capacitytransferresponse.go:
     id: 0c31c2018268
-    last_write_checksum: sha1:d1b16130b187481777a7292a9e72b5c852e10ea5
-    pristine_git_object: ef6caeeb3ca87213a4074fff9947e32a3856161d
+    last_write_checksum: sha1:5874a0645ed1f455471288bc55a09f56dc6d32e9
+    pristine_git_object: 1a295d71305b8b51bb36cae7a9a76acb3db38438
   models/components/v2createcapacitytransferrequest.go:
     id: f4c7395b68bd
-    last_write_checksum: sha1:77210ca7d5728a3af98f924439331498c27c0968
-    pristine_git_object: da23214b0fa998a5c7414d4a36873ff1722ae18a
+    last_write_checksum: sha1:496ce5bd2316db21f8426d9c71b9e38a60e7ff4c
+    pristine_git_object: 87ea101d6132780ad8ffec093e387948585efffd
   models/components/v2createorderrequest.go:
     id: af35ccb6b1b4
-    last_write_checksum: sha1:65b7596e6b610abbe37c728ff79442a2906b69ad
-    pristine_git_object: 7090d97fdd701fb2d69c66f976462dfcbc1c0d41
+    last_write_checksum: sha1:b7409e37f4ddc0af0bdea633a5d36c3b2e7e91e4
+    pristine_git_object: fa98c0f873f0cbd31669d9382fa052ae0302dfae
   models/components/v2listcapacitytransfersresponse.go:
     id: 4fab9efcd376
     last_write_checksum: sha1:8c908e87e687c2b014c374a847277f5c8795b8de
@@ -1338,10 +1430,34 @@ trackedFiles:
     id: e3bbcee6b27a
     last_write_checksum: sha1:ea387b7677c8e29cf9fd36e1b9ed87cc5e8d23f7
     pristine_git_object: 5a1372aadd8387e9808eddcde529d8ad5b3abf58
+  models/components/v2maintenancenoticetype.go:
+    id: 89b8c0fda476
+    last_write_checksum: sha1:d08860ad0736bbb9e5f7259a72d81c58a161e804
+    pristine_git_object: b63789baf737b8887e0e194f432b6cfdd4211277
+  models/components/v2orderestimatenotice.go:
+    id: 0ee07755c1a7
+    last_write_checksum: sha1:bc11e06efdf2866c30e476d10134d1d025974879
+    pristine_git_object: afdd1d8f723a133c610e060ec141f15b0d27c0d1
+  models/components/v2orderestimaterequest.go:
+    id: ac224173d498
+    last_write_checksum: sha1:75074ff55b021a7bb575008682c656791e2081a7
+    pristine_git_object: cf645dd926a04386ac34759623fd477f025c3a78
+  models/components/v2orderestimateresponse.go:
+    id: "640017660641"
+    last_write_checksum: sha1:994ee3d4037323de92b0dd656d28ffae9e89cc0c
+    pristine_git_object: 304a01b644fd7e87467adf0ab0903c63240d19b1
+  models/components/v2orderestimateunavailablereason.go:
+    id: 980a8473984a
+    last_write_checksum: sha1:890d6884a6cf17a1697e107b5bf1c91ae3691abd
+    pristine_git_object: 64eea1b7defa5648a15788bbd4764a4f069ef5e0
+  models/components/v2orderproposal.go:
+    id: 4037a03a76c0
+    last_write_checksum: sha1:1ffaa6fd247c7e04bf360b8bef204374dca437fe
+    pristine_git_object: b3443cc144c4d2271176e16e5a8588b24afbef7f
   models/components/v2orderresponse.go:
     id: 2d248f7773b9
-    last_write_checksum: sha1:145996dbb3afa0d048ed111f11e6eca719a02135
-    pristine_git_object: 81cf8f57b3ae4136a9821c63c25515a3682b2dcc
+    last_write_checksum: sha1:6457b45760db67abfd3199c3c25a68d42852e13d
+    pristine_git_object: 37db8b6f2cdc5e6adb75bd545c0f8ab18b4758a2
   models/components/v2ordersortby.go:
     id: "212466274600"
     last_write_checksum: sha1:b1b274ffd45e7e8fced800fff85161b0162633a0
@@ -1470,6 +1586,18 @@ trackedFiles:
     id: 3fde6975080f
     last_write_checksum: sha1:b9b13a85fc5e7e3a1ca28ffeaffcec5f9d0da78c
     pristine_git_object: e2f86173b3bfe577fac279734c0de9c4f6bcbb83
+  models/operations/getorderbookdepth.go:
+    id: 4933a5109b11
+    last_write_checksum: sha1:df57bf048282dbeb65d49118a57be2b685c5c0e0
+    pristine_git_object: e8bd6778dc3c7d81abe44e1c7a85da14d085ea26
+  models/operations/getorderbookquote.go:
+    id: 6c29d872df1c
+    last_write_checksum: sha1:ac2c38c191de3a96d38cdba659e60c11f0012d03
+    pristine_git_object: 700f84e8fbd42261b64f7dc67b3abf42fe793a78
+  models/operations/getorderestimate.go:
+    id: 4c9be2010502
+    last_write_checksum: sha1:c68991f09f1085e6bf26b792a06fdd61148b0277
+    pristine_git_object: 73b14179b15958abb9e8527667b948a5930c1da2
   models/operations/getprocurement.go:
     id: 93d5901b4c2a
     last_write_checksum: sha1:715919d53db6d502443a18a790ab761b67190c8f
@@ -1480,8 +1608,8 @@ trackedFiles:
     pristine_git_object: c2da61a7c0f9792fe47f1de2c26896d672e2fa35
   models/operations/listavailability.go:
     id: 9858e4d95377
-    last_write_checksum: sha1:7a78a63d9686dce9845a50f31a36eab29382d5e8
-    pristine_git_object: 59a63a948b5c9e4280c5ae3595d0097164f71291
+    last_write_checksum: sha1:a0a13665f592d3a146417c7f569426a6f8598e51
+    pristine_git_object: 5706d1108b5f5a0389b4fd174e074a35589f7960
   models/operations/listcapacities.go:
     id: a23be896cdcc
     last_write_checksum: sha1:b495419cbae5f921c31b2d9d6319ccfa8748f6ae
@@ -1514,6 +1642,10 @@ trackedFiles:
     id: 9838a59d4b31
     last_write_checksum: sha1:3d1776b753fe0fa203d31d42c987273451ad625b
     pristine_git_object: daa8bbd06517493464d2224abcde62085d6afecf
+  models/operations/listorderbookwindows.go:
+    id: 19444b59e256
+    last_write_checksum: sha1:4f894d23ab0548a42610d3d5773f4174f3dad4ca
+    pristine_git_object: 3bdf5b70a279adf656a0faea3649df27819f192a
   models/operations/listorders.go:
     id: b782c3162758
     last_write_checksum: sha1:baa435386187e71d13e91f27392189e2af176c84
@@ -1558,10 +1690,14 @@ trackedFiles:
     id: ad67101ebca3
     last_write_checksum: sha1:2e9433eff1651ac77d6678ea76880d9a4980cbc2
     pristine_git_object: e6e5a01c6e721e879e24a38a1f97e3e27d4686d4
+  orderbook.go:
+    id: 6b1ffd6edadd
+    last_write_checksum: sha1:495e185f359bf1465ec1eb0e6e71188ce6a2c98f
+    pristine_git_object: 30227640404dd2bb9e2500e2e1cd51524e72fb55
   orders.go:
     id: 1b73efd3b2ef
-    last_write_checksum: sha1:7aff91073429980aef0481a0e004449fee632762
-    pristine_git_object: dc60849ee8843404130d81cf3b1438812a671481
+    last_write_checksum: sha1:9b4c18a883b1f011270787f7c395bf8d91fc9551
+    pristine_git_object: 1bf145512dc6c1aab5c8534e755dd0c7225c89eb
   procurements.go:
     id: ad9e889edf7a
     last_write_checksum: sha1:3c4de4a739443a1c9c39acca604b6479b7c307b9
@@ -1572,8 +1708,8 @@ trackedFiles:
     pristine_git_object: 5b3dc7c122d8ab08905485342d7474f8f163888d
   sdk.go:
     id: 8db9b9536b0a
-    last_write_checksum: sha1:89d3c4ce54ee3e0c1d045848db6379a8041217c6
-    pristine_git_object: efaf13222053745a011692431fae9d7897fe2eee
+    last_write_checksum: sha1:f9b44d15d85d3978ac0734bd89c541fa486f1b89
+    pristine_git_object: 604db4e473cbc9adea65cd627a07a1e0a47e338e
   types/bigint.go:
     id: 6f911e1a03c3
     last_write_checksum: sha1:49b004005d0461fb04b846eca062b070b0360b31
@@ -1678,7 +1814,7 @@ examples:
         application/json: {"name": "my-resource-name", "workspace": "wksp_k3R-nX9vLm7Qp2Yw5Jd8F", "tags": {"env": "prod", "team": "infra"}}
       responses:
         "201":
-          application/json: {"id": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "resource_path": "sfc:capacity:<account_id>:<workspace>:<name>", "owner": "my-resource-name", "workspace": "my-resource-name", "name": "my-resource-name", "kind": "originating", "object": "capacity", "allocation_schedule": {"total": [], "by_instance_sku": {"key": [{"effective_at": 1738972800, "node_allocation": 300189}]}}, "procurements": [{"id": "proc_k3R-nX9vLm7Qp2Yw5Jd8F", "name": "my-resource-name"}], "deployments": ["depl_k3R-nX9vLm7Qp2Yw5Jd8F"], "created_at": 1738972800, "tags": {"env": "prod", "team": "infra"}}
+          application/json: {"id": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "resource_path": "sfc:capacity:<account_id>:<workspace>:<name>", "owner": "my-resource-name", "workspace": "my-resource-name", "name": "my-resource-name", "kind": "originating", "object": "capacity", "allocation_schedule": {"total": [], "by_instance_sku": {"key": [{"start_at": 1738972800, "node_count": 557541}]}}, "procurements": [{"id": "proc_k3R-nX9vLm7Qp2Yw5Jd8F", "name": "my-resource-name"}], "deployments": ["depl_k3R-nX9vLm7Qp2Yw5Jd8F"], "created_at": 1738972800, "tags": {"env": "prod", "team": "infra"}}
         "401":
           application/json: {"error": {"type": "authentication_error", "message": "<value>"}}
         "403":
@@ -1696,7 +1832,7 @@ examples:
           schedule_history_minutes: 0
       responses:
         "200":
-          application/json: {"id": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "resource_path": "sfc:capacity:<account_id>:<workspace>:<name>", "owner": "my-resource-name", "workspace": "my-resource-name", "name": "my-resource-name", "kind": "read_only", "object": "capacity", "allocation_schedule": {"total": [], "by_instance_sku": {"key": [], "key1": [{"effective_at": 1738972800, "node_allocation": 469347}], "key2": [{"effective_at": 1738972800, "node_allocation": 469347}]}}, "procurements": ["proc_k3R-nX9vLm7Qp2Yw5Jd8F"], "deployments": [], "created_at": 1738972800, "tags": {"env": "prod", "team": "infra"}}
+          application/json: {"id": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "resource_path": "sfc:capacity:<account_id>:<workspace>:<name>", "owner": "my-resource-name", "workspace": "my-resource-name", "name": "my-resource-name", "kind": "read_only", "object": "capacity", "allocation_schedule": {"total": [], "by_instance_sku": {"key": [], "key1": [{"start_at": 1738972800, "node_count": 686584}], "key2": [{"start_at": 1738972800, "node_count": 276763}]}}, "procurements": ["proc_k3R-nX9vLm7Qp2Yw5Jd8F"], "deployments": [], "created_at": 1738972800, "tags": {"env": "prod", "team": "infra"}}
         "401":
           application/json: {"error": {"type": "authentication_error", "message": "<value>"}}
         "404":
@@ -1726,7 +1862,7 @@ examples:
         application/json: {"name": "my-resource-name", "tags": {"env": "prod", "team": "infra"}}
       responses:
         "200":
-          application/json: {"id": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "resource_path": "sfc:capacity:<account_id>:<workspace>:<name>", "owner": "my-resource-name", "workspace": "my-resource-name", "name": "my-resource-name", "kind": "originating", "object": "capacity", "allocation_schedule": {"total": [], "by_instance_sku": {"key": [], "key1": [{"effective_at": 1738972800, "node_allocation": 455460}]}}, "procurements": [], "deployments": ["depl_k3R-nX9vLm7Qp2Yw5Jd8F"], "created_at": 1738972800, "tags": {"env": "prod", "team": "infra"}}
+          application/json: {"id": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "resource_path": "sfc:capacity:<account_id>:<workspace>:<name>", "owner": "my-resource-name", "workspace": "my-resource-name", "name": "my-resource-name", "kind": "originating", "object": "capacity", "allocation_schedule": {"total": [], "by_instance_sku": {"key": [], "key1": [{"start_at": 1738972800, "node_count": 490549}]}}, "procurements": [], "deployments": ["depl_k3R-nX9vLm7Qp2Yw5Jd8F"], "created_at": 1738972800, "tags": {"env": "prod", "team": "infra"}}
         "401":
           application/json: {"error": {"type": "authentication_error", "message": "<value>"}}
         "403":
@@ -1757,7 +1893,7 @@ examples:
   create_capacity_transfer:
     speakeasy-default-create-capacity-transfer:
       requestBody:
-        application/json: {"from_capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "to_capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "allocation_schedule_delta": [{"node_count": 569495, "start_at": 1738972800, "end_at": 1738972800}], "instance_sku": "isku_k3R-nX9vLm7Qp2Yw5Jd8F"}
+        application/json: {"from_capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "to_capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "allocation_schedule_delta": [{"start_at": 1738972800, "end_at": 1738972800, "node_count": 569495}], "instance_sku": "isku_k3R-nX9vLm7Qp2Yw5Jd8F"}
       responses:
         "202":
           application/json: {"object": "capacity_transfer", "id": "cxfr_k3R-nX9vLm7Qp2Yw5Jd8F", "status": "executed", "created_at": 1738972800, "from_capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "to_capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "instance_sku": {"id": "isku_k3R-nX9vLm7Qp2Yw5Jd8F", "name": "my-resource-name"}, "allocation_schedule_delta": []}
@@ -1780,7 +1916,7 @@ examples:
           id: "cxfr_k3R-nX9vLm7Qp2Yw5Jd8F"
       responses:
         "200":
-          application/json: {"object": "capacity_transfer", "id": "cxfr_k3R-nX9vLm7Qp2Yw5Jd8F", "status": "executed", "created_at": 1738972800, "from_capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "to_capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "instance_sku": {"id": "isku_k3R-nX9vLm7Qp2Yw5Jd8F", "name": "my-resource-name"}, "allocation_schedule_delta": [{"node_count": 992850, "start_at": 1738972800, "end_at": 1738972800}]}
+          application/json: {"object": "capacity_transfer", "id": "cxfr_k3R-nX9vLm7Qp2Yw5Jd8F", "status": "executed", "created_at": 1738972800, "from_capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "to_capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "instance_sku": {"id": "isku_k3R-nX9vLm7Qp2Yw5Jd8F", "name": "my-resource-name"}, "allocation_schedule_delta": [{"start_at": 1738972800, "end_at": 1738972800, "node_count": 992850}]}
         "401":
           application/json: {"error": {"type": "authentication_error", "message": "<value>"}}
         "404":
@@ -2175,7 +2311,7 @@ examples:
           ending_before: "ordrc_gqXR7s0Kj5mHvE2wNpLc4Q"
       responses:
         "200":
-          application/json: {"object": "list", "cursor": "ordrc_gqXR7s0Kj5mHvE2wNpLc4Q", "has_more": true, "data": [{"object": "order", "id": "ordr_k3R-nX9vLm7Qp2Yw5Jd8F", "capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "side": "sell", "allow_standing": false, "instance_sku": null, "delta": {"node_count": 827530, "start_at": 1738972800, "end_at": 1738972800, "type": "rectangle"}, "limit_price_dollars_per_node_hour": "2.500000", "status": "rejected", "created_at": 1738972800, "filled_at": 1738972800, "filled_price_dollars_per_node_hour": "2.500000", "cancelled_at": 1738972800}]}
+          application/json: {"object": "list", "cursor": "ordrc_gqXR7s0Kj5mHvE2wNpLc4Q", "has_more": true, "data": [{"object": "order", "id": "ordr_k3R-nX9vLm7Qp2Yw5Jd8F", "capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "side": "sell", "allow_standing": false, "instance_sku": null, "allocation_schedule_delta": [], "limit_price_dollars_per_node_hour": "2.500000", "status": "rejected", "created_at": 1738972800, "filled_at": 1738972800, "filled_price_dollars_per_node_hour": "2.500000", "cancelled_at": 1738972800}]}
         "401":
           application/json: {"error": {"type": "authentication_error", "message": "<value>"}}
         "422":
@@ -2185,10 +2321,10 @@ examples:
   create_order:
     speakeasy-default-create-order:
       requestBody:
-        application/json: {"capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "side": "sell", "instance_sku": "isku_k3R-nX9vLm7Qp2Yw5Jd8F", "delta": {"node_count": 387888, "start_at": 1738972800, "end_at": 1738972800}, "limit_price_dollars_per_node_hour": "2.500000"}
+        application/json: {"capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "side": "sell", "instance_sku": "isku_k3R-nX9vLm7Qp2Yw5Jd8F", "allocation_schedule_delta": [], "limit_price_dollars_per_node_hour": "2.500000"}
       responses:
         "201":
-          application/json: {"object": "order", "id": "ordr_k3R-nX9vLm7Qp2Yw5Jd8F", "capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "side": "buy", "allow_standing": true, "instance_sku": {"id": "isku_k3R-nX9vLm7Qp2Yw5Jd8F", "name": "my-resource-name"}, "delta": {"node_count": 48342, "start_at": 1738972800, "end_at": 1738972800, "type": "rectangle"}, "limit_price_dollars_per_node_hour": "2.500000", "status": "cancelled", "created_at": 1738972800, "filled_at": 1738972800, "filled_price_dollars_per_node_hour": "2.500000", "cancelled_at": 1738972800}
+          application/json: {"object": "order", "id": "ordr_k3R-nX9vLm7Qp2Yw5Jd8F", "capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "side": "buy", "allow_standing": true, "instance_sku": {"id": "isku_k3R-nX9vLm7Qp2Yw5Jd8F", "name": "my-resource-name"}, "allocation_schedule_delta": [], "limit_price_dollars_per_node_hour": "2.500000", "status": "cancelled", "created_at": 1738972800, "filled_at": 1738972800, "filled_price_dollars_per_node_hour": "2.500000", "cancelled_at": 1738972800}
         "401":
           application/json: {"error": {"type": "authentication_error", "message": "<value>"}}
         "402":
@@ -2210,7 +2346,7 @@ examples:
           id: "ordr_k3R-nX9vLm7Qp2Yw5Jd8F"
       responses:
         "200":
-          application/json: {"object": "order", "id": "ordr_k3R-nX9vLm7Qp2Yw5Jd8F", "capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "side": "sell", "allow_standing": true, "instance_sku": {"id": "isku_k3R-nX9vLm7Qp2Yw5Jd8F", "name": "my-resource-name"}, "delta": {"node_count": 225920, "start_at": 1738972800, "end_at": 1738972800, "type": "rectangle"}, "limit_price_dollars_per_node_hour": "2.500000", "status": "standing", "created_at": 1738972800, "filled_at": 1738972800, "filled_price_dollars_per_node_hour": "2.500000", "cancelled_at": 1738972800}
+          application/json: {"object": "order", "id": "ordr_k3R-nX9vLm7Qp2Yw5Jd8F", "capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "side": "sell", "allow_standing": true, "instance_sku": {"id": "isku_k3R-nX9vLm7Qp2Yw5Jd8F", "name": "my-resource-name"}, "allocation_schedule_delta": [], "limit_price_dollars_per_node_hour": "2.500000", "status": "standing", "created_at": 1738972800, "filled_at": 1738972800, "filled_price_dollars_per_node_hour": "2.500000", "cancelled_at": 1738972800}
         "401":
           application/json: {"error": {"type": "authentication_error", "message": "<value>"}}
         "404":
@@ -2384,6 +2520,70 @@ examples:
           application/json: {"error": {"type": "authentication_error", "message": "<value>"}}
         "404":
           application/json: {"error": {"type": "not_found", "message": "<value>"}}
+        "500":
+          application/json: {"error": {"type": "api_error", "message": "<value>"}}
+  get_order_estimate:
+    speakeasy-default-get-order-estimate:
+      requestBody:
+        application/json: {"requirements": {"accelerator": ["H100"]}, "start_at": 1738972800, "duration_seconds": 199566, "node_count": 280380, "capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F"}
+      responses:
+        "200":
+          application/json: {"order": {"body": {"capacity": "cap_k3R-nX9vLm7Qp2Yw5Jd8F", "side": "buy", "instance_sku": "isku_k3R-nX9vLm7Qp2Yw5Jd8F", "allocation_schedule_delta": [{"start_at": 1738972800, "end_at": 1738972800, "node_count": 905130}], "limit_price_dollars_per_node_hour": "2.500000"}, "total_fee_dollars": "0.100000", "notices": []}, "type": "success"}
+        "401":
+          application/json: {"error": {"type": "authentication_error", "message": "<value>"}}
+        "422":
+          application/json: {"error": {"type": "unprocessable_entity", "message": "<value>"}}
+        "500":
+          application/json: {"error": {"type": "api_error", "message": "<value>"}}
+  get_orderbook_depth:
+    speakeasy-default-get-orderbook-depth:
+      parameters:
+        query:
+          requirements: "accelerator:H100"
+          start_at: 1738972800
+          end_at: 1738972800
+          depth: 20
+      responses:
+        "200":
+          application/json: {"requirements": {}, "start_at": 1738972800, "end_at": 1738972800, "requested_at": 1738972800, "bids": [], "asks": [{"dollars_per_node_hour": "2.500000", "node_count": 4}]}
+        "401":
+          application/json: {"error": {"type": "authentication_error", "message": "<value>"}}
+        "422":
+          application/json: {"error": {"type": "unprocessable_entity", "message": "<value>"}}
+        "500":
+          application/json: {"error": {"type": "api_error", "message": "<value>"}}
+  get_orderbook_quote:
+    speakeasy-default-get-orderbook-quote:
+      parameters:
+        query:
+          requirements: "accelerator:H100"
+          start_at: 1738972800
+          end_at: 1738972800
+      responses:
+        "200":
+          application/json: {"requirements": {"key": ["<value 1>", "<value 2>", "<value 3>"], "key1": ["<value 1>"], "key2": ["<value 1>"]}, "start_at": 1738972800, "end_at": 1738972800, "requested_at": 1738972800, "best_bid": {"dollars_per_node_hour": "2.500000", "node_count": 4}, "best_ask": {"dollars_per_node_hour": "2.500000", "node_count": 4}}
+        "401":
+          application/json: {"error": {"type": "authentication_error", "message": "<value>"}}
+        "422":
+          application/json: {"error": {"type": "unprocessable_entity", "message": "<value>"}}
+        "500":
+          application/json: {"error": {"type": "api_error", "message": "<value>"}}
+  list_orderbook_windows:
+    speakeasy-default-list-orderbook-windows:
+      parameters:
+        query:
+          requirements: "accelerator:H100"
+          range_start_at: 1738972800
+          range_end_at: 1738972800
+          limit: 50
+          starting_after: "mwin_gqXR7s0Kj5mHvE2wNpLc4Q"
+      responses:
+        "200":
+          application/json: {"object": "list", "requirements": {"key": [], "key1": ["<value 1>", "<value 2>", "<value 3>"], "key2": ["<value 1>"]}, "range_start_at": 1738972800, "range_end_at": 1738972800, "cursor": "mwin_gqXR7s0Kj5mHvE2wNpLc4Q", "has_more": true, "data": []}
+        "401":
+          application/json: {"error": {"type": "authentication_error", "message": "<value>"}}
+        "422":
+          application/json: {"error": {"type": "unprocessable_entity", "message": "<value>"}}
         "500":
           application/json: {"error": {"type": "api_error", "message": "<value>"}}
 examplesVersion: 1.0.2

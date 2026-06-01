@@ -3,152 +3,10 @@
 package components
 
 import (
-	"encoding/json"
-	"errors"
 	"github.com/sfcompute/sfc-go/internal/utils"
 	"github.com/sfcompute/sfc-go/optionalnullable"
 	"github.com/sfcompute/sfc-go/types"
 )
-
-type V2OrderResponseDeltaRectangle struct {
-	// Number of nodes to buy or sell.
-	NodeCount int `json:"node_count"`
-	// Unix timestamp.
-	StartAt int64 `json:"start_at"`
-	// Unix timestamp.
-	EndAt int64 `json:"end_at"`
-	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	type_ *string `const:"rectangle" json:"type"`
-}
-
-func (v V2OrderResponseDeltaRectangle) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(v, "", false)
-}
-
-func (v *V2OrderResponseDeltaRectangle) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &v, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (v *V2OrderResponseDeltaRectangle) GetNodeCount() int {
-	if v == nil {
-		return 0
-	}
-	return v.NodeCount
-}
-
-func (v *V2OrderResponseDeltaRectangle) GetStartAt() int64 {
-	if v == nil {
-		return 0
-	}
-	return v.StartAt
-}
-
-func (v *V2OrderResponseDeltaRectangle) GetEndAt() int64 {
-	if v == nil {
-		return 0
-	}
-	return v.EndAt
-}
-
-func (v *V2OrderResponseDeltaRectangle) GetType() *string {
-	return types.Pointer("rectangle")
-}
-
-// #region class-body-v2orderresponsedeltarectangle
-// #endregion class-body-v2orderresponsedeltarectangle
-
-type V2OrderResponseDeltaUnionType string
-
-const (
-	V2OrderResponseDeltaUnionTypeV2OrderResponseDeltaRectangle V2OrderResponseDeltaUnionType = "v2.OrderResponse_delta_Rectangle"
-	V2OrderResponseDeltaUnionTypeUnknown                       V2OrderResponseDeltaUnionType = "Unknown"
-)
-
-// V2OrderResponseDeltaUnion - The desired change in capacity. Will be added if side is `buy`, subtracted if `side` is sell if the order fills.
-type V2OrderResponseDeltaUnion struct {
-	V2OrderResponseDeltaRectangle *V2OrderResponseDeltaRectangle `queryParam:"inline" union:"member"`
-	UnknownRaw                    json.RawMessage                `json:"-" union:"unknown"`
-
-	Type V2OrderResponseDeltaUnionType
-}
-
-func CreateV2OrderResponseDeltaUnionV2OrderResponseDeltaRectangle(v2OrderResponseDeltaRectangle V2OrderResponseDeltaRectangle) V2OrderResponseDeltaUnion {
-	typ := V2OrderResponseDeltaUnionTypeV2OrderResponseDeltaRectangle
-
-	return V2OrderResponseDeltaUnion{
-		V2OrderResponseDeltaRectangle: &v2OrderResponseDeltaRectangle,
-		Type:                          typ,
-	}
-}
-
-func CreateV2OrderResponseDeltaUnionUnknown(raw json.RawMessage) V2OrderResponseDeltaUnion {
-	return V2OrderResponseDeltaUnion{
-		UnknownRaw: raw,
-		Type:       V2OrderResponseDeltaUnionTypeUnknown,
-	}
-}
-
-func (u V2OrderResponseDeltaUnion) GetUnknownRaw() json.RawMessage {
-	return u.UnknownRaw
-}
-
-func (u V2OrderResponseDeltaUnion) IsUnknown() bool {
-	return u.Type == V2OrderResponseDeltaUnionTypeUnknown
-}
-
-func (u *V2OrderResponseDeltaUnion) UnmarshalJSON(data []byte) error {
-
-	var candidates []utils.UnionCandidate
-
-	// Collect all valid candidates
-	var v2OrderResponseDeltaRectangle V2OrderResponseDeltaRectangle = V2OrderResponseDeltaRectangle{}
-	if err := utils.UnmarshalJSON(data, &v2OrderResponseDeltaRectangle, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  V2OrderResponseDeltaUnionTypeV2OrderResponseDeltaRectangle,
-			Value: &v2OrderResponseDeltaRectangle,
-		})
-	}
-
-	if len(candidates) == 0 {
-		u.UnknownRaw = json.RawMessage(data)
-		u.Type = V2OrderResponseDeltaUnionTypeUnknown
-		return nil
-	}
-
-	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestUnionCandidate(candidates, data)
-	if best == nil {
-		u.UnknownRaw = json.RawMessage(data)
-		u.Type = V2OrderResponseDeltaUnionTypeUnknown
-		return nil
-	}
-
-	// Set the union type and value based on the best candidate
-	u.Type = best.Type.(V2OrderResponseDeltaUnionType)
-	switch best.Type {
-	case V2OrderResponseDeltaUnionTypeV2OrderResponseDeltaRectangle:
-		u.V2OrderResponseDeltaRectangle = best.Value.(*V2OrderResponseDeltaRectangle)
-		return nil
-	}
-
-	u.UnknownRaw = json.RawMessage(data)
-	u.Type = V2OrderResponseDeltaUnionTypeUnknown
-	return nil
-}
-
-func (u V2OrderResponseDeltaUnion) MarshalJSON() ([]byte, error) {
-	if u.V2OrderResponseDeltaRectangle != nil {
-		return utils.MarshalJSON(u.V2OrderResponseDeltaRectangle, "", true)
-	}
-
-	if u.UnknownRaw != nil {
-		return json.RawMessage(u.UnknownRaw), nil
-	}
-	return nil, errors.New("could not marshal union type V2OrderResponseDeltaUnion: all fields are null")
-}
 
 type V2OrderResponse struct {
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
@@ -160,8 +18,10 @@ type V2OrderResponse struct {
 	// If true, the order stays in the order book until either fills, is explicitly cancelled, or the order end time is reached resulting in automatic cancellation. If false, the order is cancelled immediately if it doesn't fill.
 	AllowStanding bool                                                  `json:"allow_standing"`
 	InstanceSku   optionalnullable.OptionalNullable[InstanceSkuSummary] `json:"instance_sku,omitzero"`
-	// The desired change in capacity. Will be added if side is `buy`, subtracted if `side` is sell if the order fills.
-	Delta V2OrderResponseDeltaUnion `json:"delta"`
+	// Node count over time, as a list of `[start_at, end_at)` time ranges.
+	// Example: 5 nodes from t=0 to t=3600 is `[{"start_at": 0, "end_at": 3600, "node_count": 5}]`.
+	// `start_at` and `end_at` must be 60-second aligned, `node_count` must be non-negative. On non-final entries, `end_at` may be omitted (inferred from the next entry's `start_at`); gaps fill with `node_count: 0`.
+	AllocationScheduleDelta []ScheduleEntry `json:"allocation_schedule_delta"`
 	// Price rate in dollars per node-hour.
 	LimitPriceDollarsPerNodeHour string `json:"limit_price_dollars_per_node_hour"`
 	// The status of an order in the system.
@@ -228,11 +88,11 @@ func (v *V2OrderResponse) GetInstanceSku() optionalnullable.OptionalNullable[Ins
 	return v.InstanceSku
 }
 
-func (v *V2OrderResponse) GetDelta() V2OrderResponseDeltaUnion {
+func (v *V2OrderResponse) GetAllocationScheduleDelta() []ScheduleEntry {
 	if v == nil {
-		return V2OrderResponseDeltaUnion{}
+		return []ScheduleEntry{}
 	}
-	return v.Delta
+	return v.AllocationScheduleDelta
 }
 
 func (v *V2OrderResponse) GetLimitPriceDollarsPerNodeHour() string {

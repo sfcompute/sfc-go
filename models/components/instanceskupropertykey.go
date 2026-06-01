@@ -7,7 +7,7 @@ import (
 	"github.com/sfcompute/sfc-go/optionalnullable"
 )
 
-// InstanceSkuPropertyKey - A property key describing something about an instance SKU (e.g. `accelerator_type`, `zone`).
+// InstanceSkuPropertyKey - A property key describing something about an instance SKU (e.g. `accelerator`).
 type InstanceSkuPropertyKey struct {
 	Name string `json:"name"`
 	// Human-readable display name.

@@ -4,6 +4,8 @@ sources:
     sfc-api:
         inputs:
             - location: /Users/andreaanez/Documents/sf_compute/sfcompute/blueprint/current/openapi.json
+        overlays:
+            - location: .speakeasy/overlay.yaml
         registry:
             location: registry.speakeasyapi.dev/the-san-francisco-compute-company/v2/sfc-api
 targets:

@@ -64,6 +64,8 @@ type SDK struct {
 	Instances *Instances
 	// Place orders targeting a capacity to increase your reserved compute balance during some time period.
 	Orders *Orders
+	// Read-only orderbook visibility: bid/ask spread, depth of book, and historical fills, keyed on hardware requirements + delivery window.
+	Orderbook *Orderbook
 	// Market automations that maintain capacity by placing buy/sell orders.
 	Procurements *Procurements
 	// Resource containers scoped to an account.
@@ -144,9 +146,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *SDK {
 	sdk := &SDK{
-		SDKVersion: "0.0.1",
+		SDKVersion: "0.0.2",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/go 0.0.1 2.881.17 0.1.0 github.com/sfcompute/sfc-go",
+			UserAgent:  "speakeasy-sdk/go 0.0.2 2.881.17 0.1.0 github.com/sfcompute/sfc-go",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -170,6 +172,7 @@ func New(opts ...SDKOption) *SDK {
 	sdk.InstanceTemplates = newInstanceTemplates(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Instances = newInstances(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Orders = newOrders(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Orderbook = newOrderbook(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Procurements = newProcurements(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
 

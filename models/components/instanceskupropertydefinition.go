@@ -10,7 +10,7 @@ import (
 )
 
 type InstanceSkuPropertyDefinitionEnumeration struct {
-	// A property key describing something about an instance SKU (e.g. `accelerator_type`, `zone`).
+	// A property key describing something about an instance SKU (e.g. `accelerator`).
 	Key    InstanceSkuPropertyKey        `json:"key"`
 	Values []InstanceSkuEnumerationValue `json:"values"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling

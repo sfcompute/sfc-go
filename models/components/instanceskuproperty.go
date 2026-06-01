@@ -10,7 +10,7 @@ import (
 )
 
 type InstanceSkuPropertyEnumeration struct {
-	// A property key describing something about an instance SKU (e.g. `accelerator_type`, `zone`).
+	// A property key describing something about an instance SKU (e.g. `accelerator`).
 	Key InstanceSkuPropertyKey `json:"key"`
 	// One allowed value for an enumeration-typed property key.
 	Value InstanceSkuEnumerationValue `json:"value"`

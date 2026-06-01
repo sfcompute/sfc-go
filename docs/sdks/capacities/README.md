@@ -455,11 +455,11 @@ func main() {
     res, err := s.Capacities.CreateCapacityTransfer(ctx, components.V2CreateCapacityTransferRequest{
         FromCapacity: "cap_k3R-nX9vLm7Qp2Yw5Jd8F",
         ToCapacity: "cap_k3R-nX9vLm7Qp2Yw5Jd8F",
-        AllocationScheduleDelta: []components.V2AllocationScheduleDelta{
-            components.V2AllocationScheduleDelta{
-                NodeCount: 569495,
+        AllocationScheduleDelta: []components.ScheduleEntry{
+            components.ScheduleEntry{
                 StartAt: 1738972800,
                 EndAt: optionalnullable.From(sfc.Pointer[int64](1738972800)),
+                NodeCount: 569495,
             },
         },
         InstanceSku: "isku_k3R-nX9vLm7Qp2Yw5Jd8F",

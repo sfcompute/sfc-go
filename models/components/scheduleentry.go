@@ -2,22 +2,47 @@
 
 package components
 
+import (
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/optionalnullable"
+)
+
+// ScheduleEntry - A `[start_at, end_at)` time range with a fixed `node_count`. `end_at` is `null` only on the final entry, marking an unbounded tail.
 type ScheduleEntry struct {
 	// Unix timestamp.
-	EffectiveAt    int64 `json:"effective_at"`
-	NodeAllocation int   `json:"node_allocation"`
+	StartAt   int64                                    `json:"start_at"`
+	EndAt     optionalnullable.OptionalNullable[int64] `json:"end_at,omitzero"`
+	NodeCount int                                      `json:"node_count"`
 }
 
-func (s *ScheduleEntry) GetEffectiveAt() int64 {
+func (s ScheduleEntry) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *ScheduleEntry) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *ScheduleEntry) GetStartAt() int64 {
 	if s == nil {
 		return 0
 	}
-	return s.EffectiveAt
+	return s.StartAt
 }
 
-func (s *ScheduleEntry) GetNodeAllocation() int {
+func (s *ScheduleEntry) GetEndAt() optionalnullable.OptionalNullable[int64] {
+	if s == nil {
+		return nil
+	}
+	return s.EndAt
+}
+
+func (s *ScheduleEntry) GetNodeCount() int {
 	if s == nil {
 		return 0
 	}
-	return s.NodeAllocation
+	return s.NodeCount
 }

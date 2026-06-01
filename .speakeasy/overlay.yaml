@@ -1,6 +1,25 @@
 overlay: 1.0.0
 info:
   title: SFC API SDK Fixes
-  version: 0.0.2
+  version: 0.0.3
+  # Workarounds for spec issues that block SDK generation. These regressed after sfcompute
+  # PR #5421 ("clean up OpenAPI spec to eliminate SDK generation workarounds") when later
+  # PRs (#5453, #5479) re-introduced the collisions. Remove each entry once the underlying
+  # spec bug is fixed at the source in sfcompute.
 
-actions: []
+actions:
+  # /availability and /instance_skus are both tagged "Instance SKUs" and both reduce to a
+  # generated List() method, colliding in the same namespace. Give each a distinct name.
+  - target: "$.paths['/preview/v2/availability'].get"
+    update:
+      x-speakeasy-name-override: listAvailability
+  - target: "$.paths['/preview/v2/instance_skus'].get"
+    update:
+      x-speakeasy-name-override: listInstanceSKUs
+
+  # The top-level tags array defines "Orders" twice (base orders + order estimate), which
+  # Speakeasy rejects as a duplicate tag. Remove the redundant estimate definition; the
+  # order_estimate operation still references the remaining "Orders" tag. Targeted by the
+  # estimate description so only the duplicate (not both) is removed.
+  - target: "$.tags[?(@.name=='Orders' && @.description=='Estimate an order before placing it: filled price, fee, and operational notices.')]"
+    remove: true

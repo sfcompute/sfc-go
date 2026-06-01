@@ -21,8 +21,10 @@ type V2CapacityTransferResponse struct {
 	InstanceSku InstanceSkuSummary `json:"instance_sku"`
 	// Reason a capacity transfer was rejected.
 	RejectedReason optionalnullable.OptionalNullable[string] `json:"rejected_reason,omitzero"`
-	// The transfer's allocation schedule, expanded into constant-quantity rectangles. The final rectangle has `end_at: null` (the unbounded tail); gaps are represented as explicit zero-quantity rectangles.
-	AllocationScheduleDelta []V2AllocationScheduleDelta `json:"allocation_schedule_delta"`
+	// Node count over time, as a list of `[start_at, end_at)` time ranges.
+	// Example: 5 nodes from t=0 to t=3600 is `[{"start_at": 0, "end_at": 3600, "node_count": 5}]`.
+	// `start_at` and `end_at` must be 60-second aligned, `node_count` must be non-negative. On non-final entries, `end_at` may be omitted (inferred from the next entry's `start_at`); gaps fill with `node_count: 0`.
+	AllocationScheduleDelta []ScheduleEntry `json:"allocation_schedule_delta"`
 }
 
 func (v V2CapacityTransferResponse) MarshalJSON() ([]byte, error) {
@@ -89,9 +91,9 @@ func (v *V2CapacityTransferResponse) GetRejectedReason() optionalnullable.Option
 	return v.RejectedReason
 }
 
-func (v *V2CapacityTransferResponse) GetAllocationScheduleDelta() []V2AllocationScheduleDelta {
+func (v *V2CapacityTransferResponse) GetAllocationScheduleDelta() []ScheduleEntry {
 	if v == nil {
-		return []V2AllocationScheduleDelta{}
+		return []ScheduleEntry{}
 	}
 	return v.AllocationScheduleDelta
 }

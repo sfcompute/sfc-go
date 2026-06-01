@@ -8,9 +8,9 @@ import (
 )
 
 type ListAvailabilityRequest struct {
-	// Filter applied before grouping. Wire format matches `RequirementsQuery` (e.g. `accelerator_type:H100;region:NorthAmerica`). Keys/values are validated against the property registry; the caller's audience is injected automatically.
+	// Filter SKUs before grouping. Semicolon-separated `key:value[,value...]` pairs (e.g. `accelerator:H100`). Use keys and values from `/v2/instance_sku_property_catalog`.
 	Requirements *string `queryParam:"style=form,explode=true,name=requirements"`
-	// Property keys to group by. Repeatable: `?group_by=region&group_by=accelerator_type`. Each key must be a public registry key. Empty `group_by` → a single aggregate group.
+	// Property keys to group by. Repeatable: `?group_by=accelerator`. Each key must be a public registry key. Empty `group_by` → a single aggregate group.
 	GroupBy []string `queryParam:"style=form,explode=true,name=group_by"`
 }
 

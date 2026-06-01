@@ -1,0 +1,9 @@
+# ListOrderbookWindowsResponse
+
+
+## Fields
+
+| Field                                                                                               | Type                                                                                                | Required                                                                                            | Description                                                                                         |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `HTTPMeta`                                                                                          | [components.HTTPMetadata](../../models/components/httpmetadata.md)                                  | :heavy_check_mark:                                                                                  | N/A                                                                                                 |
+| `ListOrderbookWindowsResponse`                                                                      | [*components.ListOrderbookWindowsResponse](../../models/components/listorderbookwindowsresponse.md) | :heavy_minus_sign:                                                                                  | Active windows in the range.                                                                        |

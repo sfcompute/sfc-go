@@ -1,0 +1,15 @@
+# OrderbookDepthResponse
+
+Depth of book for one delivery window. Bids descending (highest first), asks ascending (lowest first). Either array may be empty when no orders rest on that side.
+
+
+## Fields
+
+| Field                                                            | Type                                                             | Required                                                         | Description                                                      | Example                                                          |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `Requirements`                                                   | map[string][]`string`                                            | :heavy_check_mark:                                               | N/A                                                              |                                                                  |
+| `StartAt`                                                        | `int64`                                                          | :heavy_check_mark:                                               | Unix timestamp.                                                  | 1738972800                                                       |
+| `EndAt`                                                          | `int64`                                                          | :heavy_check_mark:                                               | Unix timestamp.                                                  | 1738972800                                                       |
+| `RequestedAt`                                                    | `int64`                                                          | :heavy_check_mark:                                               | Unix timestamp.                                                  | 1738972800                                                       |
+| `Bids`                                                           | [][components.PriceLevel](../../models/components/pricelevel.md) | :heavy_check_mark:                                               | Bids sorted descending by rate (best bid first).                 |                                                                  |
+| `Asks`                                                           | [][components.PriceLevel](../../models/components/pricelevel.md) | :heavy_check_mark:                                               | Asks sorted ascending by rate (best ask first).                  |                                                                  |

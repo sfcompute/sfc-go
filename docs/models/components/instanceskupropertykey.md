@@ -1,6 +1,6 @@
 # InstanceSkuPropertyKey
 
-A property key describing something about an instance SKU (e.g. `accelerator_type`, `zone`).
+A property key describing something about an instance SKU (e.g. `accelerator`).
 
 
 ## Fields

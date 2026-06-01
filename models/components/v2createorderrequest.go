@@ -3,130 +3,33 @@
 package components
 
 import (
-	"errors"
-	"fmt"
 	"github.com/sfcompute/sfc-go/internal/utils"
 )
-
-type V2CreateOrderRequestDeltaRectangle struct {
-	// Number of nodes to buy or sell.
-	NodeCount int `json:"node_count"`
-	// Unix timestamp.
-	StartAt int64 `json:"start_at"`
-	// Unix timestamp.
-	EndAt int64 `json:"end_at"`
-}
-
-func (v V2CreateOrderRequestDeltaRectangle) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(v, "", false)
-}
-
-func (v *V2CreateOrderRequestDeltaRectangle) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &v, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (v *V2CreateOrderRequestDeltaRectangle) GetNodeCount() int {
-	if v == nil {
-		return 0
-	}
-	return v.NodeCount
-}
-
-func (v *V2CreateOrderRequestDeltaRectangle) GetStartAt() int64 {
-	if v == nil {
-		return 0
-	}
-	return v.StartAt
-}
-
-func (v *V2CreateOrderRequestDeltaRectangle) GetEndAt() int64 {
-	if v == nil {
-		return 0
-	}
-	return v.EndAt
-}
-
-// #region class-body-v2createorderrequestdeltarectangle
-// #endregion class-body-v2createorderrequestdeltarectangle
-
-type V2CreateOrderRequestDeltaUnionType string
-
-const (
-	V2CreateOrderRequestDeltaUnionTypeV2CreateOrderRequestDeltaRectangle V2CreateOrderRequestDeltaUnionType = "v2.CreateOrderRequest_delta_Rectangle"
-)
-
-// V2CreateOrderRequestDeltaUnion - The desired change in capacity. Will be added if side is `buy`, subtracted if `side` is sell if the order fills.
-type V2CreateOrderRequestDeltaUnion struct {
-	V2CreateOrderRequestDeltaRectangle *V2CreateOrderRequestDeltaRectangle `queryParam:"inline" union:"member"`
-
-	Type V2CreateOrderRequestDeltaUnionType
-}
-
-func CreateV2CreateOrderRequestDeltaUnionV2CreateOrderRequestDeltaRectangle(v2CreateOrderRequestDeltaRectangle V2CreateOrderRequestDeltaRectangle) V2CreateOrderRequestDeltaUnion {
-	typ := V2CreateOrderRequestDeltaUnionTypeV2CreateOrderRequestDeltaRectangle
-
-	return V2CreateOrderRequestDeltaUnion{
-		V2CreateOrderRequestDeltaRectangle: &v2CreateOrderRequestDeltaRectangle,
-		Type:                               typ,
-	}
-}
-
-func (u *V2CreateOrderRequestDeltaUnion) UnmarshalJSON(data []byte) error {
-
-	var candidates []utils.UnionCandidate
-
-	// Collect all valid candidates
-	var v2CreateOrderRequestDeltaRectangle V2CreateOrderRequestDeltaRectangle = V2CreateOrderRequestDeltaRectangle{}
-	if err := utils.UnmarshalJSON(data, &v2CreateOrderRequestDeltaRectangle, "", true, nil); err == nil {
-		candidates = append(candidates, utils.UnionCandidate{
-			Type:  V2CreateOrderRequestDeltaUnionTypeV2CreateOrderRequestDeltaRectangle,
-			Value: &v2CreateOrderRequestDeltaRectangle,
-		})
-	}
-
-	if len(candidates) == 0 {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for V2CreateOrderRequestDeltaUnion", string(data))
-	}
-
-	// Pick the best candidate using multi-stage filtering
-	best := utils.PickBestUnionCandidate(candidates, data)
-	if best == nil {
-		return fmt.Errorf("could not unmarshal `%s` into any supported union types for V2CreateOrderRequestDeltaUnion", string(data))
-	}
-
-	// Set the union type and value based on the best candidate
-	u.Type = best.Type.(V2CreateOrderRequestDeltaUnionType)
-	switch best.Type {
-	case V2CreateOrderRequestDeltaUnionTypeV2CreateOrderRequestDeltaRectangle:
-		u.V2CreateOrderRequestDeltaRectangle = best.Value.(*V2CreateOrderRequestDeltaRectangle)
-		return nil
-	}
-
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for V2CreateOrderRequestDeltaUnion", string(data))
-}
-
-func (u V2CreateOrderRequestDeltaUnion) MarshalJSON() ([]byte, error) {
-	if u.V2CreateOrderRequestDeltaRectangle != nil {
-		return utils.MarshalJSON(u.V2CreateOrderRequestDeltaRectangle, "", true)
-	}
-
-	return nil, errors.New("could not marshal union type V2CreateOrderRequestDeltaUnion: all fields are null")
-}
 
 type V2CreateOrderRequest struct {
 	// A resource path like 'sfc:capacity:acme:prod:my-capacity' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
 	Capacity string `json:"capacity"`
 	Side     Side   `json:"side"`
-	// If true, the order stays in the order book until either fills, is explicitly cancelled, or the order end time is reached resulting in automatic cancellation. If false, the order is cancelled immediately if it doesn't fill.
+	// If true, the order rests on the order book until it fills, is cancelled, or its end time passes. If false, the order is cancelled immediately if it does not fill.
 	AllowStanding *bool  `json:"allow_standing,omitzero"`
 	InstanceSku   string `json:"instance_sku"`
-	// The desired change in capacity. Will be added if side is `buy`, subtracted if `side` is sell if the order fills.
-	Delta V2CreateOrderRequestDeltaUnion `json:"delta"`
+	// Node count over time, as a list of `[start_at, end_at)` time ranges.
+	// Example: 5 nodes from t=0 to t=3600 is `[{"start_at": 0, "end_at": 3600, "node_count": 5}]`.
+	// `start_at` and `end_at` must be 60-second aligned, `node_count` must be non-negative. On non-final entries, `end_at` may be omitted (inferred from the next entry's `start_at`); gaps fill with `node_count: 0`.
+	AllocationScheduleDelta []ScheduleEntry `json:"allocation_schedule_delta"`
 	// Price rate in dollars per node-hour.
 	LimitPriceDollarsPerNodeHour string `json:"limit_price_dollars_per_node_hour"`
+}
+
+func (v V2CreateOrderRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(v, "", false)
+}
+
+func (v *V2CreateOrderRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &v, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (v *V2CreateOrderRequest) GetCapacity() string {
@@ -157,11 +60,11 @@ func (v *V2CreateOrderRequest) GetInstanceSku() string {
 	return v.InstanceSku
 }
 
-func (v *V2CreateOrderRequest) GetDelta() V2CreateOrderRequestDeltaUnion {
+func (v *V2CreateOrderRequest) GetAllocationScheduleDelta() []ScheduleEntry {
 	if v == nil {
-		return V2CreateOrderRequestDeltaUnion{}
+		return []ScheduleEntry{}
 	}
-	return v.Delta
+	return v.AllocationScheduleDelta
 }
 
 func (v *V2CreateOrderRequest) GetLimitPriceDollarsPerNodeHour() string {

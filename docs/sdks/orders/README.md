@@ -6,10 +6,87 @@ Place orders targeting a capacity to increase your reserved compute balance duri
 
 ### Available Operations
 
+* [GetOrderEstimate](#getorderestimate) - Estimate an order
 * [List](#list) - List orders
 * [Create](#create) - Create order
 * [Fetch](#fetch) - Get order
 * [Cancel](#cancel) - Cancel order
+
+## GetOrderEstimate
+
+Estimate a buy or sell order before placing it.
+
+### Example Usage
+
+<!-- UsageSnippet language="go" operationID="get_order_estimate" method="post" path="/preview/v2/order_estimate" -->
+```go
+package main
+
+import(
+	"context"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/optionalnullable"
+	"github.com/sfcompute/sfc-go/models/components"
+	"log"
+)
+
+func main() {
+    ctx := context.Background()
+
+    s := sfc.New(
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
+    )
+
+    res, err := s.Orders.GetOrderEstimate(ctx, components.CreateV2OrderEstimateRequestV2OrderEstimateRequestBuy(
+        components.V2OrderEstimateRequestBuy{
+            Requirements: map[string][]string{
+                "accelerator": []string{
+                    "H100",
+                },
+            },
+            StartAt: 1738972800,
+            DurationSeconds: 199566,
+            NodeCount: 280380,
+            Capacity: optionalnullable.From(sfc.Pointer("cap_k3R-nX9vLm7Qp2Yw5Jd8F")),
+        },
+    ))
+    if err != nil {
+        log.Fatal(err)
+    }
+    if res.V2OrderEstimateResponse != nil {
+        switch res.V2OrderEstimateResponse.Type {
+            case components.V2OrderEstimateResponseTypeV2OrderEstimateResponseSuccess:
+                // res.V2OrderEstimateResponse.V2OrderEstimateResponseSuccess is populated
+            case components.V2OrderEstimateResponseTypeV2OrderEstimateResponseUnavailable:
+                // res.V2OrderEstimateResponse.V2OrderEstimateResponseUnavailable is populated
+            default:
+                // Unknown type - use res.V2OrderEstimateResponse.GetUnknownRaw() for raw JSON
+        }
+
+    }
+}
+```
+
+### Parameters
+
+| Parameter                                                                              | Type                                                                                   | Required                                                                               | Description                                                                            |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `ctx`                                                                                  | [context.Context](https://pkg.go.dev/context#Context)                                  | :heavy_check_mark:                                                                     | The context to use for the request.                                                    |
+| `request`                                                                              | [components.V2OrderEstimateRequest](../../models/components/v2orderestimaterequest.md) | :heavy_check_mark:                                                                     | The request object to use for the request.                                             |
+| `opts`                                                                                 | [][operations.Option](../../models/operations/option.md)                               | :heavy_minus_sign:                                                                     | The options for this request.                                                          |
+
+### Response
+
+**[*operations.GetOrderEstimateResponse](../../models/operations/getorderestimateresponse.md), error**
+
+### Errors
+
+| Error Type                         | Status Code                        | Content Type                       |
+| ---------------------------------- | ---------------------------------- | ---------------------------------- |
+| apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.UnprocessableEntityError | 422                                | application/json                   |
+| apierrors.InternalServerError      | 500                                | application/json                   |
+| apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## List
 
@@ -116,13 +193,7 @@ func main() {
         Capacity: "cap_k3R-nX9vLm7Qp2Yw5Jd8F",
         Side: components.SideSell,
         InstanceSku: "isku_k3R-nX9vLm7Qp2Yw5Jd8F",
-        Delta: components.CreateV2CreateOrderRequestDeltaUnionV2CreateOrderRequestDeltaRectangle(
-            components.V2CreateOrderRequestDeltaRectangle{
-                NodeCount: 387888,
-                StartAt: 1738972800,
-                EndAt: 1738972800,
-            },
-        ),
+        AllocationScheduleDelta: []components.ScheduleEntry{},
         LimitPriceDollarsPerNodeHour: "2.500000",
     }, optionalnullable.From[string](nil))
     if err != nil {

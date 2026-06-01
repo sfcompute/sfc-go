@@ -34,9 +34,9 @@ func newInstanceSKUs(rootSDK *SDK, sdkConfig config.SDKConfiguration, hooks *hoo
 	}
 }
 
-// List grouped instance-SKU availability
+// ListAvailability - List grouped instance-SKU availability
 // Aggregate availability across instance SKUs that match `requirements`, grouped by the given property keys. Each group exposes a summed `total` schedule plus a per-SKU breakdown.
-func (s *InstanceSKUs) List(ctx context.Context, requirements *string, groupBy []string, opts ...operations.Option) (*operations.ListAvailabilityResponse, error) {
+func (s *InstanceSKUs) ListAvailability(ctx context.Context, requirements *string, groupBy []string, opts ...operations.Option) (*operations.ListAvailabilityResponse, error) {
 	request := operations.ListAvailabilityRequest{
 		Requirements: requirements,
 		GroupBy:      groupBy,

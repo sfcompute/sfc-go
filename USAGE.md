@@ -15,7 +15,7 @@ func main() {
 		sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
 	)
 
-	res, err := s.InstanceSKUs.List(ctx, nil, []string{
+	res, err := s.InstanceSKUs.ListAvailability(ctx, nil, []string{
 		"my-resource-name",
 	})
 	if err != nil {
