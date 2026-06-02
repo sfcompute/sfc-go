@@ -10,6 +10,8 @@ Browse available instance SKU property definitions.
 
 ## List
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 List every property key and its allowed values. Use the keys and values here when filling in `requirements` on orders and procurements.
 
 ### Example Usage

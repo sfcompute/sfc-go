@@ -3,52 +3,12 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/sfcompute/sfc-go/internal/utils"
 	"github.com/sfcompute/sfc-go/models/components"
 )
 
-type GetDeploymentExpand string
-
-const (
-	GetDeploymentExpandCapacity         GetDeploymentExpand = "capacity"
-	GetDeploymentExpandInstanceTemplate GetDeploymentExpand = "instance_template"
-)
-
-func (e GetDeploymentExpand) ToPointer() *GetDeploymentExpand {
-	return &e
-}
-func (e *GetDeploymentExpand) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "capacity":
-		fallthrough
-	case "instance_template":
-		*e = GetDeploymentExpand(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetDeploymentExpand: %v", v)
-	}
-}
-
 type GetDeploymentRequest struct {
-	ID     string                `pathParam:"style=simple,explode=false,name=id"`
-	Expand []GetDeploymentExpand `queryParam:"style=form,explode=true,name=expand"`
-}
-
-func (g GetDeploymentRequest) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
-}
-
-func (g *GetDeploymentRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
 func (g *GetDeploymentRequest) GetID() string {
@@ -56,13 +16,6 @@ func (g *GetDeploymentRequest) GetID() string {
 		return ""
 	}
 	return g.ID
-}
-
-func (g *GetDeploymentRequest) GetExpand() []GetDeploymentExpand {
-	if g == nil {
-		return nil
-	}
-	return g.Expand
 }
 
 type GetDeploymentResponse struct {

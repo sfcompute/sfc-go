@@ -1,0 +1,11 @@
+# ListUsersResponse
+
+
+## Fields
+
+| Field                                                                | Type                                                                 | Required                                                             | Description                                                          | Example                                                              |
+| -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `Object`                                                             | `*string`                                                            | :heavy_minus_sign:                                                   | N/A                                                                  |                                                                      |
+| `Data`                                                               | [][components.UserResponse](../../models/components/userresponse.md) | :heavy_check_mark:                                                   | N/A                                                                  |                                                                      |
+| `HasMore`                                                            | `bool`                                                               | :heavy_check_mark:                                                   | N/A                                                                  |                                                                      |
+| `Cursor`                                                             | optionalnullable.OptionalNullable[`string`]                          | :heavy_minus_sign:                                                   | N/A                                                                  | usrc_gqXR7s0Kj5mHvE2wNpLc4Q                                          |

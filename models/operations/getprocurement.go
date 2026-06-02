@@ -8,19 +8,7 @@ import (
 )
 
 type GetProcurementRequest struct {
-	ID     string   `pathParam:"style=simple,explode=false,name=id"`
-	Expand []string `queryParam:"style=form,explode=true,name=expand"`
-}
-
-func (g GetProcurementRequest) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
-}
-
-func (g *GetProcurementRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
 func (g *GetProcurementRequest) GetID() string {
@@ -28,13 +16,6 @@ func (g *GetProcurementRequest) GetID() string {
 		return ""
 	}
 	return g.ID
-}
-
-func (g *GetProcurementRequest) GetExpand() []string {
-	if g == nil {
-		return nil
-	}
-	return g.Expand
 }
 
 type GetProcurementResponse struct {

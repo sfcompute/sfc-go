@@ -8,7 +8,7 @@ import (
 )
 
 type ListImagesRequest struct {
-	// Filter by workspace.
+	// Filter by workspace. Pass `sfc:workspace:sfcompute:public` to list sfc-provided public images.
 	Workspace string `queryParam:"style=form,explode=true,name=workspace"`
 	// Filter by image ID (repeatable).
 	ID []string `queryParam:"style=form,explode=true,name=id"`

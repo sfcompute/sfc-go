@@ -36,6 +36,8 @@ func newInstanceSKUCatalog(rootSDK *SDK, sdkConfig config.SDKConfiguration, hook
 }
 
 // List instance SKU property catalog
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // List every property key and its allowed values. Use the keys and values here when filling in `requirements` on orders and procurements.
 func (s *InstanceSKUCatalog) List(ctx context.Context, limit *int64, startingAfter *string, endingBefore *string, opts ...operations.Option) (*operations.ListInstanceSkuPropertyCatalogResponse, error) {
 	request := operations.ListInstanceSkuPropertyCatalogRequest{

@@ -36,6 +36,8 @@ func newDeployments(rootSDK *SDK, sdkConfig config.SDKConfiguration, hooks *hook
 }
 
 // List deployments
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // List all deployments.
 func (s *Deployments) List(ctx context.Context, request operations.ListDeploymentsRequest, opts ...operations.Option) (*operations.ListDeploymentsResponse, error) {
 	o := operations.Options{}
@@ -289,6 +291,31 @@ func (s *Deployments) List(ctx context.Context, request operations.ListDeploymen
 			}
 			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 403:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ForbiddenError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode == 422:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -364,6 +391,8 @@ func (s *Deployments) List(ctx context.Context, request operations.ListDeploymen
 }
 
 // Create deployment
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Create a deployment for bulk node management.
 func (s *Deployments) Create(ctx context.Context, request components.CreateDeploymentRequest, opts ...operations.Option) (*operations.CreateDeploymentResponse, error) {
 	o := operations.Options{}
@@ -726,11 +755,12 @@ func (s *Deployments) Create(ctx context.Context, request components.CreateDeplo
 }
 
 // GetDeployment - Get deployment
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Retrieve a deployment by ID or name.
-func (s *Deployments) GetDeployment(ctx context.Context, id string, expand []operations.GetDeploymentExpand, opts ...operations.Option) (*operations.GetDeploymentResponse, error) {
+func (s *Deployments) GetDeployment(ctx context.Context, id string, opts ...operations.Option) (*operations.GetDeploymentResponse, error) {
 	request := operations.GetDeploymentRequest{
-		ID:     id,
-		Expand: expand,
+		ID: id,
 	}
 
 	o := operations.Options{}
@@ -782,10 +812,6 @@ func (s *Deployments) GetDeployment(ctx context.Context, id string, expand []ope
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-
-	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
-		return nil, fmt.Errorf("error populating query params: %w", err)
-	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
@@ -940,6 +966,31 @@ func (s *Deployments) GetDeployment(ctx context.Context, id string, expand []ope
 			}
 			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 403:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ForbiddenError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode == 404:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -1015,6 +1066,8 @@ func (s *Deployments) GetDeployment(ctx context.Context, id string, expand []ope
 }
 
 // Delete deployment
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Delete a deployment.
 func (s *Deployments) Delete(ctx context.Context, id string, opts ...operations.Option) (*operations.DeleteDeploymentResponse, error) {
 	request := operations.DeleteDeploymentRequest{
@@ -1305,6 +1358,8 @@ func (s *Deployments) Delete(ctx context.Context, id string, opts ...operations.
 }
 
 // PatchDeployment - Update deployment
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Update a deployment's configuration.
 func (s *Deployments) PatchDeployment(ctx context.Context, id string, body components.PatchDeploymentRequest, opts ...operations.Option) (*operations.PatchDeploymentResponse, error) {
 	request := operations.PatchDeploymentRequest{

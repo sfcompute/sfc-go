@@ -35,6 +35,8 @@ func newInstanceSKUs(rootSDK *SDK, sdkConfig config.SDKConfiguration, hooks *hoo
 }
 
 // ListAvailability - List grouped instance-SKU availability
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Aggregate availability across instance SKUs that match `requirements`, grouped by the given property keys. Each group exposes a summed `total` schedule plus a per-SKU breakdown.
 func (s *InstanceSKUs) ListAvailability(ctx context.Context, requirements *string, groupBy []string, opts ...operations.Option) (*operations.ListAvailabilityResponse, error) {
 	request := operations.ListAvailabilityRequest{
@@ -324,6 +326,8 @@ func (s *InstanceSKUs) ListAvailability(ctx context.Context, requirements *strin
 }
 
 // ListInstanceSKUs - List instance SKUs
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // List all instance SKUs available on the market with their properties.
 func (s *InstanceSKUs) ListInstanceSKUs(ctx context.Context, limit *int64, startingAfter *string, endingBefore *string, opts ...operations.Option) (*operations.ListInstanceSkusResponse, error) {
 	request := operations.ListInstanceSkusRequest{
@@ -659,6 +663,8 @@ func (s *InstanceSKUs) ListInstanceSKUs(ctx context.Context, limit *int64, start
 }
 
 // GetInstanceSku - Get instance SKU
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Retrieve an instance SKU by ID, including its registered properties.
 func (s *InstanceSKUs) GetInstanceSku(ctx context.Context, id string, opts ...operations.Option) (*operations.GetInstanceSkuResponse, error) {
 	request := operations.GetInstanceSkuRequest{

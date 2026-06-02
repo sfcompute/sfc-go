@@ -6,19 +6,19 @@ Place orders targeting a capacity to increase your reserved compute balance duri
 
 ### Available Operations
 
-* [GetOrderEstimate](#getorderestimate) - Estimate an order
+* [GetOrderPreview](#getorderpreview) - Estimate an order
 * [List](#list) - List orders
 * [Create](#create) - Create order
 * [Fetch](#fetch) - Get order
 * [Cancel](#cancel) - Cancel order
 
-## GetOrderEstimate
+## GetOrderPreview
 
 Estimate a buy or sell order before placing it.
 
 ### Example Usage
 
-<!-- UsageSnippet language="go" operationID="get_order_estimate" method="post" path="/preview/v2/order_estimate" -->
+<!-- UsageSnippet language="go" operationID="get_order_preview" method="post" path="/preview/v2/order_preview" -->
 ```go
 package main
 
@@ -37,30 +37,30 @@ func main() {
         sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
-    res, err := s.Orders.GetOrderEstimate(ctx, components.CreateV2OrderEstimateRequestV2OrderEstimateRequestBuy(
-        components.V2OrderEstimateRequestBuy{
+    res, err := s.Orders.GetOrderPreview(ctx, components.CreateV2OrderPreviewRequestV2OrderPreviewRequestBuy(
+        components.V2OrderPreviewRequestBuy{
             Requirements: map[string][]string{
                 "accelerator": []string{
                     "H100",
                 },
             },
             StartAt: 1738972800,
-            DurationSeconds: 199566,
-            NodeCount: 280380,
+            DurationSeconds: 590322,
+            NodeCount: 520580,
             Capacity: optionalnullable.From(sfc.Pointer("cap_k3R-nX9vLm7Qp2Yw5Jd8F")),
         },
     ))
     if err != nil {
         log.Fatal(err)
     }
-    if res.V2OrderEstimateResponse != nil {
-        switch res.V2OrderEstimateResponse.Type {
-            case components.V2OrderEstimateResponseTypeV2OrderEstimateResponseSuccess:
-                // res.V2OrderEstimateResponse.V2OrderEstimateResponseSuccess is populated
-            case components.V2OrderEstimateResponseTypeV2OrderEstimateResponseUnavailable:
-                // res.V2OrderEstimateResponse.V2OrderEstimateResponseUnavailable is populated
+    if res.V2OrderPreviewResponse != nil {
+        switch res.V2OrderPreviewResponse.Type {
+            case components.V2OrderPreviewResponseTypeV2OrderPreviewResponseQuoted:
+                // res.V2OrderPreviewResponse.V2OrderPreviewResponseQuoted is populated
+            case components.V2OrderPreviewResponseTypeV2OrderPreviewResponseUnavailable:
+                // res.V2OrderPreviewResponse.V2OrderPreviewResponseUnavailable is populated
             default:
-                // Unknown type - use res.V2OrderEstimateResponse.GetUnknownRaw() for raw JSON
+                // Unknown type - use res.V2OrderPreviewResponse.GetUnknownRaw() for raw JSON
         }
 
     }
@@ -69,15 +69,15 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                              | Type                                                                                   | Required                                                                               | Description                                                                            |
-| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `ctx`                                                                                  | [context.Context](https://pkg.go.dev/context#Context)                                  | :heavy_check_mark:                                                                     | The context to use for the request.                                                    |
-| `request`                                                                              | [components.V2OrderEstimateRequest](../../models/components/v2orderestimaterequest.md) | :heavy_check_mark:                                                                     | The request object to use for the request.                                             |
-| `opts`                                                                                 | [][operations.Option](../../models/operations/option.md)                               | :heavy_minus_sign:                                                                     | The options for this request.                                                          |
+| Parameter                                                                            | Type                                                                                 | Required                                                                             | Description                                                                          |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| `ctx`                                                                                | [context.Context](https://pkg.go.dev/context#Context)                                | :heavy_check_mark:                                                                   | The context to use for the request.                                                  |
+| `request`                                                                            | [components.V2OrderPreviewRequest](../../models/components/v2orderpreviewrequest.md) | :heavy_check_mark:                                                                   | The request object to use for the request.                                           |
+| `opts`                                                                               | [][operations.Option](../../models/operations/option.md)                             | :heavy_minus_sign:                                                                   | The options for this request.                                                        |
 
 ### Response
 
-**[*operations.GetOrderEstimateResponse](../../models/operations/getorderestimateresponse.md), error**
+**[*operations.GetOrderPreviewResponse](../../models/operations/getorderpreviewresponse.md), error**
 
 ### Errors
 
@@ -89,6 +89,8 @@ func main() {
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## List
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 List all orders.
 
@@ -119,6 +121,7 @@ func main() {
         Capacity: sfc.Pointer("cap_k3R-nX9vLm7Qp2Yw5Jd8F"),
         CreatedAfter: sfc.Pointer[int64](1738972800),
         CreatedBefore: sfc.Pointer[int64](1738972800),
+        Procurement: sfc.Pointer("proc_k3R-nX9vLm7Qp2Yw5Jd8F"),
         StartingAfter: sfc.Pointer("ordrc_gqXR7s0Kj5mHvE2wNpLc4Q"),
         EndingBefore: sfc.Pointer("ordrc_gqXR7s0Kj5mHvE2wNpLc4Q"),
     })
@@ -166,6 +169,8 @@ func main() {
 
 ## Create
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Place a buy or sell order. Orders fill completely or not at all. All nodes fill on a single instance SKU matching the order's `requirements`. Order filling is asynchronous; poll `GET /v2/orders/{id}` to check status.
 
 ### Example Usage
@@ -200,15 +205,7 @@ func main() {
         log.Fatal(err)
     }
     if res.V2OrderResponse != nil {
-        switch res.V2OrderResponse.Capacity.Type {
-            case components.ExpandableCapacityIDCapacitySummaryUnionTypeStr:
-                // res.V2OrderResponse.Capacity.Str is populated
-            case components.ExpandableCapacityIDCapacitySummaryUnionTypeExpandableCapacityIDCapacitySummary:
-                // res.V2OrderResponse.Capacity.ExpandableCapacityIDCapacitySummary is populated
-            default:
-                // Unknown type - use res.V2OrderResponse.Capacity.GetUnknownRaw() for raw JSON
-        }
-
+        // handle response
     }
 }
 ```
@@ -241,6 +238,8 @@ func main() {
 
 ## Fetch
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Retrieve an order by ID.
 
 ### Example Usage
@@ -253,7 +252,6 @@ import(
 	"context"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
-	"github.com/sfcompute/sfc-go/models/components"
 )
 
 func main() {
@@ -263,20 +261,12 @@ func main() {
         sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
-    res, err := s.Orders.Fetch(ctx, "ordr_xyz789", nil)
+    res, err := s.Orders.Fetch(ctx, "ordr_xyz789")
     if err != nil {
         log.Fatal(err)
     }
     if res.V2OrderResponse != nil {
-        switch res.V2OrderResponse.Capacity.Type {
-            case components.ExpandableCapacityIDCapacitySummaryUnionTypeStr:
-                // res.V2OrderResponse.Capacity.Str is populated
-            case components.ExpandableCapacityIDCapacitySummaryUnionTypeExpandableCapacityIDCapacitySummary:
-                // res.V2OrderResponse.Capacity.ExpandableCapacityIDCapacitySummary is populated
-            default:
-                // Unknown type - use res.V2OrderResponse.Capacity.GetUnknownRaw() for raw JSON
-        }
-
+        // handle response
     }
 }
 ```
@@ -287,7 +277,6 @@ func main() {
 | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
 | `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |                                                          |
 | `id`                                                     | `string`                                                 | :heavy_check_mark:                                       | Order ID                                                 | ordr_k3R-nX9vLm7Qp2Yw5Jd8F                               |
-| `expand`                                                 | []`string`                                               | :heavy_minus_sign:                                       | N/A                                                      |                                                          |
 | `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |                                                          |
 
 ### Response
@@ -304,6 +293,8 @@ func main() {
 | apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
 
 ## Cancel
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Request cancellation of an order. This is asynchronous — poll `GET /v2/orders/{id}` to confirm the status has changed to cancelled.
 

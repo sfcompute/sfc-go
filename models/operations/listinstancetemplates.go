@@ -19,7 +19,6 @@ type ListInstanceTemplatesRequest struct {
 	EndingBefore *string `queryParam:"style=form,explode=true,name=ending_before"`
 	// Additional fields to include in the response.
 	Include []string `queryParam:"style=form,explode=true,name=include"`
-	Expand  []string `queryParam:"style=form,explode=true,name=expand"`
 }
 
 func (l ListInstanceTemplatesRequest) MarshalJSON() ([]byte, error) {
@@ -73,13 +72,6 @@ func (l *ListInstanceTemplatesRequest) GetInclude() []string {
 		return nil
 	}
 	return l.Include
-}
-
-func (l *ListInstanceTemplatesRequest) GetExpand() []string {
-	if l == nil {
-		return nil
-	}
-	return l.Expand
 }
 
 type ListInstanceTemplatesResponse struct {

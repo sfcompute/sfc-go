@@ -9,6 +9,7 @@ import (
 )
 
 type ImageUploadResponse struct {
+	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
 	ID string `json:"id"`
 	// A resource path for a image resource. Format: sfc:image:<account>:<workspace>:<name>.
 	ResourcePath string `json:"resource_path"`

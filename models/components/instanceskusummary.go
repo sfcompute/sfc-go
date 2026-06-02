@@ -4,6 +4,7 @@ package components
 
 // InstanceSkuSummary - Summary view of an instance SKU embedded on responses that reference one (orders, procurements, instances, capacity transfers). Carries both the id and the human-readable name. Legacy SKUs whose `name` column hasn't been backfilled use `UNKNOWN_INSTANCE_SKU_NAME` as a placeholder so this field is always populated on the wire.
 type InstanceSkuSummary struct {
+	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }

@@ -13,10 +13,14 @@ Custom machine images for instances.
 * [CompleteUpload](#completeupload) - Complete image upload
 * [Download](#download) - Download image
 * [UploadPart](#uploadpart) - Get upload part URL
+* [ReinstateImage](#reinstateimage) - Reinstate image
+* [RevokeImage](#revokeimage) - Revoke image
 
 ## List
 
-List all images owned by the authenticated user.
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
+List images in the specified workspace. Pass `sfc:workspace:sfcompute:public` as the workspace to list sfc-provided public images instead.
 
 ### Example Usage
 
@@ -90,6 +94,8 @@ func main() {
 
 ## StartUpload
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Create an image and start a multipart upload.
 
 ### Example Usage
@@ -150,6 +156,8 @@ func main() {
 
 ## Fetch
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Retrieve an image by ID. Returns both user-owned and public images.
 
 ### Example Usage
@@ -204,6 +212,8 @@ func main() {
 
 ## Delete
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Delete an image.
 
 ### Example Usage
@@ -252,12 +262,15 @@ func main() {
 | Error Type                    | Status Code                   | Content Type                  |
 | ----------------------------- | ----------------------------- | ----------------------------- |
 | apierrors.UnauthorizedError   | 401                           | application/json              |
+| apierrors.ForbiddenError      | 403                           | application/json              |
 | apierrors.NotFoundError       | 404                           | application/json              |
 | apierrors.ConflictError       | 409                           | application/json              |
 | apierrors.InternalServerError | 500                           | application/json              |
 | apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
 
 ## CompleteUpload
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Finalize a multipart image upload.
 
@@ -318,6 +331,8 @@ func main() {
 
 ## Download
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Get a presigned URL to download an image.
 
 ### Example Usage
@@ -373,6 +388,8 @@ func main() {
 
 ## UploadPart
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Get a presigned URL to upload one part of a multipart image upload.
 
 ### Example Usage
@@ -427,5 +444,121 @@ func main() {
 | apierrors.BadRequestError     | 400                           | application/json              |
 | apierrors.UnauthorizedError   | 401                           | application/json              |
 | apierrors.NotFoundError       | 404                           | application/json              |
+| apierrors.InternalServerError | 500                           | application/json              |
+| apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
+
+## ReinstateImage
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
+Reinstate a revoked image, making it available for new instances again
+
+### Example Usage
+
+<!-- UsageSnippet language="go" operationID="reinstate_image" method="post" path="/preview/v2/images/{id}/reinstate" -->
+```go
+package main
+
+import(
+	"context"
+	sfc "github.com/sfcompute/sfc-go"
+	"log"
+)
+
+func main() {
+    ctx := context.Background()
+
+    s := sfc.New(
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
+    )
+
+    res, err := s.Images.ReinstateImage(ctx, "image_k3R-nX9vLm7Qp2Yw5Jd8F")
+    if err != nil {
+        log.Fatal(err)
+    }
+    if res.ImageListEntry != nil {
+        // handle response
+    }
+}
+```
+
+### Parameters
+
+| Parameter                                                | Type                                                     | Required                                                 | Description                                              | Example                                                  |
+| -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
+| `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |                                                          |
+| `id`                                                     | `string`                                                 | :heavy_check_mark:                                       | Image ID, name, or resource path                         | image_k3R-nX9vLm7Qp2Yw5Jd8F                              |
+| `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |                                                          |
+
+### Response
+
+**[*operations.ReinstateImageResponse](../../models/operations/reinstateimageresponse.md), error**
+
+### Errors
+
+| Error Type                    | Status Code                   | Content Type                  |
+| ----------------------------- | ----------------------------- | ----------------------------- |
+| apierrors.UnauthorizedError   | 401                           | application/json              |
+| apierrors.ForbiddenError      | 403                           | application/json              |
+| apierrors.NotFoundError       | 404                           | application/json              |
+| apierrors.ConflictError       | 409                           | application/json              |
+| apierrors.InternalServerError | 500                           | application/json              |
+| apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
+
+## RevokeImage
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
+Revoke a private image. Revoked images can't back new instances; existing instances continue running.
+
+### Example Usage
+
+<!-- UsageSnippet language="go" operationID="revoke_image" method="post" path="/preview/v2/images/{id}/revoke" -->
+```go
+package main
+
+import(
+	"context"
+	sfc "github.com/sfcompute/sfc-go"
+	"log"
+)
+
+func main() {
+    ctx := context.Background()
+
+    s := sfc.New(
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
+    )
+
+    res, err := s.Images.RevokeImage(ctx, "image_k3R-nX9vLm7Qp2Yw5Jd8F")
+    if err != nil {
+        log.Fatal(err)
+    }
+    if res.ImageListEntry != nil {
+        // handle response
+    }
+}
+```
+
+### Parameters
+
+| Parameter                                                | Type                                                     | Required                                                 | Description                                              | Example                                                  |
+| -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
+| `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |                                                          |
+| `id`                                                     | `string`                                                 | :heavy_check_mark:                                       | Image ID, name, or resource path                         | image_k3R-nX9vLm7Qp2Yw5Jd8F                              |
+| `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |                                                          |
+
+### Response
+
+**[*operations.RevokeImageResponse](../../models/operations/revokeimageresponse.md), error**
+
+### Errors
+
+| Error Type                    | Status Code                   | Content Type                  |
+| ----------------------------- | ----------------------------- | ----------------------------- |
+| apierrors.UnauthorizedError   | 401                           | application/json              |
+| apierrors.ForbiddenError      | 403                           | application/json              |
+| apierrors.NotFoundError       | 404                           | application/json              |
+| apierrors.ConflictError       | 409                           | application/json              |
 | apierrors.InternalServerError | 500                           | application/json              |
 | apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |

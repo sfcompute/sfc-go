@@ -8,19 +8,7 @@ import (
 )
 
 type FetchInstanceTemplateRequest struct {
-	ID     string   `pathParam:"style=simple,explode=false,name=id"`
-	Expand []string `queryParam:"style=form,explode=true,name=expand"`
-}
-
-func (f FetchInstanceTemplateRequest) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(f, "", false)
-}
-
-func (f *FetchInstanceTemplateRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &f, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
 func (f *FetchInstanceTemplateRequest) GetID() string {
@@ -28,13 +16,6 @@ func (f *FetchInstanceTemplateRequest) GetID() string {
 		return ""
 	}
 	return f.ID
-}
-
-func (f *FetchInstanceTemplateRequest) GetExpand() []string {
-	if f == nil {
-		return nil
-	}
-	return f.Expand
 }
 
 type FetchInstanceTemplateResponse struct {

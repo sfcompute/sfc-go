@@ -17,6 +17,8 @@ A bucket of owned compute balance over time.
 
 ## List
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 List all capacities.
 
 ### Example Usage
@@ -85,11 +87,14 @@ func main() {
 | Error Type                         | Status Code                        | Content Type                       |
 | ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.ForbiddenError           | 403                                | application/json                   |
 | apierrors.UnprocessableEntityError | 422                                | application/json                   |
 | apierrors.InternalServerError      | 500                                | application/json                   |
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## Create
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Create a capacity to hold compute.
 
@@ -126,15 +131,7 @@ func main() {
         log.Fatal(err)
     }
     if res.CapacityResponse != nil {
-        switch res.CapacityResponse.Procurements.Type {
-            case components.ExpandableListProcurementIDProcurementSummaryUnionTypeArrayOfStr:
-                // res.CapacityResponse.Procurements.ArrayOfStr is populated
-            case components.ExpandableListProcurementIDProcurementSummaryUnionTypeArrayOfExpandableListProcurementIDProcurementSummary:
-                // res.CapacityResponse.Procurements.ArrayOfExpandableListProcurementIDProcurementSummary is populated
-            default:
-                // Unknown type - use res.CapacityResponse.Procurements.GetUnknownRaw() for raw JSON
-        }
-
+        // handle response
     }
 }
 ```
@@ -163,6 +160,8 @@ func main() {
 
 ## Fetch
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Retrieve a capacity by ID, resource path, or name, including its compute schedule.
 
 ### Example Usage
@@ -175,7 +174,6 @@ import(
 	"context"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
-	"github.com/sfcompute/sfc-go/models/components"
 )
 
 func main() {
@@ -185,33 +183,24 @@ func main() {
         sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
-    res, err := s.Capacities.Fetch(ctx, "cap_k3R-nX9vLm7Qp2Yw5Jd8F", sfc.Pointer[int64](0), nil)
+    res, err := s.Capacities.Fetch(ctx, "cap_k3R-nX9vLm7Qp2Yw5Jd8F", sfc.Pointer[int64](0))
     if err != nil {
         log.Fatal(err)
     }
     if res.CapacityResponse != nil {
-        switch res.CapacityResponse.Procurements.Type {
-            case components.ExpandableListProcurementIDProcurementSummaryUnionTypeArrayOfStr:
-                // res.CapacityResponse.Procurements.ArrayOfStr is populated
-            case components.ExpandableListProcurementIDProcurementSummaryUnionTypeArrayOfExpandableListProcurementIDProcurementSummary:
-                // res.CapacityResponse.Procurements.ArrayOfExpandableListProcurementIDProcurementSummary is populated
-            default:
-                // Unknown type - use res.CapacityResponse.Procurements.GetUnknownRaw() for raw JSON
-        }
-
+        // handle response
     }
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                          | Type                                                                               | Required                                                                           | Description                                                                        | Example                                                                            |
-| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `ctx`                                                                              | [context.Context](https://pkg.go.dev/context#Context)                              | :heavy_check_mark:                                                                 | The context to use for the request.                                                |                                                                                    |
-| `id`                                                                               | `string`                                                                           | :heavy_check_mark:                                                                 | N/A                                                                                | cap_k3R-nX9vLm7Qp2Yw5Jd8F                                                          |
-| `scheduleHistoryMinutes`                                                           | `*int64`                                                                           | :heavy_minus_sign:                                                                 | How many minutes of past schedule to include.                                      |                                                                                    |
-| `expand`                                                                           | [][operations.FetchCapacityExpand](../../models/operations/fetchcapacityexpand.md) | :heavy_minus_sign:                                                                 | Expand related resources inline instead of returning IDs.                          |                                                                                    |
-| `opts`                                                                             | [][operations.Option](../../models/operations/option.md)                           | :heavy_minus_sign:                                                                 | The options for this request.                                                      |                                                                                    |
+| Parameter                                                | Type                                                     | Required                                                 | Description                                              | Example                                                  |
+| -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
+| `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |                                                          |
+| `id`                                                     | `string`                                                 | :heavy_check_mark:                                       | N/A                                                      | cap_k3R-nX9vLm7Qp2Yw5Jd8F                                |
+| `scheduleHistoryMinutes`                                 | `*int64`                                                 | :heavy_minus_sign:                                       | How many minutes of past schedule to include.            |                                                          |
+| `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |                                                          |
 
 ### Response
 
@@ -222,11 +211,14 @@ func main() {
 | Error Type                    | Status Code                   | Content Type                  |
 | ----------------------------- | ----------------------------- | ----------------------------- |
 | apierrors.UnauthorizedError   | 401                           | application/json              |
+| apierrors.ForbiddenError      | 403                           | application/json              |
 | apierrors.NotFoundError       | 404                           | application/json              |
 | apierrors.InternalServerError | 500                           | application/json              |
 | apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
 
 ## Delete
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Delete a capacity. The capacity must have no active orders, future allocations, active nodes, deployments, or procurements. Remove all dependencies before deleting.
 
@@ -276,12 +268,15 @@ func main() {
 | Error Type                         | Status Code                        | Content Type                       |
 | ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.ForbiddenError           | 403                                | application/json                   |
 | apierrors.NotFoundError            | 404                                | application/json                   |
 | apierrors.UnprocessableEntityError | 422                                | application/json                   |
 | apierrors.InternalServerError      | 500                                | application/json                   |
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## Update
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Update a capacity. Omitted fields are left unchanged.
 
@@ -317,15 +312,7 @@ func main() {
         log.Fatal(err)
     }
     if res.CapacityResponse != nil {
-        switch res.CapacityResponse.Procurements.Type {
-            case components.ExpandableListProcurementIDProcurementSummaryUnionTypeArrayOfStr:
-                // res.CapacityResponse.Procurements.ArrayOfStr is populated
-            case components.ExpandableListProcurementIDProcurementSummaryUnionTypeArrayOfExpandableListProcurementIDProcurementSummary:
-                // res.CapacityResponse.Procurements.ArrayOfExpandableListProcurementIDProcurementSummary is populated
-            default:
-                // Unknown type - use res.CapacityResponse.Procurements.GetUnknownRaw() for raw JSON
-        }
-
+        // handle response
     }
 }
 ```
@@ -355,6 +342,8 @@ func main() {
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## ListCapacityTransfers
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 List capacity transfers for the caller's organization.
 
@@ -423,11 +412,14 @@ func main() {
 | Error Type                         | Status Code                        | Content Type                       |
 | ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.ForbiddenError           | 403                                | application/json                   |
 | apierrors.UnprocessableEntityError | 422                                | application/json                   |
 | apierrors.InternalServerError      | 500                                | application/json                   |
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## CreateCapacityTransfer
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Transfer some or all of one capacity into another
 
@@ -500,6 +492,8 @@ func main() {
 
 ## FetchCapacityTransfer
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Retrieve a capacity transfer by ID.
 
 ### Example Usage
@@ -548,6 +542,7 @@ func main() {
 | Error Type                    | Status Code                   | Content Type                  |
 | ----------------------------- | ----------------------------- | ----------------------------- |
 | apierrors.UnauthorizedError   | 401                           | application/json              |
+| apierrors.ForbiddenError      | 403                           | application/json              |
 | apierrors.NotFoundError       | 404                           | application/json              |
 | apierrors.InternalServerError | 500                           | application/json              |
 | apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |

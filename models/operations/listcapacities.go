@@ -3,37 +3,9 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/sfcompute/sfc-go/internal/utils"
 	"github.com/sfcompute/sfc-go/models/components"
 )
-
-type ListCapacitiesExpand string
-
-const (
-	ListCapacitiesExpandProcurements ListCapacitiesExpand = "procurements"
-	ListCapacitiesExpandDeployments  ListCapacitiesExpand = "deployments"
-)
-
-func (e ListCapacitiesExpand) ToPointer() *ListCapacitiesExpand {
-	return &e
-}
-func (e *ListCapacitiesExpand) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "procurements":
-		fallthrough
-	case "deployments":
-		*e = ListCapacitiesExpand(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ListCapacitiesExpand: %v", v)
-	}
-}
 
 type ListCapacitiesRequest struct {
 	// Filter by workspace.
@@ -51,8 +23,6 @@ type ListCapacitiesRequest struct {
 	Tag []string `queryParam:"style=form,explode=true,name=tag"`
 	// Filter by tag key existence (repeatable). Returns resources that have a tag with this key, regardless of the value.
 	TagKey []string `queryParam:"style=form,explode=true,name=tag_key"`
-	// Expand related resources inline instead of returning IDs.
-	Expand []ListCapacitiesExpand `queryParam:"style=form,explode=true,name=expand"`
 }
 
 func (l ListCapacitiesRequest) MarshalJSON() ([]byte, error) {
@@ -120,13 +90,6 @@ func (l *ListCapacitiesRequest) GetTagKey() []string {
 		return nil
 	}
 	return l.TagKey
-}
-
-func (l *ListCapacitiesRequest) GetExpand() []ListCapacitiesExpand {
-	if l == nil {
-		return nil
-	}
-	return l.Expand
 }
 
 type ListCapacitiesResponse struct {

@@ -47,6 +47,7 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
+// SDK - sfc-api: Public preview API - subject to change. See https://docs.sfcompute.com/preview/roadmap for details.
 type SDK struct {
 	SDKVersion   string
 	InstanceSKUs *InstanceSKUs
@@ -66,8 +67,12 @@ type SDK struct {
 	Orders *Orders
 	// Read-only orderbook visibility: bid/ask spread, depth of book, and historical fills, keyed on hardware requirements + delivery window.
 	Orderbook *Orderbook
+	// Inspect what the caller is allowed to do.
+	Permissions *Permissions
 	// Market automations that maintain capacity by placing buy/sell orders.
 	Procurements *Procurements
+	// Read-only access to users within the caller's organization.
+	Users *Users
 	// Resource containers scoped to an account.
 	Workspaces *Workspaces
 
@@ -146,9 +151,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *SDK {
 	sdk := &SDK{
-		SDKVersion: "0.0.2",
+		SDKVersion: "0.1.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/go 0.0.2 2.881.17 0.1.0 github.com/sfcompute/sfc-go",
+			UserAgent:  "speakeasy-sdk/go 0.1.0 2.881.17 0.1.0 github.com/sfcompute/sfc-go",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -173,7 +178,9 @@ func New(opts ...SDKOption) *SDK {
 	sdk.Instances = newInstances(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Orders = newOrders(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Orderbook = newOrderbook(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Permissions = newPermissions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Procurements = newProcurements(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Users = newUsers(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk

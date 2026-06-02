@@ -3,46 +3,17 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/sfcompute/sfc-go/internal/utils"
 	"github.com/sfcompute/sfc-go/models/components"
 )
 
-type ListDeploymentsExpand string
-
-const (
-	ListDeploymentsExpandCapacity         ListDeploymentsExpand = "capacity"
-	ListDeploymentsExpandInstanceTemplate ListDeploymentsExpand = "instance_template"
-)
-
-func (e ListDeploymentsExpand) ToPointer() *ListDeploymentsExpand {
-	return &e
-}
-func (e *ListDeploymentsExpand) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "capacity":
-		fallthrough
-	case "instance_template":
-		*e = ListDeploymentsExpand(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ListDeploymentsExpand: %v", v)
-	}
-}
-
 type ListDeploymentsRequest struct {
 	// Filter by workspace.
-	Workspace     string                  `queryParam:"style=form,explode=true,name=workspace"`
-	Capacity      *string                 `queryParam:"style=form,explode=true,name=capacity"`
-	Limit         *int64                  `default:"50" queryParam:"style=form,explode=true,name=limit"`
-	StartingAfter *string                 `queryParam:"style=form,explode=true,name=starting_after"`
-	EndingBefore  *string                 `queryParam:"style=form,explode=true,name=ending_before"`
-	Expand        []ListDeploymentsExpand `queryParam:"style=form,explode=true,name=expand"`
+	Workspace     string  `queryParam:"style=form,explode=true,name=workspace"`
+	Capacity      *string `queryParam:"style=form,explode=true,name=capacity"`
+	Limit         *int64  `default:"50" queryParam:"style=form,explode=true,name=limit"`
+	StartingAfter *string `queryParam:"style=form,explode=true,name=starting_after"`
+	EndingBefore  *string `queryParam:"style=form,explode=true,name=ending_before"`
 }
 
 func (l ListDeploymentsRequest) MarshalJSON() ([]byte, error) {
@@ -89,13 +60,6 @@ func (l *ListDeploymentsRequest) GetEndingBefore() *string {
 		return nil
 	}
 	return l.EndingBefore
-}
-
-func (l *ListDeploymentsRequest) GetExpand() []ListDeploymentsExpand {
-	if l == nil {
-		return nil
-	}
-	return l.Expand
 }
 
 type ListDeploymentsResponse struct {

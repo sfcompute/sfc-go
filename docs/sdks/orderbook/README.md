@@ -7,8 +7,9 @@ Read-only orderbook visibility: bid/ask spread, depth of book, and historical fi
 ### Available Operations
 
 * [GetOrderbookDepth](#getorderbookdepth) - Get market depth
+* [ListOrderbookFills](#listorderbookfills) - List market fills
 * [GetOrderbookQuote](#getorderbookquote) - Get market quote
-* [List](#list) - List market windows
+* [ListOrderbookWindows](#listorderbookwindows) - List market windows
 
 ## GetOrderbookDepth
 
@@ -57,6 +58,67 @@ func main() {
 ### Response
 
 **[*operations.GetOrderbookDepthResponse](../../models/operations/getorderbookdepthresponse.md), error**
+
+### Errors
+
+| Error Type                         | Status Code                        | Content Type                       |
+| ---------------------------------- | ---------------------------------- | ---------------------------------- |
+| apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.UnprocessableEntityError | 422                                | application/json                   |
+| apierrors.InternalServerError      | 500                                | application/json                   |
+| apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
+
+## ListOrderbookFills
+
+All contracts that filled on hardware meeting the requirements for the given delivery window, sorted newest first. One row per fill (contract). Participant identity is never exposed.
+
+### Example Usage
+
+<!-- UsageSnippet language="go" operationID="list_orderbook_fills" method="get" path="/preview/v2/orderbook/fills" -->
+```go
+package main
+
+import(
+	"context"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/operations"
+	"log"
+)
+
+func main() {
+    ctx := context.Background()
+
+    s := sfc.New(
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
+    )
+
+    res, err := s.Orderbook.ListOrderbookFills(ctx, operations.ListOrderbookFillsRequest{
+        Requirements: sfc.Pointer("accelerator:H100"),
+        StartAt: 1746057600,
+        EndAt: 1746662400,
+        SinceAt: sfc.Pointer[int64](1745452800),
+        StartingAfter: sfc.Pointer("mfilc_gqXR7s0Kj5mHvE2wNpLc4Q"),
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+    if res.ListOrderbookFillsResponse != nil {
+        // handle response
+    }
+}
+```
+
+### Parameters
+
+| Parameter                                                                                    | Type                                                                                         | Required                                                                                     | Description                                                                                  |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `ctx`                                                                                        | [context.Context](https://pkg.go.dev/context#Context)                                        | :heavy_check_mark:                                                                           | The context to use for the request.                                                          |
+| `request`                                                                                    | [operations.ListOrderbookFillsRequest](../../models/operations/listorderbookfillsrequest.md) | :heavy_check_mark:                                                                           | The request object to use for the request.                                                   |
+| `opts`                                                                                       | [][operations.Option](../../models/operations/option.md)                                     | :heavy_minus_sign:                                                                           | The options for this request.                                                                |
+
+### Response
+
+**[*operations.ListOrderbookFillsResponse](../../models/operations/listorderbookfillsresponse.md), error**
 
 ### Errors
 
@@ -123,7 +185,7 @@ func main() {
 | apierrors.InternalServerError      | 500                                | application/json                   |
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
-## List
+## ListOrderbookWindows
 
 List every delivery window with resting orders matching the requirements, within the given time range. Each row is a summary; use /quote or /depth for detail on a specific window.
 
@@ -147,7 +209,7 @@ func main() {
         sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
-    res, err := s.Orderbook.List(ctx, operations.ListOrderbookWindowsRequest{
+    res, err := s.Orderbook.ListOrderbookWindows(ctx, operations.ListOrderbookWindowsRequest{
         Requirements: sfc.Pointer("accelerator:H100"),
         RangeStartAt: 1746057600,
         RangeEndAt: 1748649600,

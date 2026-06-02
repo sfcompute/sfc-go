@@ -10,7 +10,8 @@ import (
 type InstanceSku struct {
 	// Single discriminator for the instance-SKU object on both admin and public endpoints. They expose different field shapes but represent the same underlying resource (mirrors Stripe's pattern of one `object` discriminator per resource type, regardless of view).
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object     *string               `const:"instance_sku" json:"object"`
+	object *string `const:"instance_sku" json:"object"`
+	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
 	ID         string                `json:"id"`
 	Name       string                `json:"name"`
 	Properties []InstanceSkuProperty `json:"properties"`

@@ -13,9 +13,15 @@ type CreateInstanceRequest struct {
 	Capacity string `json:"capacity"`
 	// A resource path like 'sfc:image:acme:prod:my-image' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
 	Image string `json:"image"`
+	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
+	InstanceSku string `json:"instance_sku"`
 	// Base64-encoded [cloud-init user data](https://cloudinit.readthedocs.io/en/latest/explanation/format/index.html). Maximum 64KB.
 	CloudInitUserData *string                                              `json:"cloud_init_user_data,omitzero"`
 	Tags              optionalnullable.OptionalNullable[map[string]string] `json:"tags,omitzero"`
+	// Shutdown priority. Higher numbers are kept longer. Defaults to 0.
+	Priority optionalnullable.OptionalNullable[int64] `json:"priority,omitzero"`
+	// **Experimental — subject to change or removal without notice.** Enables InfiniBand. The chosen `instance_sku` must support InfiniBand.
+	PreviewEnableInfiniband *bool `default:"false" json:"_preview_enable_infiniband"`
 }
 
 func (c CreateInstanceRequest) MarshalJSON() ([]byte, error) {
@@ -50,6 +56,13 @@ func (c *CreateInstanceRequest) GetImage() string {
 	return c.Image
 }
 
+func (c *CreateInstanceRequest) GetInstanceSku() string {
+	if c == nil {
+		return ""
+	}
+	return c.InstanceSku
+}
+
 func (c *CreateInstanceRequest) GetCloudInitUserData() *string {
 	if c == nil {
 		return nil
@@ -62,4 +75,18 @@ func (c *CreateInstanceRequest) GetTags() optionalnullable.OptionalNullable[map[
 		return nil
 	}
 	return c.Tags
+}
+
+func (c *CreateInstanceRequest) GetPriority() optionalnullable.OptionalNullable[int64] {
+	if c == nil {
+		return nil
+	}
+	return c.Priority
+}
+
+func (c *CreateInstanceRequest) GetPreviewEnableInfiniband() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.PreviewEnableInfiniband
 }

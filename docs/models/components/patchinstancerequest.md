@@ -1,0 +1,10 @@
+# PatchInstanceRequest
+
+
+## Fields
+
+| Field                                                                       | Type                                                                        | Required                                                                    | Description                                                                 | Example                                                                     |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `Name`                                                                      | optionalnullable.OptionalNullable[`string`]                                 | :heavy_minus_sign:                                                          | N/A                                                                         | my-resource-name                                                            |
+| `Tags`                                                                      | optionalnullable.OptionalNullable[map[string]`string`]                      | :heavy_minus_sign:                                                          | N/A                                                                         | {<br/>"env": "prod",<br/>"team": "infra"<br/>}                              |
+| `Priority`                                                                  | optionalnullable.OptionalNullable[`int64`]                                  | :heavy_minus_sign:                                                          | Shutdown priority. Higher numbers are kept longer. Omit to leave unchanged. |                                                                             |

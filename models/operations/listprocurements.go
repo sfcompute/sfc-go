@@ -9,12 +9,11 @@ import (
 
 type ListProcurementsRequest struct {
 	// Filter by workspace.
-	Workspace     string   `queryParam:"style=form,explode=true,name=workspace"`
-	Capacity      *string  `queryParam:"style=form,explode=true,name=capacity"`
-	Limit         *int64   `default:"50" queryParam:"style=form,explode=true,name=limit"`
-	StartingAfter *string  `queryParam:"style=form,explode=true,name=starting_after"`
-	EndingBefore  *string  `queryParam:"style=form,explode=true,name=ending_before"`
-	Expand        []string `queryParam:"style=form,explode=true,name=expand"`
+	Workspace     string  `queryParam:"style=form,explode=true,name=workspace"`
+	Capacity      *string `queryParam:"style=form,explode=true,name=capacity"`
+	Limit         *int64  `default:"50" queryParam:"style=form,explode=true,name=limit"`
+	StartingAfter *string `queryParam:"style=form,explode=true,name=starting_after"`
+	EndingBefore  *string `queryParam:"style=form,explode=true,name=ending_before"`
 }
 
 func (l ListProcurementsRequest) MarshalJSON() ([]byte, error) {
@@ -61,13 +60,6 @@ func (l *ListProcurementsRequest) GetEndingBefore() *string {
 		return nil
 	}
 	return l.EndingBefore
-}
-
-func (l *ListProcurementsRequest) GetExpand() []string {
-	if l == nil {
-		return nil
-	}
-	return l.Expand
 }
 
 type ListProcurementsResponse struct {

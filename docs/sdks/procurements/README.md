@@ -14,6 +14,8 @@ Market automations that maintain capacity by placing buy/sell orders.
 
 ## List
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 List all procurements.
 
 ### Example Usage
@@ -80,11 +82,14 @@ func main() {
 | Error Type                         | Status Code                        | Content Type                       |
 | ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.ForbiddenError           | 403                                | application/json                   |
 | apierrors.UnprocessableEntityError | 422                                | application/json                   |
 | apierrors.InternalServerError      | 500                                | application/json                   |
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## Create
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Create a market automation that maintains capacity by placing buy/sell orders.
 
@@ -163,6 +168,8 @@ func main() {
 
 ## GetProcurement
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Retrieve a procurement by ID or name.
 
 ### Example Usage
@@ -185,7 +192,7 @@ func main() {
         sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
-    res, err := s.Procurements.GetProcurement(ctx, "proc_k3R-nX9vLm7Qp2Yw5Jd8F", nil)
+    res, err := s.Procurements.GetProcurement(ctx, "proc_k3R-nX9vLm7Qp2Yw5Jd8F")
     if err != nil {
         log.Fatal(err)
     }
@@ -209,7 +216,6 @@ func main() {
 | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
 | `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |                                                          |
 | `id`                                                     | `string`                                                 | :heavy_check_mark:                                       | N/A                                                      | proc_k3R-nX9vLm7Qp2Yw5Jd8F                               |
-| `expand`                                                 | []`string`                                               | :heavy_minus_sign:                                       | N/A                                                      |                                                          |
 | `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |                                                          |
 
 ### Response
@@ -221,11 +227,14 @@ func main() {
 | Error Type                    | Status Code                   | Content Type                  |
 | ----------------------------- | ----------------------------- | ----------------------------- |
 | apierrors.UnauthorizedError   | 401                           | application/json              |
+| apierrors.ForbiddenError      | 403                           | application/json              |
 | apierrors.NotFoundError       | 404                           | application/json              |
 | apierrors.InternalServerError | 500                           | application/json              |
 | apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
 
 ## Delete
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Delete a procurement. Standing orders are cancelled automatically.
 
@@ -281,6 +290,8 @@ func main() {
 | apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
 
 ## PatchProcurement
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Update a procurement's configuration.
 

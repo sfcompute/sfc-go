@@ -13,7 +13,7 @@ Developer-friendly & type-safe Go SDK specifically catered to leverage *sfc* API
 <!-- Start Summary [summary] -->
 ## Summary
 
-
+sfc-api: Public preview API - subject to change. See https://docs.sfcompute.com/preview/roadmap for details.
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
@@ -155,6 +155,8 @@ func main() {
 * [CompleteUpload](docs/sdks/images/README.md#completeupload) - Complete image upload
 * [Download](docs/sdks/images/README.md#download) - Download image
 * [UploadPart](docs/sdks/images/README.md#uploadpart) - Get upload part URL
+* [ReinstateImage](docs/sdks/images/README.md#reinstateimage) - Reinstate image
+* [RevokeImage](docs/sdks/images/README.md#revokeimage) - Revoke image
 
 ### [InstanceSKUCatalog](docs/sdks/instanceskucatalog/README.md)
 
@@ -177,8 +179,10 @@ func main() {
 
 * [List](docs/sdks/instances/README.md#list) - List instances
 * [Create](docs/sdks/instances/README.md#create) - Create instance
+* [BatchPatchInstances](docs/sdks/instances/README.md#batchpatchinstances) - Update multiple instances
 * [Fetch](docs/sdks/instances/README.md#fetch) - Get instance
 * [Delete](docs/sdks/instances/README.md#delete) - Delete instance
+* [Update](docs/sdks/instances/README.md#update) - Update instance
 * [GetLogsForInstance](docs/sdks/instances/README.md#getlogsforinstance) - Get instance logs
 * [GetSSHInfoForInstance](docs/sdks/instances/README.md#getsshinfoforinstance) - Get instance SSH info
 * [TerminateInstance](docs/sdks/instances/README.md#terminateinstance) - Terminate instance
@@ -186,16 +190,21 @@ func main() {
 ### [Orderbook](docs/sdks/orderbook/README.md)
 
 * [GetOrderbookDepth](docs/sdks/orderbook/README.md#getorderbookdepth) - Get market depth
+* [ListOrderbookFills](docs/sdks/orderbook/README.md#listorderbookfills) - List market fills
 * [GetOrderbookQuote](docs/sdks/orderbook/README.md#getorderbookquote) - Get market quote
-* [List](docs/sdks/orderbook/README.md#list) - List market windows
+* [ListOrderbookWindows](docs/sdks/orderbook/README.md#listorderbookwindows) - List market windows
 
 ### [Orders](docs/sdks/orders/README.md)
 
-* [GetOrderEstimate](docs/sdks/orders/README.md#getorderestimate) - Estimate an order
+* [GetOrderPreview](docs/sdks/orders/README.md#getorderpreview) - Estimate an order
 * [List](docs/sdks/orders/README.md#list) - List orders
 * [Create](docs/sdks/orders/README.md#create) - Create order
 * [Fetch](docs/sdks/orders/README.md#fetch) - Get order
 * [Cancel](docs/sdks/orders/README.md#cancel) - Cancel order
+
+### [Permissions](docs/sdks/permissions/README.md)
+
+* [CheckPermissionHandler](docs/sdks/permissions/README.md#checkpermissionhandler) - Check permissions
 
 ### [Procurements](docs/sdks/procurements/README.md)
 
@@ -204,6 +213,11 @@ func main() {
 * [GetProcurement](docs/sdks/procurements/README.md#getprocurement) - Get procurement
 * [Delete](docs/sdks/procurements/README.md#delete) - Delete procurement
 * [PatchProcurement](docs/sdks/procurements/README.md#patchprocurement) - Update procurement
+
+### [Users](docs/sdks/users/README.md)
+
+* [List](docs/sdks/users/README.md#list) - List users
+* [GetUserHandler](docs/sdks/users/README.md#getuserhandler) - Get user
 
 ### [Workspaces](docs/sdks/workspaces/README.md)
 

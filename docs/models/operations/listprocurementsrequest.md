@@ -10,4 +10,3 @@
 | `Limit`                      | `*int64`                     | :heavy_minus_sign:           | N/A                          |                              |
 | `StartingAfter`              | `*string`                    | :heavy_minus_sign:           | N/A                          | procc_gqXR7s0Kj5mHvE2wNpLc4Q |
 | `EndingBefore`               | `*string`                    | :heavy_minus_sign:           | N/A                          | procc_gqXR7s0Kj5mHvE2wNpLc4Q |
-| `Expand`                     | []`string`                   | :heavy_minus_sign:           | N/A                          |                              |

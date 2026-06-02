@@ -8,10 +8,11 @@ import (
 )
 
 type CreateProcurementRequest struct {
-	Name        optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
-	Target      ProcurementTarget                         `json:"target"`
-	Capacity    string                                    `json:"capacity"`
-	InstanceSku string                                    `json:"instance_sku"`
+	Name     optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
+	Target   ProcurementTarget                         `json:"target"`
+	Capacity string                                    `json:"capacity"`
+	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
+	InstanceSku string `json:"instance_sku"`
 	// Price rate in dollars per node-hour.
 	MinSellPriceDollarsPerNodeHour string `json:"min_sell_price_dollars_per_node_hour"`
 	// Price rate in dollars per node-hour.

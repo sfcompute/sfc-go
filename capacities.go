@@ -37,6 +37,8 @@ func newCapacities(rootSDK *SDK, sdkConfig config.SDKConfiguration, hooks *hooks
 }
 
 // List capacities
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // List all capacities.
 func (s *Capacities) List(ctx context.Context, request operations.ListCapacitiesRequest, opts ...operations.Option) (*operations.ListCapacitiesResponse, error) {
 	o := operations.Options{}
@@ -290,6 +292,31 @@ func (s *Capacities) List(ctx context.Context, request operations.ListCapacities
 			}
 			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 403:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ForbiddenError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode == 422:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -365,6 +392,8 @@ func (s *Capacities) List(ctx context.Context, request operations.ListCapacities
 }
 
 // Create capacity
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Create a capacity to hold compute.
 func (s *Capacities) Create(ctx context.Context, request components.CreateCapacityRequest, opts ...operations.Option) (*operations.CreateCapacityResponse, error) {
 	o := operations.Options{}
@@ -677,12 +706,13 @@ func (s *Capacities) Create(ctx context.Context, request components.CreateCapaci
 }
 
 // Fetch - Get capacity
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Retrieve a capacity by ID, resource path, or name, including its compute schedule.
-func (s *Capacities) Fetch(ctx context.Context, id string, scheduleHistoryMinutes *int64, expand []operations.FetchCapacityExpand, opts ...operations.Option) (*operations.FetchCapacityResponse, error) {
+func (s *Capacities) Fetch(ctx context.Context, id string, scheduleHistoryMinutes *int64, opts ...operations.Option) (*operations.FetchCapacityResponse, error) {
 	request := operations.FetchCapacityRequest{
 		ID:                     id,
 		ScheduleHistoryMinutes: scheduleHistoryMinutes,
-		Expand:                 expand,
 	}
 
 	o := operations.Options{}
@@ -892,6 +922,31 @@ func (s *Capacities) Fetch(ctx context.Context, id string, scheduleHistoryMinute
 			}
 			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 403:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ForbiddenError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode == 404:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -967,6 +1022,8 @@ func (s *Capacities) Fetch(ctx context.Context, id string, scheduleHistoryMinute
 }
 
 // Delete capacity
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Delete a capacity. The capacity must have no active orders, future allocations, active nodes, deployments, or procurements. Remove all dependencies before deleting.
 func (s *Capacities) Delete(ctx context.Context, id string, opts ...operations.Option) (*operations.DeleteCapacityResponse, error) {
 	request := operations.DeleteCapacityRequest{
@@ -1157,6 +1214,31 @@ func (s *Capacities) Delete(ctx context.Context, id string, opts ...operations.O
 			}
 			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 403:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ForbiddenError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode == 404:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -1257,6 +1339,8 @@ func (s *Capacities) Delete(ctx context.Context, id string, opts ...operations.O
 }
 
 // Update capacity
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Update a capacity. Omitted fields are left unchanged.
 func (s *Capacities) Update(ctx context.Context, id string, body components.PatchCapacityRequest, opts ...operations.Option) (*operations.UpdateCapacityResponse, error) {
 	request := operations.UpdateCapacityRequest{
@@ -1599,6 +1683,8 @@ func (s *Capacities) Update(ctx context.Context, id string, body components.Patc
 }
 
 // ListCapacityTransfers - List capacity transfers
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // List capacity transfers for the caller's organization.
 func (s *Capacities) ListCapacityTransfers(ctx context.Context, request operations.ListCapacityTransfersRequest, opts ...operations.Option) (*operations.ListCapacityTransfersResponse, error) {
 	o := operations.Options{}
@@ -1852,6 +1938,31 @@ func (s *Capacities) ListCapacityTransfers(ctx context.Context, request operatio
 			}
 			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 403:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ForbiddenError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode == 422:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -1927,6 +2038,8 @@ func (s *Capacities) ListCapacityTransfers(ctx context.Context, request operatio
 }
 
 // CreateCapacityTransfer - Create capacity transfer
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Transfer some or all of one capacity into another
 func (s *Capacities) CreateCapacityTransfer(ctx context.Context, body components.V2CreateCapacityTransferRequest, idempotencyKey optionalnullable.OptionalNullable[string], opts ...operations.Option) (*operations.CreateCapacityTransferResponse, error) {
 	request := operations.CreateCapacityTransferRequest{
@@ -2296,6 +2409,8 @@ func (s *Capacities) CreateCapacityTransfer(ctx context.Context, body components
 }
 
 // FetchCapacityTransfer - Get capacity transfer
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Retrieve a capacity transfer by ID.
 func (s *Capacities) FetchCapacityTransfer(ctx context.Context, id string, opts ...operations.Option) (*operations.FetchCapacityTransferResponse, error) {
 	request := operations.FetchCapacityTransferRequest{
@@ -2489,6 +2604,31 @@ func (s *Capacities) FetchCapacityTransfer(ctx context.Context, id string, opts 
 			}
 
 			var out apierrors.UnauthorizedError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 403:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ForbiddenError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}

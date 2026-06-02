@@ -3,44 +3,14 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/sfcompute/sfc-go/internal/utils"
 	"github.com/sfcompute/sfc-go/models/components"
 )
-
-type FetchCapacityExpand string
-
-const (
-	FetchCapacityExpandProcurements FetchCapacityExpand = "procurements"
-	FetchCapacityExpandDeployments  FetchCapacityExpand = "deployments"
-)
-
-func (e FetchCapacityExpand) ToPointer() *FetchCapacityExpand {
-	return &e
-}
-func (e *FetchCapacityExpand) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "procurements":
-		fallthrough
-	case "deployments":
-		*e = FetchCapacityExpand(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for FetchCapacityExpand: %v", v)
-	}
-}
 
 type FetchCapacityRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// How many minutes of past schedule to include.
 	ScheduleHistoryMinutes *int64 `default:"0" queryParam:"style=form,explode=true,name=schedule_history_minutes"`
-	// Expand related resources inline instead of returning IDs.
-	Expand []FetchCapacityExpand `queryParam:"style=form,explode=true,name=expand"`
 }
 
 func (f FetchCapacityRequest) MarshalJSON() ([]byte, error) {
@@ -66,13 +36,6 @@ func (f *FetchCapacityRequest) GetScheduleHistoryMinutes() *int64 {
 		return nil
 	}
 	return f.ScheduleHistoryMinutes
-}
-
-func (f *FetchCapacityRequest) GetExpand() []FetchCapacityExpand {
-	if f == nil {
-		return nil
-	}
-	return f.Expand
 }
 
 type FetchCapacityResponse struct {

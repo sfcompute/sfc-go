@@ -14,12 +14,12 @@ type ProcurementResponse struct {
 	ResourcePath string `json:"resource_path"`
 	Owner        string `json:"owner"`
 	Workspace    string `json:"workspace"`
+	WorkspaceID  string `json:"workspace_id"`
 	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object *string           `const:"procurement" json:"object"`
-	Target ProcurementTarget `json:"target"`
-	// ID (default) or expanded summary when using expand parameter
-	Capacity    ExpandableCapacityIDCapacitySummaryUnion              `json:"capacity"`
+	object      *string                                               `const:"procurement" json:"object"`
+	Target      ProcurementTarget                                     `json:"target"`
+	Capacity    CapacitySummary                                       `json:"capacity"`
 	InstanceSku optionalnullable.OptionalNullable[InstanceSkuSummary] `json:"instance_sku,omitzero"`
 	// Price rate in dollars per node-hour.
 	MinSellPriceDollarsPerNodeHour string `json:"min_sell_price_dollars_per_node_hour"`
@@ -75,6 +75,13 @@ func (p *ProcurementResponse) GetWorkspace() string {
 	return p.Workspace
 }
 
+func (p *ProcurementResponse) GetWorkspaceID() string {
+	if p == nil {
+		return ""
+	}
+	return p.WorkspaceID
+}
+
 func (p *ProcurementResponse) GetName() string {
 	if p == nil {
 		return ""
@@ -93,9 +100,9 @@ func (p *ProcurementResponse) GetTarget() ProcurementTarget {
 	return p.Target
 }
 
-func (p *ProcurementResponse) GetCapacity() ExpandableCapacityIDCapacitySummaryUnion {
+func (p *ProcurementResponse) GetCapacity() CapacitySummary {
 	if p == nil {
-		return ExpandableCapacityIDCapacitySummaryUnion{}
+		return CapacitySummary{}
 	}
 	return p.Capacity
 }

@@ -8,16 +8,17 @@ import (
 )
 
 type InstanceTemplateResponse struct {
+	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
 	ID string `json:"id"`
 	// A resource path for a instance_template resource. Format: sfc:instance_template:<account>:<workspace>:<name>.
 	ResourcePath string `json:"resource_path"`
 	Owner        string `json:"owner"`
 	Workspace    string `json:"workspace"`
+	WorkspaceID  string `json:"workspace_id"`
 	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object *string `const:"instance_template" json:"object"`
-	// ID (default) or expanded summary when using expand parameter
-	Image ExpandableImageIDImageSummaryUnion `json:"image"`
+	object *string      `const:"instance_template" json:"object"`
+	Image  ImageSummary `json:"image"`
 	// Whether cloud-init user data is configured for this template.
 	CloudInitUserDataUsed bool `json:"cloud_init_user_data_used"`
 	// Unix timestamp.
@@ -65,6 +66,13 @@ func (i *InstanceTemplateResponse) GetWorkspace() string {
 	return i.Workspace
 }
 
+func (i *InstanceTemplateResponse) GetWorkspaceID() string {
+	if i == nil {
+		return ""
+	}
+	return i.WorkspaceID
+}
+
 func (i *InstanceTemplateResponse) GetName() string {
 	if i == nil {
 		return ""
@@ -76,9 +84,9 @@ func (i *InstanceTemplateResponse) GetObject() *string {
 	return types.Pointer("instance_template")
 }
 
-func (i *InstanceTemplateResponse) GetImage() ExpandableImageIDImageSummaryUnion {
+func (i *InstanceTemplateResponse) GetImage() ImageSummary {
 	if i == nil {
-		return ExpandableImageIDImageSummaryUnion{}
+		return ImageSummary{}
 	}
 	return i.Image
 }

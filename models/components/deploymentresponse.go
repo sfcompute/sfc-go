@@ -13,14 +13,13 @@ type DeploymentResponse struct {
 	ResourcePath string `json:"resource_path"`
 	Owner        string `json:"owner"`
 	Workspace    string `json:"workspace"`
+	WorkspaceID  string `json:"workspace_id"`
 	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object *string `const:"deployment" json:"object"`
-	// ID (default) or expanded summary when using expand parameter
-	Capacity ExpandableCapacityIDCapacitySummaryUnion `json:"capacity"`
-	// ID (default) or expanded summary when using expand parameter
-	InstanceTemplate    ExpandableInstanceTemplateIDInstanceTemplateSummaryUnion `json:"instance_template"`
-	TargetInstanceCount int                                                      `json:"target_instance_count"`
+	object              *string                 `const:"deployment" json:"object"`
+	Capacity            CapacitySummary         `json:"capacity"`
+	InstanceTemplate    InstanceTemplateSummary `json:"instance_template"`
+	TargetInstanceCount int                     `json:"target_instance_count"`
 	// A name template using {{variable}} syntax. Available variables: {{adjective}} (~128 random adjectives), {{noun}} (~128 random nouns), {{nanoid(N)}} (N-character alphanumeric identifier, 1 ≤ N ≤ 21). The template must produce enough unique combinations to avoid collisions — equivalent to at least the default template {{adjective}}-{{noun}}-{{nanoid(6)}} (~1 quadrillion possibilities). Must start with an alphanumeric character. Resolved names are limited to 255 characters.
 	InstanceNameTemplate string               `json:"instance_name_template"`
 	Status               ReconciliationStatus `json:"status"`
@@ -69,6 +68,13 @@ func (d *DeploymentResponse) GetWorkspace() string {
 	return d.Workspace
 }
 
+func (d *DeploymentResponse) GetWorkspaceID() string {
+	if d == nil {
+		return ""
+	}
+	return d.WorkspaceID
+}
+
 func (d *DeploymentResponse) GetName() string {
 	if d == nil {
 		return ""
@@ -80,16 +86,16 @@ func (d *DeploymentResponse) GetObject() *string {
 	return types.Pointer("deployment")
 }
 
-func (d *DeploymentResponse) GetCapacity() ExpandableCapacityIDCapacitySummaryUnion {
+func (d *DeploymentResponse) GetCapacity() CapacitySummary {
 	if d == nil {
-		return ExpandableCapacityIDCapacitySummaryUnion{}
+		return CapacitySummary{}
 	}
 	return d.Capacity
 }
 
-func (d *DeploymentResponse) GetInstanceTemplate() ExpandableInstanceTemplateIDInstanceTemplateSummaryUnion {
+func (d *DeploymentResponse) GetInstanceTemplate() InstanceTemplateSummary {
 	if d == nil {
-		return ExpandableInstanceTemplateIDInstanceTemplateSummaryUnion{}
+		return InstanceTemplateSummary{}
 	}
 	return d.InstanceTemplate
 }

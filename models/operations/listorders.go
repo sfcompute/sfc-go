@@ -83,14 +83,15 @@ type ListOrdersRequest struct {
 	Status        []components.OrderStatus `queryParam:"style=form,explode=true,name=status"`
 	CreatedAfter  *int64                   `queryParam:"style=form,explode=true,name=created_after"`
 	CreatedBefore *int64                   `queryParam:"style=form,explode=true,name=created_before"`
+	// Filter to one procurement's orders (ID or resource path). Without it, the list omits procurement orders.
+	Procurement *string `queryParam:"style=form,explode=true,name=procurement"`
 	// Prefix with `-` for descending.
 	SortBy *ListOrdersSortBy `queryParam:"style=form,explode=true,name=sort_by"`
 	Limit  *int64            `default:"50" queryParam:"style=form,explode=true,name=limit"`
 	// Set to the response's `cursor` to fetch the next page.
 	StartingAfter *string `queryParam:"style=form,explode=true,name=starting_after"`
 	// Set to the response's `cursor` to fetch the previous page.
-	EndingBefore *string  `queryParam:"style=form,explode=true,name=ending_before"`
-	Expand       []string `queryParam:"style=form,explode=true,name=expand"`
+	EndingBefore *string `queryParam:"style=form,explode=true,name=ending_before"`
 }
 
 func (l ListOrdersRequest) MarshalJSON() ([]byte, error) {
@@ -146,6 +147,13 @@ func (l *ListOrdersRequest) GetCreatedBefore() *int64 {
 	return l.CreatedBefore
 }
 
+func (l *ListOrdersRequest) GetProcurement() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Procurement
+}
+
 func (l *ListOrdersRequest) GetSortBy() *ListOrdersSortBy {
 	if l == nil {
 		return nil
@@ -172,13 +180,6 @@ func (l *ListOrdersRequest) GetEndingBefore() *string {
 		return nil
 	}
 	return l.EndingBefore
-}
-
-func (l *ListOrdersRequest) GetExpand() []string {
-	if l == nil {
-		return nil
-	}
-	return l.Expand
 }
 
 type ListOrdersResponse struct {

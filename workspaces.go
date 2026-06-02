@@ -33,8 +33,14 @@ func newWorkspaces(rootSDK *SDK, sdkConfig config.SDKConfiguration, hooks *hooks
 }
 
 // List workspaces
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // List all workspaces for the authenticated account.
-func (s *Workspaces) List(ctx context.Context, opts ...operations.Option) (*operations.ListWorkspacesHandlerResponse, error) {
+func (s *Workspaces) List(ctx context.Context, id []string, opts ...operations.Option) (*operations.ListWorkspacesHandlerResponse, error) {
+	request := operations.ListWorkspacesHandlerRequest{
+		ID: id,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -84,6 +90,10 @@ func (s *Workspaces) List(ctx context.Context, opts ...operations.Option) (*oper
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
@@ -238,6 +248,31 @@ func (s *Workspaces) List(ctx context.Context, opts ...operations.Option) (*oper
 			}
 			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 422:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.UnprocessableEntityError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode == 500:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -288,6 +323,8 @@ func (s *Workspaces) List(ctx context.Context, opts ...operations.Option) (*oper
 }
 
 // Create workspace
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Create a workspace.
 func (s *Workspaces) Create(ctx context.Context, request components.CreateWorkspaceRequest, opts ...operations.Option) (*operations.CreateWorkspaceHandlerResponse, error) {
 	o := operations.Options{}
@@ -575,6 +612,8 @@ func (s *Workspaces) Create(ctx context.Context, request components.CreateWorksp
 }
 
 // GetWorkspaceHandler - Get workspace
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Retrieve a workspace by name or ID.
 func (s *Workspaces) GetWorkspaceHandler(ctx context.Context, workspace string, opts ...operations.Option) (*operations.GetWorkspaceHandlerResponse, error) {
 	request := operations.GetWorkspaceHandlerRequest{
@@ -859,6 +898,8 @@ func (s *Workspaces) GetWorkspaceHandler(ctx context.Context, workspace string, 
 }
 
 // Delete workspace
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Soft-delete a workspace by name or ID. Workspace must be empty (no capacities, instance templates, or images).
 func (s *Workspaces) Delete(ctx context.Context, workspace string, opts ...operations.Option) (*operations.DeleteWorkspaceHandlerResponse, error) {
 	request := operations.DeleteWorkspaceHandlerRequest{
@@ -1149,6 +1190,8 @@ func (s *Workspaces) Delete(ctx context.Context, workspace string, opts ...opera
 }
 
 // PatchWorkspaceHandler - Update workspace
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Rename a workspace.
 func (s *Workspaces) PatchWorkspaceHandler(ctx context.Context, workspace string, body components.PatchWorkspaceRequest, opts ...operations.Option) (*operations.PatchWorkspaceHandlerResponse, error) {
 	request := operations.PatchWorkspaceHandlerRequest{

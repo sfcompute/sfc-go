@@ -14,6 +14,8 @@ Resource containers scoped to an account.
 
 ## List
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 List all workspaces for the authenticated account.
 
 ### Example Usage
@@ -35,7 +37,9 @@ func main() {
         sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
-    res, err := s.Workspaces.List(ctx)
+    res, err := s.Workspaces.List(ctx, []string{
+        "wksp_k3R-nX9vLm7Qp2Yw5Jd8F",
+    })
     if err != nil {
         log.Fatal(err)
     }
@@ -47,10 +51,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                | Type                                                     | Required                                                 | Description                                              |
-| -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
-| `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |
-| `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |
+| Parameter                                                    | Type                                                         | Required                                                     | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `ctx`                                                        | [context.Context](https://pkg.go.dev/context#Context)        | :heavy_check_mark:                                           | The context to use for the request.                          |
+| `id`                                                         | []`string`                                                   | :heavy_minus_sign:                                           | Filter by workspace ID, resource path, or name (repeatable). |
+| `opts`                                                       | [][operations.Option](../../models/operations/option.md)     | :heavy_minus_sign:                                           | The options for this request.                                |
 
 ### Response
 
@@ -58,13 +63,16 @@ func main() {
 
 ### Errors
 
-| Error Type                    | Status Code                   | Content Type                  |
-| ----------------------------- | ----------------------------- | ----------------------------- |
-| apierrors.UnauthorizedError   | 401                           | application/json              |
-| apierrors.InternalServerError | 500                           | application/json              |
-| apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
+| Error Type                         | Status Code                        | Content Type                       |
+| ---------------------------------- | ---------------------------------- | ---------------------------------- |
+| apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.UnprocessableEntityError | 422                                | application/json                   |
+| apierrors.InternalServerError      | 500                                | application/json                   |
+| apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## Create
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Create a workspace.
 
@@ -124,6 +132,8 @@ func main() {
 
 ## GetWorkspaceHandler
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Retrieve a workspace by name or ID.
 
 ### Example Usage
@@ -177,6 +187,8 @@ func main() {
 | apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
 
 ## Delete
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Soft-delete a workspace by name or ID. Workspace must be empty (no capacities, instance templates, or images).
 
@@ -232,6 +244,8 @@ func main() {
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## PatchWorkspaceHandler
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Rename a workspace.
 

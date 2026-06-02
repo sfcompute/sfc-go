@@ -3,40 +3,9 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/sfcompute/sfc-go/internal/utils"
 	"github.com/sfcompute/sfc-go/models/components"
 )
-
-type ListInstancesExpand string
-
-const (
-	ListInstancesExpandCapacity   ListInstancesExpand = "capacity"
-	ListInstancesExpandImage      ListInstancesExpand = "image"
-	ListInstancesExpandDeployment ListInstancesExpand = "deployment"
-)
-
-func (e ListInstancesExpand) ToPointer() *ListInstancesExpand {
-	return &e
-}
-func (e *ListInstancesExpand) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "capacity":
-		fallthrough
-	case "image":
-		fallthrough
-	case "deployment":
-		*e = ListInstancesExpand(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ListInstancesExpand: %v", v)
-	}
-}
 
 type ListInstancesRequest struct {
 	// Filter by workspace.
@@ -54,8 +23,6 @@ type ListInstancesRequest struct {
 	EndingBefore *string `queryParam:"style=form,explode=true,name=ending_before"`
 	// Additional fields to include in the response.
 	Include []string `queryParam:"style=form,explode=true,name=include"`
-	// Fields to expand with full objects instead of IDs.
-	Expand []ListInstancesExpand `queryParam:"style=form,explode=true,name=expand"`
 	// Filter by tag key-value pair (repeatable). Format: `key=value` (the `=` between key and value must be percent-encoded in the URL).
 	Tag []string `queryParam:"style=form,explode=true,name=tag"`
 	// Filter by tag key existence (repeatable). Returns resources that have a tag with this key, regardless of the value.
@@ -127,13 +94,6 @@ func (l *ListInstancesRequest) GetInclude() []string {
 		return nil
 	}
 	return l.Include
-}
-
-func (l *ListInstancesRequest) GetExpand() []ListInstancesExpand {
-	if l == nil {
-		return nil
-	}
-	return l.Expand
 }
 
 func (l *ListInstancesRequest) GetTag() []string {

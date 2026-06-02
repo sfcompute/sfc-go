@@ -14,17 +14,19 @@ type CapacityResponse struct {
 	ResourcePath string `json:"resource_path"`
 	Owner        string `json:"owner"`
 	Workspace    string `json:"workspace"`
+	WorkspaceID  string `json:"workspace_id"`
 	Name         string `json:"name"`
 	// Capacity kind determines what operations are allowed on a capacity.
+	//
 	// - `Market`: User-created capacities. - `Originating`: Provider capacities for selling compute. Cannot add compute   (buy orders/procurements). - `ReadOnly`: System-managed capacities used for legacy compute, bare metal   contracts, and other. Cannot be modified through the API.
 	Kind CapacityKind `json:"kind"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	object             *string            `const:"capacity" json:"object"`
 	AllocationSchedule AllocationSchedule `json:"allocation_schedule"`
-	// Array of IDs (default) or expanded summaries when using expand parameter
-	Procurements *ExpandableListProcurementIDProcurementSummaryUnion `json:"procurements,omitzero"`
-	// Array of IDs (default) or expanded summaries when using expand parameter
-	Deployments *ExpandableListDeploymentIDDeploymentSummaryUnion `json:"deployments,omitzero"`
+	// Active procurements targeting this capacity.
+	Procurements []ProcurementSummary `json:"procurements,omitzero"`
+	// Active deployments targeting this capacity.
+	Deployments []DeploymentSummary `json:"deployments,omitzero"`
 	// Unix timestamp.
 	CreatedAt int64                                                `json:"created_at"`
 	Tags      optionalnullable.OptionalNullable[map[string]string] `json:"tags,omitzero"`
@@ -69,6 +71,13 @@ func (c *CapacityResponse) GetWorkspace() string {
 	return c.Workspace
 }
 
+func (c *CapacityResponse) GetWorkspaceID() string {
+	if c == nil {
+		return ""
+	}
+	return c.WorkspaceID
+}
+
 func (c *CapacityResponse) GetName() string {
 	if c == nil {
 		return ""
@@ -94,14 +103,14 @@ func (c *CapacityResponse) GetAllocationSchedule() AllocationSchedule {
 	return c.AllocationSchedule
 }
 
-func (c *CapacityResponse) GetProcurements() *ExpandableListProcurementIDProcurementSummaryUnion {
+func (c *CapacityResponse) GetProcurements() []ProcurementSummary {
 	if c == nil {
 		return nil
 	}
 	return c.Procurements
 }
 
-func (c *CapacityResponse) GetDeployments() *ExpandableListDeploymentIDDeploymentSummaryUnion {
+func (c *CapacityResponse) GetDeployments() []DeploymentSummary {
 	if c == nil {
 		return nil
 	}

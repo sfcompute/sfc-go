@@ -10,6 +10,8 @@
 
 ## ListAvailability
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Aggregate availability across instance SKUs that match `requirements`, grouped by the given property keys. Each group exposes a summed `total` schedule plus a per-SKU breakdown.
 
 ### Example Usage
@@ -66,6 +68,8 @@ func main() {
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## ListInstanceSKUs
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 List all instance SKUs available on the market with their properties.
 
@@ -134,6 +138,8 @@ func main() {
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## GetInstanceSku
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Retrieve an instance SKU by ID, including its registered properties.
 

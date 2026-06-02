@@ -9,30 +9,32 @@ import (
 )
 
 type InstanceResponse struct {
+	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
 	ID string `json:"id"`
 	// A resource path for a instance resource. Format: sfc:instance:<account>:<workspace>:<name>.
 	ResourcePath string `json:"resource_path"`
 	Owner        string `json:"owner"`
 	Workspace    string `json:"workspace"`
+	WorkspaceID  string `json:"workspace_id"`
 	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	object *string `const:"instance" json:"object"`
 	// `awaiting_allocation` when waiting for compute allocation on its capacity, `running` once assigned and the physical machine is running (still takes time for the image to be downloaded and booted), `terminated` when stopped by the user or after running out of allocation, `failed` on hardware fault.
 	Status      InstanceStatus                                        `json:"status"`
 	InstanceSku optionalnullable.OptionalNullable[InstanceSkuSummary] `json:"instance_sku,omitzero"`
-	// ID (default) or expanded summary when using expand parameter
-	Capacity ExpandableCapacityIDCapacitySummaryUnion `json:"capacity"`
+	Capacity    CapacitySummary                                       `json:"capacity"`
 	// Unix timestamp.
-	CreatedAt int64 `json:"created_at"`
-	// ID (default) or expanded summary when using expand parameter
-	Image      ExpandableImageIDImageSummaryUnion                                              `json:"image"`
-	Deployment optionalnullable.OptionalNullable[ExpandableDeploymentIDDeploymentSummaryUnion] `json:"deployment,omitzero"`
+	CreatedAt  int64                                                `json:"created_at"`
+	Image      ImageSummary                                         `json:"image"`
+	Deployment optionalnullable.OptionalNullable[DeploymentSummary] `json:"deployment,omitzero"`
 	// Whether cloud-init user data is configured for this instance.
 	CloudInitUserDataUsed bool `json:"cloud_init_user_data_used"`
 	// Base64-encoded [cloud-init user data](https://cloudinit.readthedocs.io/en/latest/explanation/format/index.html).
 	CloudInitUserData  *string                                              `json:"cloud_init_user_data,omitzero"`
 	Tags               optionalnullable.OptionalNullable[map[string]string] `json:"tags,omitzero"`
 	ExpectedShutdownAt optionalnullable.OptionalNullable[int64]             `json:"expected_shutdown_at,omitzero"`
+	// Shutdown priority. Higher numbers are kept longer when the capacity's quota drops below the running-instance count. Default 0; any signed 64-bit integer is accepted.
+	Priority int64 `json:"priority"`
 }
 
 func (i InstanceResponse) MarshalJSON() ([]byte, error) {
@@ -74,6 +76,13 @@ func (i *InstanceResponse) GetWorkspace() string {
 	return i.Workspace
 }
 
+func (i *InstanceResponse) GetWorkspaceID() string {
+	if i == nil {
+		return ""
+	}
+	return i.WorkspaceID
+}
+
 func (i *InstanceResponse) GetName() string {
 	if i == nil {
 		return ""
@@ -99,9 +108,9 @@ func (i *InstanceResponse) GetInstanceSku() optionalnullable.OptionalNullable[In
 	return i.InstanceSku
 }
 
-func (i *InstanceResponse) GetCapacity() ExpandableCapacityIDCapacitySummaryUnion {
+func (i *InstanceResponse) GetCapacity() CapacitySummary {
 	if i == nil {
-		return ExpandableCapacityIDCapacitySummaryUnion{}
+		return CapacitySummary{}
 	}
 	return i.Capacity
 }
@@ -113,14 +122,14 @@ func (i *InstanceResponse) GetCreatedAt() int64 {
 	return i.CreatedAt
 }
 
-func (i *InstanceResponse) GetImage() ExpandableImageIDImageSummaryUnion {
+func (i *InstanceResponse) GetImage() ImageSummary {
 	if i == nil {
-		return ExpandableImageIDImageSummaryUnion{}
+		return ImageSummary{}
 	}
 	return i.Image
 }
 
-func (i *InstanceResponse) GetDeployment() optionalnullable.OptionalNullable[ExpandableDeploymentIDDeploymentSummaryUnion] {
+func (i *InstanceResponse) GetDeployment() optionalnullable.OptionalNullable[DeploymentSummary] {
 	if i == nil {
 		return nil
 	}
@@ -153,4 +162,11 @@ func (i *InstanceResponse) GetExpectedShutdownAt() optionalnullable.OptionalNull
 		return nil
 	}
 	return i.ExpectedShutdownAt
+}
+
+func (i *InstanceResponse) GetPriority() int64 {
+	if i == nil {
+		return 0
+	}
+	return i.Priority
 }

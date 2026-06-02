@@ -3,10 +3,15 @@
 package components
 
 // OrderStatus - The status of an order in the system.
+//
 // `pending` = not resolved/processed yet.
+//
 // `filled` = order executed.
+//
 // `standing` = the order is waiting for a match.
+//
 // `cancelled` = the order was cancelled either automatically (not a standing order and didn't immediately fill, or current time past `end_at`) or by explicit cancellation.
+//
 // `rejected` = validation/system error occurred.
 type OrderStatus string
 

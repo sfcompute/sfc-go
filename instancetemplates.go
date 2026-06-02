@@ -36,6 +36,8 @@ func newInstanceTemplates(rootSDK *SDK, sdkConfig config.SDKConfiguration, hooks
 }
 
 // List instance templates
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // List all instance templates.
 func (s *InstanceTemplates) List(ctx context.Context, request operations.ListInstanceTemplatesRequest, opts ...operations.Option) (*operations.ListInstanceTemplatesResponse, error) {
 	o := operations.Options{}
@@ -289,6 +291,31 @@ func (s *InstanceTemplates) List(ctx context.Context, request operations.ListIns
 			}
 			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 403:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ForbiddenError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode == 422:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -364,6 +391,8 @@ func (s *InstanceTemplates) List(ctx context.Context, request operations.ListIns
 }
 
 // Create instance template
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Create a reusable instance template.
 func (s *InstanceTemplates) Create(ctx context.Context, request components.CreateInstanceTemplateRequest, opts ...operations.Option) (*operations.CreateInstanceTemplateResponse, error) {
 	o := operations.Options{}
@@ -576,6 +605,31 @@ func (s *InstanceTemplates) Create(ctx context.Context, request components.Creat
 			}
 			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 403:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ForbiddenError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode == 422:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -651,11 +705,12 @@ func (s *InstanceTemplates) Create(ctx context.Context, request components.Creat
 }
 
 // Fetch - Get instance template
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Retrieve an instance template by ID or resource path.
-func (s *InstanceTemplates) Fetch(ctx context.Context, id string, expand []string, opts ...operations.Option) (*operations.FetchInstanceTemplateResponse, error) {
+func (s *InstanceTemplates) Fetch(ctx context.Context, id string, opts ...operations.Option) (*operations.FetchInstanceTemplateResponse, error) {
 	request := operations.FetchInstanceTemplateRequest{
-		ID:     id,
-		Expand: expand,
+		ID: id,
 	}
 
 	o := operations.Options{}
@@ -707,10 +762,6 @@ func (s *InstanceTemplates) Fetch(ctx context.Context, id string, expand []strin
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-
-	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
-		return nil, fmt.Errorf("error populating query params: %w", err)
-	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
@@ -865,6 +916,31 @@ func (s *InstanceTemplates) Fetch(ctx context.Context, id string, expand []strin
 			}
 			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 403:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ForbiddenError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode == 404:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -940,6 +1016,8 @@ func (s *InstanceTemplates) Fetch(ctx context.Context, id string, expand []strin
 }
 
 // Delete instance template
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Delete an instance template. The template must not be in use by any capacity.
 func (s *InstanceTemplates) Delete(ctx context.Context, id string, opts ...operations.Option) (*operations.DeleteInstanceTemplateResponse, error) {
 	request := operations.DeleteInstanceTemplateRequest{
@@ -1114,6 +1192,31 @@ func (s *InstanceTemplates) Delete(ctx context.Context, id string, opts ...opera
 			}
 
 			var out apierrors.UnauthorizedError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 403:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ForbiddenError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}

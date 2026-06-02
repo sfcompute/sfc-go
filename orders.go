@@ -36,9 +36,9 @@ func newOrders(rootSDK *SDK, sdkConfig config.SDKConfiguration, hooks *hooks.Hoo
 	}
 }
 
-// GetOrderEstimate - Estimate an order
+// GetOrderPreview - Estimate an order
 // Estimate a buy or sell order before placing it.
-func (s *Orders) GetOrderEstimate(ctx context.Context, request components.V2OrderEstimateRequest, opts ...operations.Option) (*operations.GetOrderEstimateResponse, error) {
+func (s *Orders) GetOrderPreview(ctx context.Context, request components.V2OrderPreviewRequest, opts ...operations.Option) (*operations.GetOrderPreviewResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -57,7 +57,7 @@ func (s *Orders) GetOrderEstimate(ctx context.Context, request components.V2Orde
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := url.JoinPath(baseURL, "/preview/v2/order_estimate")
+	opURL, err := url.JoinPath(baseURL, "/preview/v2/order_preview")
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -67,7 +67,7 @@ func (s *Orders) GetOrderEstimate(ctx context.Context, request components.V2Orde
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "get_order_estimate",
+		OperationID:      "get_order_preview",
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
@@ -195,7 +195,7 @@ func (s *Orders) GetOrderEstimate(ctx context.Context, request components.V2Orde
 		}
 	}
 
-	res := &operations.GetOrderEstimateResponse{
+	res := &operations.GetOrderPreviewResponse{
 		HTTPMeta: components.HTTPMetadata{
 			Request:  req,
 			Response: httpRes,
@@ -211,12 +211,12 @@ func (s *Orders) GetOrderEstimate(ctx context.Context, request components.V2Orde
 				return nil, err
 			}
 
-			var out components.V2OrderEstimateResponse
+			var out components.V2OrderPreviewResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.V2OrderEstimateResponse = &out
+			res.V2OrderPreviewResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -324,6 +324,8 @@ func (s *Orders) GetOrderEstimate(ctx context.Context, request components.V2Orde
 }
 
 // List orders
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // List all orders.
 func (s *Orders) List(ctx context.Context, request operations.ListOrdersRequest, opts ...operations.Option) (*operations.ListOrdersResponse, error) {
 	o := operations.Options{}
@@ -652,6 +654,8 @@ func (s *Orders) List(ctx context.Context, request operations.ListOrdersRequest,
 }
 
 // Create order
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Place a buy or sell order. Orders fill completely or not at all. All nodes fill on a single instance SKU matching the order's `requirements`. Order filling is asynchronous; poll `GET /v2/orders/{id}` to check status.
 func (s *Orders) Create(ctx context.Context, body components.V2CreateOrderRequest, idempotencyKey optionalnullable.OptionalNullable[string], opts ...operations.Option) (*operations.CreateOrderResponse, error) {
 	request := operations.CreateOrderRequest{
@@ -1046,11 +1050,12 @@ func (s *Orders) Create(ctx context.Context, body components.V2CreateOrderReques
 }
 
 // Fetch - Get order
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Retrieve an order by ID.
-func (s *Orders) Fetch(ctx context.Context, id string, expand []string, opts ...operations.Option) (*operations.FetchOrderResponse, error) {
+func (s *Orders) Fetch(ctx context.Context, id string, opts ...operations.Option) (*operations.FetchOrderResponse, error) {
 	request := operations.FetchOrderRequest{
-		ID:     id,
-		Expand: expand,
+		ID: id,
 	}
 
 	o := operations.Options{}
@@ -1102,10 +1107,6 @@ func (s *Orders) Fetch(ctx context.Context, id string, expand []string, opts ...
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-
-	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
-		return nil, fmt.Errorf("error populating query params: %w", err)
-	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
@@ -1335,6 +1336,8 @@ func (s *Orders) Fetch(ctx context.Context, id string, expand []string, opts ...
 }
 
 // Cancel order
+// > ⚠️ This endpoint is in [public preview](/preview/roadmap).
+//
 // Request cancellation of an order. This is asynchronous — poll `GET /v2/orders/{id}` to confirm the status has changed to cancelled.
 func (s *Orders) Cancel(ctx context.Context, id string, opts ...operations.Option) (*operations.CancelOrderResponse, error) {
 	request := operations.CancelOrderRequest{

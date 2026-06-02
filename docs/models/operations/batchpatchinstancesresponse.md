@@ -1,0 +1,9 @@
+# BatchPatchInstancesResponse
+
+
+## Fields
+
+| Field                                                                                             | Type                                                                                              | Required                                                                                          | Description                                                                                       |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `HTTPMeta`                                                                                        | [components.HTTPMetadata](../../models/components/httpmetadata.md)                                | :heavy_check_mark:                                                                                | N/A                                                                                               |
+| `BatchPatchInstancesResponse`                                                                     | [*components.BatchPatchInstancesResponse](../../models/components/batchpatchinstancesresponse.md) | :heavy_minus_sign:                                                                                | Instances updated.                                                                                |

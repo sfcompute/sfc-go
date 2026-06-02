@@ -10,32 +10,42 @@ import (
 
 type V2OrderResponse struct {
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object *string `const:"order" json:"object"`
-	ID     string  `json:"id"`
-	// ID (default) or expanded summary when using expand parameter
-	Capacity ExpandableCapacityIDCapacitySummaryUnion `json:"capacity"`
-	Side     Side                                     `json:"side"`
+	object   *string         `const:"order" json:"object"`
+	ID       string          `json:"id"`
+	Capacity CapacitySummary `json:"capacity"`
+	Side     Side            `json:"side"`
 	// If true, the order stays in the order book until either fills, is explicitly cancelled, or the order end time is reached resulting in automatic cancellation. If false, the order is cancelled immediately if it doesn't fill.
 	AllowStanding bool                                                  `json:"allow_standing"`
 	InstanceSku   optionalnullable.OptionalNullable[InstanceSkuSummary] `json:"instance_sku,omitzero"`
 	// Node count over time, as a list of `[start_at, end_at)` time ranges.
+	//
 	// Example: 5 nodes from t=0 to t=3600 is `[{"start_at": 0, "end_at": 3600, "node_count": 5}]`.
+	//
 	// `start_at` and `end_at` must be 60-second aligned, `node_count` must be non-negative. On non-final entries, `end_at` may be omitted (inferred from the next entry's `start_at`); gaps fill with `node_count: 0`.
 	AllocationScheduleDelta []ScheduleEntry `json:"allocation_schedule_delta"`
 	// Price rate in dollars per node-hour.
 	LimitPriceDollarsPerNodeHour string `json:"limit_price_dollars_per_node_hour"`
 	// The status of an order in the system.
+	//
 	// `pending` = not resolved/processed yet.
+	//
 	// `filled` = order executed.
+	//
 	// `standing` = the order is waiting for a match.
+	//
 	// `cancelled` = the order was cancelled either automatically (not a standing order and didn't immediately fill, or current time past `end_at`) or by explicit cancellation.
+	//
 	// `rejected` = validation/system error occurred.
 	Status OrderStatus `json:"status"`
 	// Unix timestamp.
-	CreatedAt                     int64                                     `json:"created_at"`
-	FilledAt                      optionalnullable.OptionalNullable[int64]  `json:"filled_at,omitzero"`
-	FilledPriceDollarsPerNodeHour optionalnullable.OptionalNullable[string] `json:"filled_price_dollars_per_node_hour,omitzero"`
-	CancelledAt                   optionalnullable.OptionalNullable[int64]  `json:"cancelled_at,omitzero"`
+	CreatedAt int64                                    `json:"created_at"`
+	FilledAt  optionalnullable.OptionalNullable[int64] `json:"filled_at,omitzero"`
+	// Node count that filled. Equals the order's quantity for complete fills.
+	FilledQuantity                       optionalnullable.OptionalNullable[int]    `json:"filled_quantity,omitzero"`
+	FilledAveragePriceDollarsPerNodeHour optionalnullable.OptionalNullable[string] `json:"filled_average_price_dollars_per_node_hour,omitzero"`
+	// Each contract produced by this order. Empty for unfilled orders.
+	Fills       []V2OrderFill                            `json:"fills,omitzero"`
+	CancelledAt optionalnullable.OptionalNullable[int64] `json:"cancelled_at,omitzero"`
 }
 
 func (v V2OrderResponse) MarshalJSON() ([]byte, error) {
@@ -60,9 +70,9 @@ func (v *V2OrderResponse) GetID() string {
 	return v.ID
 }
 
-func (v *V2OrderResponse) GetCapacity() ExpandableCapacityIDCapacitySummaryUnion {
+func (v *V2OrderResponse) GetCapacity() CapacitySummary {
 	if v == nil {
-		return ExpandableCapacityIDCapacitySummaryUnion{}
+		return CapacitySummary{}
 	}
 	return v.Capacity
 }
@@ -123,11 +133,25 @@ func (v *V2OrderResponse) GetFilledAt() optionalnullable.OptionalNullable[int64]
 	return v.FilledAt
 }
 
-func (v *V2OrderResponse) GetFilledPriceDollarsPerNodeHour() optionalnullable.OptionalNullable[string] {
+func (v *V2OrderResponse) GetFilledQuantity() optionalnullable.OptionalNullable[int] {
 	if v == nil {
 		return nil
 	}
-	return v.FilledPriceDollarsPerNodeHour
+	return v.FilledQuantity
+}
+
+func (v *V2OrderResponse) GetFilledAveragePriceDollarsPerNodeHour() optionalnullable.OptionalNullable[string] {
+	if v == nil {
+		return nil
+	}
+	return v.FilledAveragePriceDollarsPerNodeHour
+}
+
+func (v *V2OrderResponse) GetFills() []V2OrderFill {
+	if v == nil {
+		return nil
+	}
+	return v.Fills
 }
 
 func (v *V2OrderResponse) GetCancelledAt() optionalnullable.OptionalNullable[int64] {

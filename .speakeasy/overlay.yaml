@@ -23,3 +23,19 @@ actions:
   # estimate description so only the duplicate (not both) is removed.
   - target: "$.tags[?(@.name=='Orders' && @.description=='Estimate an order before placing it: filled price, fee, and operational notices.')]"
     remove: true
+
+  # The "Orderbook" tag has two list-like GETs (fills, windows) and two get-like GETs
+  # (depth, quote), so Speakeasy generates colliding List()/Get() methods. Give each a
+  # distinct name.
+  - target: "$.paths['/preview/v2/orderbook/depth'].get"
+    update:
+      x-speakeasy-name-override: getOrderbookDepth
+  - target: "$.paths['/preview/v2/orderbook/fills'].get"
+    update:
+      x-speakeasy-name-override: listOrderbookFills
+  - target: "$.paths['/preview/v2/orderbook/quote'].get"
+    update:
+      x-speakeasy-name-override: getOrderbookQuote
+  - target: "$.paths['/preview/v2/orderbook/windows'].get"
+    update:
+      x-speakeasy-name-override: listOrderbookWindows

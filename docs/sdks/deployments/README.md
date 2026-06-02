@@ -14,6 +14,8 @@ Deployment automations that maintain a fleet of instances on a capacity.
 
 ## List
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 List all deployments.
 
 ### Example Usage
@@ -80,11 +82,14 @@ func main() {
 | Error Type                         | Status Code                        | Content Type                       |
 | ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.ForbiddenError           | 403                                | application/json                   |
 | apierrors.UnprocessableEntityError | 422                                | application/json                   |
 | apierrors.InternalServerError      | 500                                | application/json                   |
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## Create
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Create a deployment for bulk node management.
 
@@ -120,15 +125,7 @@ func main() {
         log.Fatal(err)
     }
     if res.DeploymentResponse != nil {
-        switch res.DeploymentResponse.Capacity.Type {
-            case components.ExpandableCapacityIDCapacitySummaryUnionTypeStr:
-                // res.DeploymentResponse.Capacity.Str is populated
-            case components.ExpandableCapacityIDCapacitySummaryUnionTypeExpandableCapacityIDCapacitySummary:
-                // res.DeploymentResponse.Capacity.ExpandableCapacityIDCapacitySummary is populated
-            default:
-                // Unknown type - use res.DeploymentResponse.Capacity.GetUnknownRaw() for raw JSON
-        }
-
+        // handle response
     }
 }
 ```
@@ -159,6 +156,8 @@ func main() {
 
 ## GetDeployment
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Retrieve a deployment by ID or name.
 
 ### Example Usage
@@ -171,7 +170,6 @@ import(
 	"context"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
-	"github.com/sfcompute/sfc-go/models/components"
 )
 
 func main() {
@@ -181,32 +179,23 @@ func main() {
         sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
-    res, err := s.Deployments.GetDeployment(ctx, "depl_k3R-nX9vLm7Qp2Yw5Jd8F", nil)
+    res, err := s.Deployments.GetDeployment(ctx, "depl_k3R-nX9vLm7Qp2Yw5Jd8F")
     if err != nil {
         log.Fatal(err)
     }
     if res.DeploymentResponse != nil {
-        switch res.DeploymentResponse.Capacity.Type {
-            case components.ExpandableCapacityIDCapacitySummaryUnionTypeStr:
-                // res.DeploymentResponse.Capacity.Str is populated
-            case components.ExpandableCapacityIDCapacitySummaryUnionTypeExpandableCapacityIDCapacitySummary:
-                // res.DeploymentResponse.Capacity.ExpandableCapacityIDCapacitySummary is populated
-            default:
-                // Unknown type - use res.DeploymentResponse.Capacity.GetUnknownRaw() for raw JSON
-        }
-
+        // handle response
     }
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                          | Type                                                                               | Required                                                                           | Description                                                                        | Example                                                                            |
-| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `ctx`                                                                              | [context.Context](https://pkg.go.dev/context#Context)                              | :heavy_check_mark:                                                                 | The context to use for the request.                                                |                                                                                    |
-| `id`                                                                               | `string`                                                                           | :heavy_check_mark:                                                                 | N/A                                                                                | depl_k3R-nX9vLm7Qp2Yw5Jd8F                                                         |
-| `expand`                                                                           | [][operations.GetDeploymentExpand](../../models/operations/getdeploymentexpand.md) | :heavy_minus_sign:                                                                 | N/A                                                                                |                                                                                    |
-| `opts`                                                                             | [][operations.Option](../../models/operations/option.md)                           | :heavy_minus_sign:                                                                 | The options for this request.                                                      |                                                                                    |
+| Parameter                                                | Type                                                     | Required                                                 | Description                                              | Example                                                  |
+| -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
+| `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |                                                          |
+| `id`                                                     | `string`                                                 | :heavy_check_mark:                                       | N/A                                                      | depl_k3R-nX9vLm7Qp2Yw5Jd8F                               |
+| `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |                                                          |
 
 ### Response
 
@@ -217,11 +206,14 @@ func main() {
 | Error Type                    | Status Code                   | Content Type                  |
 | ----------------------------- | ----------------------------- | ----------------------------- |
 | apierrors.UnauthorizedError   | 401                           | application/json              |
+| apierrors.ForbiddenError      | 403                           | application/json              |
 | apierrors.NotFoundError       | 404                           | application/json              |
 | apierrors.InternalServerError | 500                           | application/json              |
 | apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
 
 ## Delete
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Delete a deployment.
 
@@ -278,6 +270,8 @@ func main() {
 
 ## PatchDeployment
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 Update a deployment's configuration.
 
 ### Example Usage
@@ -310,15 +304,7 @@ func main() {
         log.Fatal(err)
     }
     if res.DeploymentResponse != nil {
-        switch res.DeploymentResponse.Capacity.Type {
-            case components.ExpandableCapacityIDCapacitySummaryUnionTypeStr:
-                // res.DeploymentResponse.Capacity.Str is populated
-            case components.ExpandableCapacityIDCapacitySummaryUnionTypeExpandableCapacityIDCapacitySummary:
-                // res.DeploymentResponse.Capacity.ExpandableCapacityIDCapacitySummary is populated
-            default:
-                // Unknown type - use res.DeploymentResponse.Capacity.GetUnknownRaw() for raw JSON
-        }
-
+        // handle response
     }
 }
 ```

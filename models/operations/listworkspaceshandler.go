@@ -7,6 +7,29 @@ import (
 	"github.com/sfcompute/sfc-go/models/components"
 )
 
+type ListWorkspacesHandlerRequest struct {
+	// Filter by workspace ID, resource path, or name (repeatable).
+	ID []string `queryParam:"style=form,explode=true,name=id"`
+}
+
+func (l ListWorkspacesHandlerRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *ListWorkspacesHandlerRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (l *ListWorkspacesHandlerRequest) GetID() []string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
 type ListWorkspacesHandlerResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// List of workspaces.

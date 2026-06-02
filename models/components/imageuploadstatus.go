@@ -9,6 +9,7 @@ const (
 	ImageUploadStatusUploading ImageUploadStatus = "uploading"
 	ImageUploadStatusCompleted ImageUploadStatus = "completed"
 	ImageUploadStatusFailed    ImageUploadStatus = "failed"
+	ImageUploadStatusRevoked   ImageUploadStatus = "revoked"
 )
 
 func (e ImageUploadStatus) ToPointer() *ImageUploadStatus {
@@ -19,7 +20,7 @@ func (e ImageUploadStatus) ToPointer() *ImageUploadStatus {
 func (e *ImageUploadStatus) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "started", "uploading", "completed", "failed":
+		case "started", "uploading", "completed", "failed", "revoked":
 			return true
 		}
 	}

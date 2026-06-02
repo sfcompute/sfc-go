@@ -11,10 +11,13 @@ type V2CreateOrderRequest struct {
 	Capacity string `json:"capacity"`
 	Side     Side   `json:"side"`
 	// If true, the order rests on the order book until it fills, is cancelled, or its end time passes. If false, the order is cancelled immediately if it does not fill.
-	AllowStanding *bool  `json:"allow_standing,omitzero"`
-	InstanceSku   string `json:"instance_sku"`
+	AllowStanding *bool `json:"allow_standing,omitzero"`
+	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
+	InstanceSku string `json:"instance_sku"`
 	// Node count over time, as a list of `[start_at, end_at)` time ranges.
+	//
 	// Example: 5 nodes from t=0 to t=3600 is `[{"start_at": 0, "end_at": 3600, "node_count": 5}]`.
+	//
 	// `start_at` and `end_at` must be 60-second aligned, `node_count` must be non-negative. On non-final entries, `end_at` may be omitted (inferred from the next entry's `start_at`); gaps fill with `node_count: 0`.
 	AllocationScheduleDelta []ScheduleEntry `json:"allocation_schedule_delta"`
 	// Price rate in dollars per node-hour.

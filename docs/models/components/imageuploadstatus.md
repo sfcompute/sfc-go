@@ -22,3 +22,4 @@ custom := components.ImageUploadStatus("custom_value")
 | `ImageUploadStatusUploading` | uploading                    |
 | `ImageUploadStatusCompleted` | completed                    |
 | `ImageUploadStatusFailed`    | failed                       |
+| `ImageUploadStatusRevoked`   | revoked                      |

@@ -8,10 +8,13 @@ type V2CreateCapacityTransferRequest struct {
 	// A resource path like 'sfc:capacity:acme:prod:my-capacity' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
 	ToCapacity string `json:"to_capacity"`
 	// Node count over time, as a list of `[start_at, end_at)` time ranges.
+	//
 	// Example: 5 nodes from t=0 to t=3600 is `[{"start_at": 0, "end_at": 3600, "node_count": 5}]`.
+	//
 	// `start_at` and `end_at` must be 60-second aligned, `node_count` must be non-negative. On non-final entries, `end_at` may be omitted (inferred from the next entry's `start_at`); gaps fill with `node_count: 0`.
 	AllocationScheduleDelta []ScheduleEntry `json:"allocation_schedule_delta"`
-	InstanceSku             string          `json:"instance_sku"`
+	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
+	InstanceSku string `json:"instance_sku"`
 }
 
 func (v *V2CreateCapacityTransferRequest) GetFromCapacity() string {

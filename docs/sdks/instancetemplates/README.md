@@ -13,6 +13,8 @@ Reusable instance configuration.
 
 ## List
 
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
 List all instance templates.
 
 ### Example Usage
@@ -81,11 +83,14 @@ func main() {
 | Error Type                         | Status Code                        | Content Type                       |
 | ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.ForbiddenError           | 403                                | application/json                   |
 | apierrors.UnprocessableEntityError | 422                                | application/json                   |
 | apierrors.InternalServerError      | 500                                | application/json                   |
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## Create
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Create a reusable instance template.
 
@@ -120,15 +125,7 @@ func main() {
         log.Fatal(err)
     }
     if res.InstanceTemplateResponse != nil {
-        switch res.InstanceTemplateResponse.Image.Type {
-            case components.ExpandableImageIDImageSummaryUnionTypeStr:
-                // res.InstanceTemplateResponse.Image.Str is populated
-            case components.ExpandableImageIDImageSummaryUnionTypeExpandableImageIDImageSummary:
-                // res.InstanceTemplateResponse.Image.ExpandableImageIDImageSummary is populated
-            default:
-                // Unknown type - use res.InstanceTemplateResponse.Image.GetUnknownRaw() for raw JSON
-        }
-
+        // handle response
     }
 }
 ```
@@ -150,11 +147,14 @@ func main() {
 | Error Type                         | Status Code                        | Content Type                       |
 | ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.ForbiddenError           | 403                                | application/json                   |
 | apierrors.UnprocessableEntityError | 422                                | application/json                   |
 | apierrors.InternalServerError      | 500                                | application/json                   |
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## Fetch
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Retrieve an instance template by ID or resource path.
 
@@ -168,7 +168,6 @@ import(
 	"context"
 	sfc "github.com/sfcompute/sfc-go"
 	"log"
-	"github.com/sfcompute/sfc-go/models/components"
 )
 
 func main() {
@@ -178,20 +177,12 @@ func main() {
         sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
-    res, err := s.InstanceTemplates.Fetch(ctx, "ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F", nil)
+    res, err := s.InstanceTemplates.Fetch(ctx, "ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F")
     if err != nil {
         log.Fatal(err)
     }
     if res.InstanceTemplateResponse != nil {
-        switch res.InstanceTemplateResponse.Image.Type {
-            case components.ExpandableImageIDImageSummaryUnionTypeStr:
-                // res.InstanceTemplateResponse.Image.Str is populated
-            case components.ExpandableImageIDImageSummaryUnionTypeExpandableImageIDImageSummary:
-                // res.InstanceTemplateResponse.Image.ExpandableImageIDImageSummary is populated
-            default:
-                // Unknown type - use res.InstanceTemplateResponse.Image.GetUnknownRaw() for raw JSON
-        }
-
+        // handle response
     }
 }
 ```
@@ -201,8 +192,7 @@ func main() {
 | Parameter                                                | Type                                                     | Required                                                 | Description                                              | Example                                                  |
 | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
 | `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |                                                          |
-| `id`                                                     | `string`                                                 | :heavy_check_mark:                                       | N/A                                                      | ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F                              |
-| `expand`                                                 | []`string`                                               | :heavy_minus_sign:                                       | N/A                                                      |                                                          |
+| `id`                                                     | `string`                                                 | :heavy_check_mark:                                       | N/A                                                      | itmpl_k3R-nX9vLm7Qp2Yw5Jd8F                              |
 | `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |                                                          |
 
 ### Response
@@ -214,11 +204,14 @@ func main() {
 | Error Type                    | Status Code                   | Content Type                  |
 | ----------------------------- | ----------------------------- | ----------------------------- |
 | apierrors.UnauthorizedError   | 401                           | application/json              |
+| apierrors.ForbiddenError      | 403                           | application/json              |
 | apierrors.NotFoundError       | 404                           | application/json              |
 | apierrors.InternalServerError | 500                           | application/json              |
 | apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
 
 ## Delete
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
 Delete an instance template. The template must not be in use by any capacity.
 
@@ -256,7 +249,7 @@ func main() {
 | Parameter                                                | Type                                                     | Required                                                 | Description                                              | Example                                                  |
 | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
 | `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |                                                          |
-| `id`                                                     | `string`                                                 | :heavy_check_mark:                                       | N/A                                                      | ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F                              |
+| `id`                                                     | `string`                                                 | :heavy_check_mark:                                       | N/A                                                      | itmpl_k3R-nX9vLm7Qp2Yw5Jd8F                              |
 | `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |                                                          |
 
 ### Response
@@ -268,6 +261,7 @@ func main() {
 | Error Type                         | Status Code                        | Content Type                       |
 | ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.ForbiddenError           | 403                                | application/json                   |
 | apierrors.NotFoundError            | 404                                | application/json                   |
 | apierrors.UnprocessableEntityError | 422                                | application/json                   |
 | apierrors.InternalServerError      | 500                                | application/json                   |

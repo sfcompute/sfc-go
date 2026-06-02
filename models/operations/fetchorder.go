@@ -9,19 +9,7 @@ import (
 
 type FetchOrderRequest struct {
 	// Order ID
-	ID     string   `pathParam:"style=simple,explode=false,name=id"`
-	Expand []string `queryParam:"style=form,explode=true,name=expand"`
-}
-
-func (f FetchOrderRequest) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(f, "", false)
-}
-
-func (f *FetchOrderRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &f, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
 func (f *FetchOrderRequest) GetID() string {
@@ -29,13 +17,6 @@ func (f *FetchOrderRequest) GetID() string {
 		return ""
 	}
 	return f.ID
-}
-
-func (f *FetchOrderRequest) GetExpand() []string {
-	if f == nil {
-		return nil
-	}
-	return f.Expand
 }
 
 type FetchOrderResponse struct {

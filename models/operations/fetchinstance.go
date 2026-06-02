@@ -3,55 +3,12 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/sfcompute/sfc-go/internal/utils"
 	"github.com/sfcompute/sfc-go/models/components"
 )
 
-type FetchInstanceExpand string
-
-const (
-	FetchInstanceExpandCapacity   FetchInstanceExpand = "capacity"
-	FetchInstanceExpandImage      FetchInstanceExpand = "image"
-	FetchInstanceExpandDeployment FetchInstanceExpand = "deployment"
-)
-
-func (e FetchInstanceExpand) ToPointer() *FetchInstanceExpand {
-	return &e
-}
-func (e *FetchInstanceExpand) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "capacity":
-		fallthrough
-	case "image":
-		fallthrough
-	case "deployment":
-		*e = FetchInstanceExpand(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for FetchInstanceExpand: %v", v)
-	}
-}
-
 type FetchInstanceRequest struct {
-	ID     string                `pathParam:"style=simple,explode=false,name=id"`
-	Expand []FetchInstanceExpand `queryParam:"style=form,explode=true,name=expand"`
-}
-
-func (f FetchInstanceRequest) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(f, "", false)
-}
-
-func (f *FetchInstanceRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &f, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
 func (f *FetchInstanceRequest) GetID() string {
@@ -59,13 +16,6 @@ func (f *FetchInstanceRequest) GetID() string {
 		return ""
 	}
 	return f.ID
-}
-
-func (f *FetchInstanceRequest) GetExpand() []FetchInstanceExpand {
-	if f == nil {
-		return nil
-	}
-	return f.Expand
 }
 
 type FetchInstanceResponse struct {
