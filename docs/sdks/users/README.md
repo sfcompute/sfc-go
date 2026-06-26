@@ -24,6 +24,7 @@ package main
 import(
 	"context"
 	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/models/operations"
 	"log"
 )
 
@@ -34,9 +35,13 @@ func main() {
         sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
     )
 
-    res, err := s.Users.List(ctx, []string{
-        "my-resource-name",
-    }, sfc.Pointer[int64](50), sfc.Pointer("usrc_gqXR7s0Kj5mHvE2wNpLc4Q"), sfc.Pointer("usrc_gqXR7s0Kj5mHvE2wNpLc4Q"))
+    res, err := s.Users.List(ctx, operations.ListUsersHandlerRequest{
+        ID: []string{
+            "my-resource-name",
+        },
+        StartingAfter: sfc.Pointer("usrc_gqXR7s0Kj5mHvE2wNpLc4Q"),
+        EndingBefore: sfc.Pointer("usrc_gqXR7s0Kj5mHvE2wNpLc4Q"),
+    })
     if err != nil {
         log.Fatal(err)
     }
@@ -60,14 +65,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                  | Type                                                       | Required                                                   | Description                                                | Example                                                    |
-| ---------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
-| `ctx`                                                      | [context.Context](https://pkg.go.dev/context#Context)      | :heavy_check_mark:                                         | The context to use for the request.                        |                                                            |
-| `id`                                                       | []`string`                                                 | :heavy_minus_sign:                                         | Filter by user ID or resource path (repeatable).           |                                                            |
-| `limit`                                                    | `*int64`                                                   | :heavy_minus_sign:                                         | N/A                                                        |                                                            |
-| `startingAfter`                                            | `*string`                                                  | :heavy_minus_sign:                                         | Set to the response's `cursor` to fetch the next page.     | usrc_gqXR7s0Kj5mHvE2wNpLc4Q                                |
-| `endingBefore`                                             | `*string`                                                  | :heavy_minus_sign:                                         | Set to the response's `cursor` to fetch the previous page. | usrc_gqXR7s0Kj5mHvE2wNpLc4Q                                |
-| `opts`                                                     | [][operations.Option](../../models/operations/option.md)   | :heavy_minus_sign:                                         | The options for this request.                              |                                                            |
+| Parameter                                                                                | Type                                                                                     | Required                                                                                 | Description                                                                              |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `ctx`                                                                                    | [context.Context](https://pkg.go.dev/context#Context)                                    | :heavy_check_mark:                                                                       | The context to use for the request.                                                      |
+| `request`                                                                                | [operations.ListUsersHandlerRequest](../../models/operations/listusershandlerrequest.md) | :heavy_check_mark:                                                                       | The request object to use for the request.                                               |
+| `opts`                                                                                   | [][operations.Option](../../models/operations/option.md)                                 | :heavy_minus_sign:                                                                       | The options for this request.                                                            |
 
 ### Response
 

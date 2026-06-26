@@ -4,6 +4,11 @@ package components
 
 // OrderbookDepthResponse - Depth of book for one delivery window. Bids descending (highest first), asks ascending (lowest first). Either array may be empty when no orders rest on that side.
 type OrderbookDepthResponse struct {
+	// Key/value filters on instance SKU properties.
+	//
+	// Valid keys and values are published at `GET /v2/instance_sku_property_catalog`.
+	//
+	// Empty map = no constraints.
 	Requirements map[string][]string `json:"requirements"`
 	// Unix timestamp.
 	StartAt int64 `json:"start_at"`

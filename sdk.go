@@ -2,7 +2,7 @@
 
 package sfc
 
-// Generated from OpenAPI doc version 0.1.0 and generator version 2.881.17
+// Generated from OpenAPI doc version 0.1.0 and generator version 2.913.2
 
 import (
 	"context"
@@ -51,10 +51,9 @@ func Pointer[T any](v T) *T { return &v }
 type SDK struct {
 	SDKVersion   string
 	InstanceSKUs *InstanceSKUs
-	// A bucket of owned compute balance over time.
-	Capacities *Capacities
 	// Deployment automations that maintain a fleet of instances on a capacity.
-	Deployments *Deployments
+	Deployments  *Deployments
+	FeatureFlags *FeatureFlags
 	// Custom machine images for instances.
 	Images *Images
 	// Browse available instance SKU property definitions.
@@ -69,6 +68,8 @@ type SDK struct {
 	Orderbook *Orderbook
 	// Inspect what the caller is allowed to do.
 	Permissions *Permissions
+	// A bucket of owned compute balance over time.
+	Pools *Pools
 	// Market automations that maintain capacity by placing buy/sell orders.
 	Procurements *Procurements
 	// Read-only access to users within the caller's organization.
@@ -153,7 +154,7 @@ func New(opts ...SDKOption) *SDK {
 	sdk := &SDK{
 		SDKVersion: "0.1.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/go 0.1.0 2.881.17 0.1.0 github.com/sfcompute/sfc-go",
+			UserAgent:  "speakeasy-sdk/go 0.1.0 2.913.2 0.1.0 github.com/sfcompute/sfc-go",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -170,8 +171,8 @@ func New(opts ...SDKOption) *SDK {
 	sdk.sdkConfiguration = sdk.hooks.SDKInit(sdk.sdkConfiguration)
 
 	sdk.InstanceSKUs = newInstanceSKUs(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Capacities = newCapacities(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Deployments = newDeployments(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.FeatureFlags = newFeatureFlags(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Images = newImages(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.InstanceSKUCatalog = newInstanceSKUCatalog(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.InstanceTemplates = newInstanceTemplates(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -179,6 +180,7 @@ func New(opts ...SDKOption) *SDK {
 	sdk.Orders = newOrders(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Orderbook = newOrderbook(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Permissions = newPermissions(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Pools = newPools(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Procurements = newProcurements(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Users = newUsers(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)

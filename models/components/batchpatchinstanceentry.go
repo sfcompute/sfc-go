@@ -2,12 +2,14 @@
 
 package components
 
-// BatchPatchInstanceEntry - One entry in a [`BatchPatchInstancesRequest`]. The `id` selects which instance to update; `priority` is the only mutable field supported by the batch endpoint today — for name/tag changes use the singleton `PATCH /v2/instances/{id}`. A future revision may grow optional fields here (name, tags, etc.); existing entry shapes remain forward-compatible.
+// BatchPatchInstanceEntry - One entry in a [`BatchPatchInstancesRequest`]: the instance to patch (`id`) and the fields to update. `priority_level` is the only field currently patchable here. To update name, tags, or other instance fields, use `PATCH /v2/instances/{id}`.
 type BatchPatchInstanceEntry struct {
 	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
 	ID string `json:"id"`
-	// Shutdown priority. Higher numbers are kept longer.
-	Priority int64 `json:"priority"`
+	// Instance priority — a relative ranking that determines which instances the system prefers to keep running when capacity is constrained. When a capacity's quota drops below its running-instance count, instances are terminated in priority order (lower first).
+	//
+	// Ordering: `yield < normal < preferred < critical`.
+	PriorityLevel InstancePriority `json:"priority_level"`
 }
 
 func (b *BatchPatchInstanceEntry) GetID() string {
@@ -17,9 +19,9 @@ func (b *BatchPatchInstanceEntry) GetID() string {
 	return b.ID
 }
 
-func (b *BatchPatchInstanceEntry) GetPriority() int64 {
+func (b *BatchPatchInstanceEntry) GetPriorityLevel() InstancePriority {
 	if b == nil {
-		return 0
+		return InstancePriority("")
 	}
-	return b.Priority
+	return b.PriorityLevel
 }

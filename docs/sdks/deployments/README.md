@@ -40,7 +40,7 @@ func main() {
 
     res, err := s.Deployments.List(ctx, operations.ListDeploymentsRequest{
         Workspace: "wksp_k3R-nX9vLm7Qp2Yw5Jd8F",
-        Capacity: sfc.Pointer("cap_k3R-nX9vLm7Qp2Yw5Jd8F"),
+        Pool: sfc.Pointer("pool_k3R-nX9vLm7Qp2Yw5Jd8F"),
         StartingAfter: sfc.Pointer("deplc_gqXR7s0Kj5mHvE2wNpLc4Q"),
         EndingBefore: sfc.Pointer("deplc_gqXR7s0Kj5mHvE2wNpLc4Q"),
     })
@@ -116,7 +116,7 @@ func main() {
 
     res, err := s.Deployments.Create(ctx, components.CreateDeploymentRequest{
         Name: optionalnullable.From(sfc.Pointer("my-resource-name")),
-        Capacity: "cap_k3R-nX9vLm7Qp2Yw5Jd8F",
+        Pool: "pool_k3R-nX9vLm7Qp2Yw5Jd8F",
         InstanceTemplate: "ntmpl_k3R-nX9vLm7Qp2Yw5Jd8F",
         TargetInstanceCount: 384760,
         InstanceNameTemplate: sfc.Pointer("my-fleet-{{nanoid(9)}}"),

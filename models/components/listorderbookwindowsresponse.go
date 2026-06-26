@@ -11,7 +11,12 @@ import (
 // ListOrderbookWindowsResponse - Paginated list of active windows, sorted by `(start_at, end_at)` ascending.
 type ListOrderbookWindowsResponse struct {
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object       *string             `const:"list" json:"object"`
+	object *string `const:"list" json:"object"`
+	// Key/value filters on instance SKU properties.
+	//
+	// Valid keys and values are published at `GET /v2/instance_sku_property_catalog`.
+	//
+	// Empty map = no constraints.
 	Requirements map[string][]string `json:"requirements"`
 	// Unix timestamp.
 	RangeStartAt int64 `json:"range_start_at"`

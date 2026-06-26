@@ -12,11 +12,17 @@ type ListInstancesRequest struct {
 	Workspace string `queryParam:"style=form,explode=true,name=workspace"`
 	// Filter by instance ID (repeatable).
 	ID []string `queryParam:"style=form,explode=true,name=id"`
-	// Filter by capacity.
-	Capacity *string `queryParam:"style=form,explode=true,name=capacity"`
+	// Filter by pool (repeatable). Instances on any of the given pools match.
+	Pool []string `queryParam:"style=form,explode=true,name=pool"`
 	// Filter by instance status (repeatable).
 	Status []components.InstanceStatus `queryParam:"style=form,explode=true,name=status"`
-	Limit  *int64                      `default:"50" queryParam:"style=form,explode=true,name=limit"`
+	// Filter to instances created at or after this Unix timestamp (seconds).
+	CreatedAfter *int64 `queryParam:"style=form,explode=true,name=created_after"`
+	// Filter to instances created at or before this Unix timestamp (seconds).
+	CreatedBefore *int64 `queryParam:"style=form,explode=true,name=created_before"`
+	// Filter by instance SKU (repeatable). Instances on any of the given SKUs match.
+	InstanceSku []string `queryParam:"style=form,explode=true,name=instance_sku"`
+	Limit       *int64   `default:"50" queryParam:"style=form,explode=true,name=limit"`
 	// Cursor for forward pagination (from a previous response's `cursor` field).
 	StartingAfter *string `queryParam:"style=form,explode=true,name=starting_after"`
 	// Cursor for backward pagination.
@@ -54,11 +60,11 @@ func (l *ListInstancesRequest) GetID() []string {
 	return l.ID
 }
 
-func (l *ListInstancesRequest) GetCapacity() *string {
+func (l *ListInstancesRequest) GetPool() []string {
 	if l == nil {
 		return nil
 	}
-	return l.Capacity
+	return l.Pool
 }
 
 func (l *ListInstancesRequest) GetStatus() []components.InstanceStatus {
@@ -66,6 +72,27 @@ func (l *ListInstancesRequest) GetStatus() []components.InstanceStatus {
 		return nil
 	}
 	return l.Status
+}
+
+func (l *ListInstancesRequest) GetCreatedAfter() *int64 {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedAfter
+}
+
+func (l *ListInstancesRequest) GetCreatedBefore() *int64 {
+	if l == nil {
+		return nil
+	}
+	return l.CreatedBefore
+}
+
+func (l *ListInstancesRequest) GetInstanceSku() []string {
+	if l == nil {
+		return nil
+	}
+	return l.InstanceSku
 }
 
 func (l *ListInstancesRequest) GetLimit() *int64 {

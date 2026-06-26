@@ -4,7 +4,6 @@ package components
 
 import (
 	"github.com/sfcompute/sfc-go/internal/utils"
-	"github.com/sfcompute/sfc-go/optionalnullable"
 	"github.com/sfcompute/sfc-go/types"
 )
 
@@ -17,10 +16,13 @@ type ProcurementResponse struct {
 	WorkspaceID  string `json:"workspace_id"`
 	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object      *string                                               `const:"procurement" json:"object"`
-	Target      ProcurementTarget                                     `json:"target"`
-	Capacity    CapacitySummary                                       `json:"capacity"`
-	InstanceSku optionalnullable.OptionalNullable[InstanceSkuSummary] `json:"instance_sku,omitzero"`
+	object   *string           `const:"procurement" json:"object"`
+	Target   ProcurementTarget `json:"target"`
+	Capacity CapacitySummary   `json:"capacity"`
+	// A pool referenced by id and name.
+	Pool PoolSummary `json:"pool"`
+	// A summary of an instance SKU - its `id` and human-recognizable `alias` - embedded on resources that reference a SKU.
+	InstanceSku InstanceSkuSummary `json:"instance_sku"`
 	// Price rate in dollars per node-hour.
 	MinSellPriceDollarsPerNodeHour string `json:"min_sell_price_dollars_per_node_hour"`
 	// Price rate in dollars per node-hour.
@@ -107,9 +109,16 @@ func (p *ProcurementResponse) GetCapacity() CapacitySummary {
 	return p.Capacity
 }
 
-func (p *ProcurementResponse) GetInstanceSku() optionalnullable.OptionalNullable[InstanceSkuSummary] {
+func (p *ProcurementResponse) GetPool() PoolSummary {
 	if p == nil {
-		return nil
+		return PoolSummary{}
+	}
+	return p.Pool
+}
+
+func (p *ProcurementResponse) GetInstanceSku() InstanceSkuSummary {
+	if p == nil {
+		return InstanceSkuSummary{}
 	}
 	return p.InstanceSku
 }

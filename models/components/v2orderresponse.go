@@ -13,16 +13,27 @@ type V2OrderResponse struct {
 	object   *string         `const:"order" json:"object"`
 	ID       string          `json:"id"`
 	Capacity CapacitySummary `json:"capacity"`
-	Side     Side            `json:"side"`
+	// A pool referenced by id and name.
+	Pool PoolSummary `json:"pool"`
+	Side Side        `json:"side"`
 	// If true, the order stays in the order book until either fills, is explicitly cancelled, or the order end time is reached resulting in automatic cancellation. If false, the order is cancelled immediately if it doesn't fill.
-	AllowStanding bool                                                  `json:"allow_standing"`
-	InstanceSku   optionalnullable.OptionalNullable[InstanceSkuSummary] `json:"instance_sku,omitzero"`
+	AllowStanding bool `json:"allow_standing"`
+	// If true, the order may fill partially — fewer nodes and/or a subset of the requested time window.
+	AllowPartial *bool `json:"allow_partial,omitzero"`
+	// A summary of an instance SKU - its `id` and human-recognizable `alias` - embedded on resources that reference a SKU.
+	InstanceSku InstanceSkuSummary `json:"instance_sku"`
 	// Node count over time, as a list of `[start_at, end_at)` time ranges.
 	//
 	// Example: 5 nodes from t=0 to t=3600 is `[{"start_at": 0, "end_at": 3600, "node_count": 5}]`.
 	//
 	// `start_at` and `end_at` must be 60-second aligned, `node_count` must be non-negative. On non-final entries, `end_at` may be omitted (inferred from the next entry's `start_at`); gaps fill with `node_count: 0`.
 	AllocationScheduleDelta []ScheduleEntry `json:"allocation_schedule_delta"`
+	// Node count over time, as a list of `[start_at, end_at)` time ranges.
+	//
+	// Example: 5 nodes from t=0 to t=3600 is `[{"start_at": 0, "end_at": 3600, "node_count": 5}]`.
+	//
+	// `start_at` and `end_at` must be 60-second aligned, `node_count` must be non-negative. On non-final entries, `end_at` may be omitted (inferred from the next entry's `start_at`); gaps fill with `node_count: 0`.
+	FilledAllocationScheduleDelta []ScheduleEntry `json:"filled_allocation_schedule_delta"`
 	// Price rate in dollars per node-hour.
 	LimitPriceDollarsPerNodeHour string `json:"limit_price_dollars_per_node_hour"`
 	// The status of an order in the system.
@@ -31,6 +42,8 @@ type V2OrderResponse struct {
 	//
 	// `filled` = order executed.
 	//
+	// `partially_filled` = the order matched part of its requested capacity and remains active for the remainder.
+	//
 	// `standing` = the order is waiting for a match.
 	//
 	// `cancelled` = the order was cancelled either automatically (not a standing order and didn't immediately fill, or current time past `end_at`) or by explicit cancellation.
@@ -38,11 +51,10 @@ type V2OrderResponse struct {
 	// `rejected` = validation/system error occurred.
 	Status OrderStatus `json:"status"`
 	// Unix timestamp.
-	CreatedAt int64                                    `json:"created_at"`
-	FilledAt  optionalnullable.OptionalNullable[int64] `json:"filled_at,omitzero"`
-	// Node count that filled. Equals the order's quantity for complete fills.
-	FilledQuantity                       optionalnullable.OptionalNullable[int]    `json:"filled_quantity,omitzero"`
-	FilledAveragePriceDollarsPerNodeHour optionalnullable.OptionalNullable[string] `json:"filled_average_price_dollars_per_node_hour,omitzero"`
+	CreatedAt                            int64                                               `json:"created_at"`
+	CreatedBy                            optionalnullable.OptionalNullable[V2OrderPrincipal] `json:"created_by,omitzero"`
+	FilledAt                             optionalnullable.OptionalNullable[int64]            `json:"filled_at,omitzero"`
+	FilledAveragePriceDollarsPerNodeHour optionalnullable.OptionalNullable[string]           `json:"filled_average_price_dollars_per_node_hour,omitzero"`
 	// Each contract produced by this order. Empty for unfilled orders.
 	Fills       []V2OrderFill                            `json:"fills,omitzero"`
 	CancelledAt optionalnullable.OptionalNullable[int64] `json:"cancelled_at,omitzero"`
@@ -77,6 +89,13 @@ func (v *V2OrderResponse) GetCapacity() CapacitySummary {
 	return v.Capacity
 }
 
+func (v *V2OrderResponse) GetPool() PoolSummary {
+	if v == nil {
+		return PoolSummary{}
+	}
+	return v.Pool
+}
+
 func (v *V2OrderResponse) GetSide() Side {
 	if v == nil {
 		return Side("")
@@ -91,9 +110,16 @@ func (v *V2OrderResponse) GetAllowStanding() bool {
 	return v.AllowStanding
 }
 
-func (v *V2OrderResponse) GetInstanceSku() optionalnullable.OptionalNullable[InstanceSkuSummary] {
+func (v *V2OrderResponse) GetAllowPartial() *bool {
 	if v == nil {
 		return nil
+	}
+	return v.AllowPartial
+}
+
+func (v *V2OrderResponse) GetInstanceSku() InstanceSkuSummary {
+	if v == nil {
+		return InstanceSkuSummary{}
 	}
 	return v.InstanceSku
 }
@@ -103,6 +129,13 @@ func (v *V2OrderResponse) GetAllocationScheduleDelta() []ScheduleEntry {
 		return []ScheduleEntry{}
 	}
 	return v.AllocationScheduleDelta
+}
+
+func (v *V2OrderResponse) GetFilledAllocationScheduleDelta() []ScheduleEntry {
+	if v == nil {
+		return []ScheduleEntry{}
+	}
+	return v.FilledAllocationScheduleDelta
 }
 
 func (v *V2OrderResponse) GetLimitPriceDollarsPerNodeHour() string {
@@ -126,18 +159,18 @@ func (v *V2OrderResponse) GetCreatedAt() int64 {
 	return v.CreatedAt
 }
 
+func (v *V2OrderResponse) GetCreatedBy() optionalnullable.OptionalNullable[V2OrderPrincipal] {
+	if v == nil {
+		return nil
+	}
+	return v.CreatedBy
+}
+
 func (v *V2OrderResponse) GetFilledAt() optionalnullable.OptionalNullable[int64] {
 	if v == nil {
 		return nil
 	}
 	return v.FilledAt
-}
-
-func (v *V2OrderResponse) GetFilledQuantity() optionalnullable.OptionalNullable[int] {
-	if v == nil {
-		return nil
-	}
-	return v.FilledQuantity
 }
 
 func (v *V2OrderResponse) GetFilledAveragePriceDollarsPerNodeHour() optionalnullable.OptionalNullable[string] {

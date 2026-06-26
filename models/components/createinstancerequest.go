@@ -9,8 +9,8 @@ import (
 
 type CreateInstanceRequest struct {
 	Name optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
-	// A resource path like 'sfc:capacity:acme:prod:my-capacity' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
-	Capacity string `json:"capacity"`
+	// A resource path like 'sfc:pool:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
+	Pool string `json:"pool"`
 	// A resource path like 'sfc:image:acme:prod:my-image' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
 	Image string `json:"image"`
 	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
@@ -18,8 +18,7 @@ type CreateInstanceRequest struct {
 	// Base64-encoded [cloud-init user data](https://cloudinit.readthedocs.io/en/latest/explanation/format/index.html). Maximum 64KB.
 	CloudInitUserData *string                                              `json:"cloud_init_user_data,omitzero"`
 	Tags              optionalnullable.OptionalNullable[map[string]string] `json:"tags,omitzero"`
-	// Shutdown priority. Higher numbers are kept longer. Defaults to 0.
-	Priority optionalnullable.OptionalNullable[int64] `json:"priority,omitzero"`
+	PriorityLevel     optionalnullable.OptionalNullable[InstancePriority]  `json:"priority_level,omitzero"`
 	// **Experimental — subject to change or removal without notice.** Enables InfiniBand. The chosen `instance_sku` must support InfiniBand.
 	PreviewEnableInfiniband *bool `default:"false" json:"_preview_enable_infiniband"`
 }
@@ -42,11 +41,11 @@ func (c *CreateInstanceRequest) GetName() optionalnullable.OptionalNullable[stri
 	return c.Name
 }
 
-func (c *CreateInstanceRequest) GetCapacity() string {
+func (c *CreateInstanceRequest) GetPool() string {
 	if c == nil {
 		return ""
 	}
-	return c.Capacity
+	return c.Pool
 }
 
 func (c *CreateInstanceRequest) GetImage() string {
@@ -77,11 +76,11 @@ func (c *CreateInstanceRequest) GetTags() optionalnullable.OptionalNullable[map[
 	return c.Tags
 }
 
-func (c *CreateInstanceRequest) GetPriority() optionalnullable.OptionalNullable[int64] {
+func (c *CreateInstanceRequest) GetPriorityLevel() optionalnullable.OptionalNullable[InstancePriority] {
 	if c == nil {
 		return nil
 	}
-	return c.Priority
+	return c.PriorityLevel
 }
 
 func (c *CreateInstanceRequest) GetPreviewEnableInfiniband() *bool {

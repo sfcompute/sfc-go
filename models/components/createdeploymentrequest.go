@@ -8,8 +8,8 @@ import (
 
 type CreateDeploymentRequest struct {
 	Name optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
-	// A resource path like 'sfc:capacity:acme:prod:my-capacity' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
-	Capacity string `json:"capacity"`
+	// A resource path like 'sfc:pool:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
+	Pool string `json:"pool"`
 	// A resource path like 'sfc:instance_template:acme:prod:my-instance_template' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
 	InstanceTemplate    string `json:"instance_template"`
 	TargetInstanceCount int    `json:"target_instance_count"`
@@ -24,11 +24,11 @@ func (c *CreateDeploymentRequest) GetName() optionalnullable.OptionalNullable[st
 	return c.Name
 }
 
-func (c *CreateDeploymentRequest) GetCapacity() string {
+func (c *CreateDeploymentRequest) GetPool() string {
 	if c == nil {
 		return ""
 	}
-	return c.Capacity
+	return c.Pool
 }
 
 func (c *CreateDeploymentRequest) GetInstanceTemplate() string {

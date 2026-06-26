@@ -23,6 +23,8 @@ type InstanceResponse struct {
 	Status      InstanceStatus                                        `json:"status"`
 	InstanceSku optionalnullable.OptionalNullable[InstanceSkuSummary] `json:"instance_sku,omitzero"`
 	Capacity    CapacitySummary                                       `json:"capacity"`
+	// A pool referenced by id and name.
+	Pool PoolSummary `json:"pool"`
 	// Unix timestamp.
 	CreatedAt  int64                                                `json:"created_at"`
 	Image      ImageSummary                                         `json:"image"`
@@ -33,8 +35,7 @@ type InstanceResponse struct {
 	CloudInitUserData  *string                                              `json:"cloud_init_user_data,omitzero"`
 	Tags               optionalnullable.OptionalNullable[map[string]string] `json:"tags,omitzero"`
 	ExpectedShutdownAt optionalnullable.OptionalNullable[int64]             `json:"expected_shutdown_at,omitzero"`
-	// Shutdown priority. Higher numbers are kept longer when the capacity's quota drops below the running-instance count. Default 0; any signed 64-bit integer is accepted.
-	Priority int64 `json:"priority"`
+	PriorityLevel      optionalnullable.OptionalNullable[InstancePriority]  `json:"priority_level,omitzero"`
 }
 
 func (i InstanceResponse) MarshalJSON() ([]byte, error) {
@@ -115,6 +116,13 @@ func (i *InstanceResponse) GetCapacity() CapacitySummary {
 	return i.Capacity
 }
 
+func (i *InstanceResponse) GetPool() PoolSummary {
+	if i == nil {
+		return PoolSummary{}
+	}
+	return i.Pool
+}
+
 func (i *InstanceResponse) GetCreatedAt() int64 {
 	if i == nil {
 		return 0
@@ -164,9 +172,9 @@ func (i *InstanceResponse) GetExpectedShutdownAt() optionalnullable.OptionalNull
 	return i.ExpectedShutdownAt
 }
 
-func (i *InstanceResponse) GetPriority() int64 {
+func (i *InstanceResponse) GetPriorityLevel() optionalnullable.OptionalNullable[InstancePriority] {
 	if i == nil {
-		return 0
+		return nil
 	}
-	return i.Priority
+	return i.PriorityLevel
 }

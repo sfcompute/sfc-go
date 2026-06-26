@@ -6,6 +6,8 @@ The status of an order in the system.
 
 `filled` = order executed.
 
+`partially_filled` = the order matched part of its requested capacity and remains active for the remainder.
+
 `standing` = the order is waiting for a match.
 
 `cancelled` = the order was cancelled either automatically (not a standing order and didn't immediately fill, or current time past `end_at`) or by explicit cancellation.
@@ -28,10 +30,11 @@ custom := components.OrderStatus("custom_value")
 
 ## Values
 
-| Name                   | Value                  |
-| ---------------------- | ---------------------- |
-| `OrderStatusPending`   | pending                |
-| `OrderStatusFilled`    | filled                 |
-| `OrderStatusRejected`  | rejected               |
-| `OrderStatusCancelled` | cancelled              |
-| `OrderStatusStanding`  | standing               |
+| Name                         | Value                        |
+| ---------------------------- | ---------------------------- |
+| `OrderStatusPending`         | pending                      |
+| `OrderStatusFilled`          | filled                       |
+| `OrderStatusPartiallyFilled` | partially_filled             |
+| `OrderStatusRejected`        | rejected                     |
+| `OrderStatusCancelled`       | cancelled                    |
+| `OrderStatusStanding`        | standing                     |

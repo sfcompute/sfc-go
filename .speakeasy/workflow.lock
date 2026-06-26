@@ -1,9 +1,9 @@
-speakeasyVersion: 1.761.11
+speakeasyVersion: 1.786.0
 sources:
     sfc-api:
         sourceNamespace: sfc-api
-        sourceRevisionDigest: sha256:75751ee98d62dee4c2c522301c449e66303cfeae67214a0eca698a8b4bcd6f8c
-        sourceBlobDigest: sha256:2593c7eb235a2de5839f995948eec802470faa092e8ac1f7d95416ec517d94da
+        sourceRevisionDigest: sha256:959a768039139216ce7d5b72256d5a297e4a0b7ba471aeaf6c3816b73ffd6c28
+        sourceBlobDigest: sha256:d4a33c86719f08f0ed5ca946401d42d630fd6aa254164c7b33210701c943a813
         tags:
             - latest
             - 0.1.0
@@ -11,17 +11,17 @@ targets:
     sfc-go:
         source: sfc-api
         sourceNamespace: sfc-api
-        sourceRevisionDigest: sha256:75751ee98d62dee4c2c522301c449e66303cfeae67214a0eca698a8b4bcd6f8c
-        sourceBlobDigest: sha256:2593c7eb235a2de5839f995948eec802470faa092e8ac1f7d95416ec517d94da
+        sourceRevisionDigest: sha256:959a768039139216ce7d5b72256d5a297e4a0b7ba471aeaf6c3816b73ffd6c28
+        sourceBlobDigest: sha256:d4a33c86719f08f0ed5ca946401d42d630fd6aa254164c7b33210701c943a813
         codeSamplesNamespace: sfc-api-go-code-samples
-        codeSamplesRevisionDigest: sha256:a3f1861ce82b8353fbe8b1dc61bf1f7080b6d378c3e2f2e1817f4edd0c199f5d
+        codeSamplesRevisionDigest: sha256:727dcacca5fe133edc3ad96af3c803a9f377189e0b7d268d2a97019e8f30bd03
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
     sources:
         sfc-api:
             inputs:
-                - location: /Users/andreaanez/Documents/sf_compute/sfcompute/blueprint/current/openapi.json
+                - location: /Users/seb/sfcompute/blueprint/current/openapi.json
             overlays:
                 - location: .speakeasy/overlay.yaml
             registry:

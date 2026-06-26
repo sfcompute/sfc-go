@@ -1,0 +1,9 @@
+# ListPoolTransfersResponse
+
+
+## Fields
+
+| Field                                                                                             | Type                                                                                              | Required                                                                                          | Description                                                                                       |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `HTTPMeta`                                                                                        | [components.HTTPMetadata](../../models/components/httpmetadata.md)                                | :heavy_check_mark:                                                                                | N/A                                                                                               |
+| `V2ListPoolTransfersResponse`                                                                     | [*components.V2ListPoolTransfersResponse](../../models/components/v2listpooltransfersresponse.md) | :heavy_minus_sign:                                                                                | Paginated list of pool transfers.                                                                 |

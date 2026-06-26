@@ -40,7 +40,7 @@ func main() {
 
     res, err := s.Procurements.List(ctx, operations.ListProcurementsRequest{
         Workspace: "wksp_k3R-nX9vLm7Qp2Yw5Jd8F",
-        Capacity: sfc.Pointer("cap_k3R-nX9vLm7Qp2Yw5Jd8F"),
+        Pool: sfc.Pointer("pool_k3R-nX9vLm7Qp2Yw5Jd8F"),
         StartingAfter: sfc.Pointer("procc_gqXR7s0Kj5mHvE2wNpLc4Q"),
         EndingBefore: sfc.Pointer("procc_gqXR7s0Kj5mHvE2wNpLc4Q"),
     })
@@ -119,7 +119,7 @@ func main() {
         Target: components.CreateProcurementTargetNodeCountTag(
             "<value>",
         ),
-        Capacity: "<value>",
+        Pool: "<value>",
         InstanceSku: "isku_k3R-nX9vLm7Qp2Yw5Jd8F",
         MinSellPriceDollarsPerNodeHour: "2.500000",
         MaxBuyPriceDollarsPerNodeHour: "2.500000",

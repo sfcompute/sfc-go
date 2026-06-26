@@ -4,6 +4,7 @@ package components
 
 import (
 	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/optionalnullable"
 	"github.com/sfcompute/sfc-go/types"
 )
 
@@ -15,6 +16,12 @@ type UserResponse struct {
 	ResourcePath string `json:"resource_path"`
 	// Unix timestamp.
 	CreatedAt int64 `json:"created_at"`
+	// The member's primary email, or `null` if they have no recorded email identity.
+	Email optionalnullable.OptionalNullable[string] `json:"email,omitzero"`
+	// The member's first name, or `null` if not recorded.
+	FirstName optionalnullable.OptionalNullable[string] `json:"first_name,omitzero"`
+	// The member's last name, or `null` if not recorded.
+	LastName optionalnullable.OptionalNullable[string] `json:"last_name,omitzero"`
 }
 
 func (u UserResponse) MarshalJSON() ([]byte, error) {
@@ -51,4 +58,25 @@ func (u *UserResponse) GetCreatedAt() int64 {
 		return 0
 	}
 	return u.CreatedAt
+}
+
+func (u *UserResponse) GetEmail() optionalnullable.OptionalNullable[string] {
+	if u == nil {
+		return nil
+	}
+	return u.Email
+}
+
+func (u *UserResponse) GetFirstName() optionalnullable.OptionalNullable[string] {
+	if u == nil {
+		return nil
+	}
+	return u.FirstName
+}
+
+func (u *UserResponse) GetLastName() optionalnullable.OptionalNullable[string] {
+	if u == nil {
+		return nil
+	}
+	return u.LastName
 }

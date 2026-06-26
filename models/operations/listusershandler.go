@@ -9,8 +9,10 @@ import (
 
 type ListUsersHandlerRequest struct {
 	// Filter by user ID or resource path (repeatable).
-	ID    []string `queryParam:"style=form,explode=true,name=id"`
-	Limit *int64   `default:"50" queryParam:"style=form,explode=true,name=limit"`
+	ID []string `queryParam:"style=form,explode=true,name=id"`
+	// Filter to the user with this email address. Matched case-insensitively against the member's non-deleted identities.
+	Email *string `queryParam:"style=form,explode=true,name=email"`
+	Limit *int64  `default:"50" queryParam:"style=form,explode=true,name=limit"`
 	// Set to the response's `cursor` to fetch the next page.
 	StartingAfter *string `queryParam:"style=form,explode=true,name=starting_after"`
 	// Set to the response's `cursor` to fetch the previous page.
@@ -33,6 +35,13 @@ func (l *ListUsersHandlerRequest) GetID() []string {
 		return nil
 	}
 	return l.ID
+}
+
+func (l *ListUsersHandlerRequest) GetEmail() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Email
 }
 
 func (l *ListUsersHandlerRequest) GetLimit() *int64 {
