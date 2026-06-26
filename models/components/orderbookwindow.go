@@ -18,13 +18,9 @@ type OrderbookWindow struct {
 	// Number of resting bid orders at this window.
 	TotalBidOrderCount int64 `json:"total_bid_order_count"`
 	// Number of resting ask orders at this window.
-	TotalAskOrderCount int64 `json:"total_ask_order_count"`
-	// Total node count across all resting bids at this window.
-	TotalBidNodeCount int64 `json:"total_bid_node_count"`
-	// Total node count across all resting asks at this window.
-	TotalAskNodeCount int64                                         `json:"total_ask_node_count"`
-	BestBid           optionalnullable.OptionalNullable[PriceLevel] `json:"best_bid,omitzero"`
-	BestAsk           optionalnullable.OptionalNullable[PriceLevel] `json:"best_ask,omitzero"`
+	TotalAskOrderCount int64                                         `json:"total_ask_order_count"`
+	BestBid            optionalnullable.OptionalNullable[PriceLevel] `json:"best_bid,omitzero"`
+	BestAsk            optionalnullable.OptionalNullable[PriceLevel] `json:"best_ask,omitzero"`
 }
 
 func (o OrderbookWindow) MarshalJSON() ([]byte, error) {
@@ -71,20 +67,6 @@ func (o *OrderbookWindow) GetTotalAskOrderCount() int64 {
 		return 0
 	}
 	return o.TotalAskOrderCount
-}
-
-func (o *OrderbookWindow) GetTotalBidNodeCount() int64 {
-	if o == nil {
-		return 0
-	}
-	return o.TotalBidNodeCount
-}
-
-func (o *OrderbookWindow) GetTotalAskNodeCount() int64 {
-	if o == nil {
-		return 0
-	}
-	return o.TotalAskNodeCount
 }
 
 func (o *OrderbookWindow) GetBestBid() optionalnullable.OptionalNullable[PriceLevel] {

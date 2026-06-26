@@ -127,17 +127,6 @@ func main() {
 <details open>
 <summary>Available methods</summary>
 
-### [Capacities](docs/sdks/capacities/README.md)
-
-* [List](docs/sdks/capacities/README.md#list) - List capacities
-* [Create](docs/sdks/capacities/README.md#create) - Create capacity
-* [Fetch](docs/sdks/capacities/README.md#fetch) - Get capacity
-* [Delete](docs/sdks/capacities/README.md#delete) - Delete capacity
-* [Update](docs/sdks/capacities/README.md#update) - Update capacity
-* [ListCapacityTransfers](docs/sdks/capacities/README.md#listcapacitytransfers) - List capacity transfers
-* [CreateCapacityTransfer](docs/sdks/capacities/README.md#createcapacitytransfer) - Create capacity transfer
-* [FetchCapacityTransfer](docs/sdks/capacities/README.md#fetchcapacitytransfer) - Get capacity transfer
-
 ### [Deployments](docs/sdks/deployments/README.md)
 
 * [List](docs/sdks/deployments/README.md#list) - List deployments
@@ -145,6 +134,11 @@ func main() {
 * [GetDeployment](docs/sdks/deployments/README.md#getdeployment) - Get deployment
 * [Delete](docs/sdks/deployments/README.md#delete) - Delete deployment
 * [PatchDeployment](docs/sdks/deployments/README.md#patchdeployment) - Update deployment
+
+### [FeatureFlags](docs/sdks/featureflags/README.md)
+
+* [ListUserFeatureFlags](docs/sdks/featureflags/README.md#listuserfeatureflags) - List feature flags scoped to the caller
+* [SetFeatureFlagEnrollment](docs/sdks/featureflags/README.md#setfeatureflagenrollment) - Enroll or unenroll the caller in a feature flag
 
 ### [Images](docs/sdks/images/README.md)
 
@@ -184,6 +178,7 @@ func main() {
 * [Delete](docs/sdks/instances/README.md#delete) - Delete instance
 * [Update](docs/sdks/instances/README.md#update) - Update instance
 * [GetLogsForInstance](docs/sdks/instances/README.md#getlogsforinstance) - Get instance logs
+* [ReplaceInstance](docs/sdks/instances/README.md#replaceinstance) - Replace instance
 * [GetSSHInfoForInstance](docs/sdks/instances/README.md#getsshinfoforinstance) - Get instance SSH info
 * [TerminateInstance](docs/sdks/instances/README.md#terminateinstance) - Terminate instance
 
@@ -205,6 +200,17 @@ func main() {
 ### [Permissions](docs/sdks/permissions/README.md)
 
 * [CheckPermissionHandler](docs/sdks/permissions/README.md#checkpermissionhandler) - Check permissions
+
+### [Pools](docs/sdks/pools/README.md)
+
+* [List](docs/sdks/pools/README.md#list) - List pools
+* [Create](docs/sdks/pools/README.md#create) - Create pool
+* [Fetch](docs/sdks/pools/README.md#fetch) - Get pool
+* [Delete](docs/sdks/pools/README.md#delete) - Delete pool
+* [Update](docs/sdks/pools/README.md#update) - Update pool
+* [ListPoolTransfers](docs/sdks/pools/README.md#listpooltransfers) - List pool transfers
+* [CreatePoolTransfer](docs/sdks/pools/README.md#createpooltransfer) - Create pool transfer
+* [FetchPoolTransfer](docs/sdks/pools/README.md#fetchpooltransfer) - Get pool transfer
 
 ### [Procurements](docs/sdks/procurements/README.md)
 

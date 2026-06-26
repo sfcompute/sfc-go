@@ -8,10 +8,9 @@ import (
 )
 
 type PatchInstanceRequest struct {
-	Name optionalnullable.OptionalNullable[string]            `json:"name,omitzero"`
-	Tags optionalnullable.OptionalNullable[map[string]string] `json:"tags,omitzero"`
-	// Shutdown priority. Higher numbers are kept longer. Omit to leave unchanged.
-	Priority optionalnullable.OptionalNullable[int64] `json:"priority,omitzero"`
+	Name          optionalnullable.OptionalNullable[string]            `json:"name,omitzero"`
+	Tags          optionalnullable.OptionalNullable[map[string]string] `json:"tags,omitzero"`
+	PriorityLevel optionalnullable.OptionalNullable[InstancePriority]  `json:"priority_level,omitzero"`
 }
 
 func (p PatchInstanceRequest) MarshalJSON() ([]byte, error) {
@@ -39,9 +38,9 @@ func (p *PatchInstanceRequest) GetTags() optionalnullable.OptionalNullable[map[s
 	return p.Tags
 }
 
-func (p *PatchInstanceRequest) GetPriority() optionalnullable.OptionalNullable[int64] {
+func (p *PatchInstanceRequest) GetPriorityLevel() optionalnullable.OptionalNullable[InstancePriority] {
 	if p == nil {
 		return nil
 	}
-	return p.Priority
+	return p.PriorityLevel
 }

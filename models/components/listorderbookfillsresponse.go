@@ -11,7 +11,12 @@ import (
 // ListOrderbookFillsResponse - Paginated list of historical fills, newest first.
 type ListOrderbookFillsResponse struct {
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object       *string             `const:"list" json:"object"`
+	object *string `const:"list" json:"object"`
+	// Key/value filters on instance SKU properties.
+	//
+	// Valid keys and values are published at `GET /v2/instance_sku_property_catalog`.
+	//
+	// Empty map = no constraints.
 	Requirements map[string][]string `json:"requirements"`
 	// Unix timestamp.
 	StartAt int64 `json:"start_at"`

@@ -47,7 +47,7 @@ func main() {
             StartAt: 1738972800,
             DurationSeconds: 590322,
             NodeCount: 520580,
-            Capacity: optionalnullable.From(sfc.Pointer("cap_k3R-nX9vLm7Qp2Yw5Jd8F")),
+            Pool: optionalnullable.From(sfc.Pointer("pool_k3R-nX9vLm7Qp2Yw5Jd8F")),
         },
     ))
     if err != nil {
@@ -118,7 +118,8 @@ func main() {
         ID: []string{
             "ordr_k3R-nX9vLm7Qp2Yw5Jd8F",
         },
-        Capacity: sfc.Pointer("cap_k3R-nX9vLm7Qp2Yw5Jd8F"),
+        Pool: sfc.Pointer("pool_k3R-nX9vLm7Qp2Yw5Jd8F"),
+        Workspace: sfc.Pointer("wksp_k3R-nX9vLm7Qp2Yw5Jd8F"),
         CreatedAfter: sfc.Pointer[int64](1738972800),
         CreatedBefore: sfc.Pointer[int64](1738972800),
         Procurement: sfc.Pointer("proc_k3R-nX9vLm7Qp2Yw5Jd8F"),
@@ -163,6 +164,7 @@ func main() {
 | Error Type                         | Status Code                        | Content Type                       |
 | ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.ForbiddenError           | 403                                | application/json                   |
 | apierrors.UnprocessableEntityError | 422                                | application/json                   |
 | apierrors.InternalServerError      | 500                                | application/json                   |
 | apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
@@ -171,7 +173,7 @@ func main() {
 
 > ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
-Place a buy or sell order. Orders fill completely or not at all. All nodes fill on a single instance SKU matching the order's `requirements`. Order filling is asynchronous; poll `GET /v2/orders/{id}` to check status.
+Place a buy or sell order. Orders fill on a single instance SKU matching the order's `requirements`. By default orders fill completely or not at all; set `allow_partial` to permit a partial fill. Order filling is asynchronous; poll `GET /v2/orders/{id}` to check status.
 
 ### Example Usage
 
@@ -195,7 +197,7 @@ func main() {
     )
 
     res, err := s.Orders.Create(ctx, components.V2CreateOrderRequest{
-        Capacity: "cap_k3R-nX9vLm7Qp2Yw5Jd8F",
+        Pool: "pool_k3R-nX9vLm7Qp2Yw5Jd8F",
         Side: components.SideSell,
         InstanceSku: "isku_k3R-nX9vLm7Qp2Yw5Jd8F",
         AllocationScheduleDelta: []components.ScheduleEntry{},
@@ -288,6 +290,7 @@ func main() {
 | Error Type                    | Status Code                   | Content Type                  |
 | ----------------------------- | ----------------------------- | ----------------------------- |
 | apierrors.UnauthorizedError   | 401                           | application/json              |
+| apierrors.ForbiddenError      | 403                           | application/json              |
 | apierrors.NotFoundError       | 404                           | application/json              |
 | apierrors.InternalServerError | 500                           | application/json              |
 | apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
@@ -344,6 +347,7 @@ func main() {
 | Error Type                         | Status Code                        | Content Type                       |
 | ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.ForbiddenError           | 403                                | application/json                   |
 | apierrors.NotFoundError            | 404                                | application/json                   |
 | apierrors.UnprocessableEntityError | 422                                | application/json                   |
 | apierrors.InternalServerError      | 500                                | application/json                   |

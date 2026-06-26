@@ -9,6 +9,11 @@ import (
 
 // OrderbookQuoteResponse - Top-of-book snapshot: the highest resting buy (`best_bid`) and lowest resting sell (`best_ask`) for the requested window. Either side may be absent if no orders are resting on it.
 type OrderbookQuoteResponse struct {
+	// Key/value filters on instance SKU properties.
+	//
+	// Valid keys and values are published at `GET /v2/instance_sku_property_catalog`.
+	//
+	// Empty map = no constraints.
 	Requirements map[string][]string `json:"requirements"`
 	// Unix timestamp.
 	StartAt int64 `json:"start_at"`

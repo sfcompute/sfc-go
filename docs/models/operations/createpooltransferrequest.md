@@ -1,0 +1,9 @@
+# CreatePoolTransferRequest
+
+
+## Fields
+
+| Field                                                                                            | Type                                                                                             | Required                                                                                         | Description                                                                                      |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| `IdempotencyKey`                                                                                 | optionalnullable.OptionalNullable[`string`]                                                      | :heavy_minus_sign:                                                                               | Unique key for idempotent transfer creation.                                                     |
+| `Body`                                                                                           | [components.V2CreatePoolTransferRequest](../../models/components/v2createpooltransferrequest.md) | :heavy_check_mark:                                                                               | N/A                                                                                              |

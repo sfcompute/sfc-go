@@ -39,14 +39,7 @@ func newUsers(rootSDK *SDK, sdkConfig config.SDKConfiguration, hooks *hooks.Hook
 // > ⚠️ This endpoint is in [public preview](/preview/roadmap).
 //
 // List users that are members of the caller's organization.
-func (s *Users) List(ctx context.Context, id []string, limit *int64, startingAfter *string, endingBefore *string, opts ...operations.Option) (*operations.ListUsersHandlerResponse, error) {
-	request := operations.ListUsersHandlerRequest{
-		ID:            id,
-		Limit:         limit,
-		StartingAfter: startingAfter,
-		EndingBefore:  endingBefore,
-	}
-
+func (s *Users) List(ctx context.Context, request operations.ListUsersHandlerRequest, opts ...operations.Option) (*operations.ListUsersHandlerResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -242,13 +235,11 @@ func (s *Users) List(ctx context.Context, id []string, limit *int64, startingAft
 				return nil, nil
 			}
 		}
+		request.StartingAfter = &nCVal
 
 		return s.List(
 			ctx,
-			id,
-			limit,
-			&nCVal,
-			endingBefore,
+			request,
 			opts...,
 		)
 	}

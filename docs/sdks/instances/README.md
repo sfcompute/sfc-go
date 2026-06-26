@@ -13,6 +13,7 @@ Spin up instances in a capacity to use your available compute.
 * [Delete](#delete) - Delete instance
 * [Update](#update) - Update instance
 * [GetLogsForInstance](#getlogsforinstance) - Get instance logs
+* [ReplaceInstance](#replaceinstance) - Replace instance
 * [GetSSHInfoForInstance](#getsshinfoforinstance) - Get instance SSH info
 * [TerminateInstance](#terminateinstance) - Terminate instance
 
@@ -72,7 +73,12 @@ func main() {
             "8",
             "F",
         },
-        Capacity: sfc.Pointer("cap_k3R-nX9vLm7Qp2Yw5Jd8F"),
+        Pool: []string{
+            "pool_k3R-nX9vLm7Qp2Yw5Jd8F",
+        },
+        InstanceSku: []string{
+            "isku_k3R-nX9vLm7Qp2Yw5Jd8F",
+        },
         StartingAfter: sfc.Pointer("nodec_gqXR7s0Kj5mHvE2wNpLc4Q"),
         EndingBefore: sfc.Pointer("nodec_gqXR7s0Kj5mHvE2wNpLc4Q"),
     })
@@ -149,7 +155,7 @@ func main() {
 
     res, err := s.Instances.Create(ctx, components.CreateInstanceRequest{
         Name: optionalnullable.From(sfc.Pointer("my-resource-name")),
-        Capacity: "cap_k3R-nX9vLm7Qp2Yw5Jd8F",
+        Pool: "pool_k3R-nX9vLm7Qp2Yw5Jd8F",
         Image: "image_k3R-nX9vLm7Qp2Yw5Jd8F",
         InstanceSku: "isku_k3R-nX9vLm7Qp2Yw5Jd8F",
         CloudInitUserData: sfc.Pointer("IyEvYmluL2Jhc2gKZWNobyBoZWxsbyB3b3JsZAo="),
@@ -220,7 +226,7 @@ func main() {
         Data: []components.BatchPatchInstanceEntry{
             components.BatchPatchInstanceEntry{
                 ID: "inst_k3R-nX9vLm7Qp2Yw5Jd8F",
-                Priority: 479768,
+                PriorityLevel: components.InstancePriorityPreferred,
             },
         },
     })
@@ -428,14 +434,15 @@ func main() {
 
 ### Errors
 
-| Error Type                    | Status Code                   | Content Type                  |
-| ----------------------------- | ----------------------------- | ----------------------------- |
-| apierrors.BadRequestError     | 400                           | application/json              |
-| apierrors.UnauthorizedError   | 401                           | application/json              |
-| apierrors.ForbiddenError      | 403                           | application/json              |
-| apierrors.NotFoundError       | 404                           | application/json              |
-| apierrors.InternalServerError | 500                           | application/json              |
-| apierrors.APIError            | 4XX, 5XX                      | \*/\*                         |
+| Error Type                         | Status Code                        | Content Type                       |
+| ---------------------------------- | ---------------------------------- | ---------------------------------- |
+| apierrors.BadRequestError          | 400                                | application/json                   |
+| apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.ForbiddenError           | 403                                | application/json                   |
+| apierrors.NotFoundError            | 404                                | application/json                   |
+| apierrors.UnprocessableEntityError | 422                                | application/json                   |
+| apierrors.InternalServerError      | 500                                | application/json                   |
+| apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
 
 ## GetLogsForInstance
 
@@ -493,6 +500,73 @@ func main() {
 
 | Error Type                         | Status Code                        | Content Type                       |
 | ---------------------------------- | ---------------------------------- | ---------------------------------- |
+| apierrors.UnauthorizedError        | 401                                | application/json                   |
+| apierrors.ForbiddenError           | 403                                | application/json                   |
+| apierrors.NotFoundError            | 404                                | application/json                   |
+| apierrors.UnprocessableEntityError | 422                                | application/json                   |
+| apierrors.InternalServerError      | 500                                | application/json                   |
+| apierrors.APIError                 | 4XX, 5XX                           | \*/\*                              |
+
+## ReplaceInstance
+
+> ⚠️ This endpoint is in [public preview](/preview/roadmap).
+
+Terminates the target instance and creates a fresh one on the same capacity and SKU with a new image (and optionally a new startup script and name). Capacity, SKU, subnet, public IPv4, firewall, tags, and priority are inherited from the replaced instance. The two operations happen in a single transaction. Pass an `Idempotency-Key` header to make retries safe: a repeated request returns the replacement created by the first attempt instead of creating another one.
+
+### Example Usage
+
+<!-- UsageSnippet language="go" operationID="replace_instance" method="post" path="/preview/v2/instances/{id}/replace" -->
+```go
+package main
+
+import(
+	"context"
+	sfc "github.com/sfcompute/sfc-go"
+	"github.com/sfcompute/sfc-go/optionalnullable"
+	"github.com/sfcompute/sfc-go/models/components"
+	"log"
+)
+
+func main() {
+    ctx := context.Background()
+
+    s := sfc.New(
+        sfc.WithSecurity("<YOUR_BEARER_TOKEN_HERE>"),
+    )
+
+    res, err := s.Instances.ReplaceInstance(ctx, "inst_k3R-nX9vLm7Qp2Yw5Jd8F", components.ReplaceInstanceRequest{
+        Image: "image_k3R-nX9vLm7Qp2Yw5Jd8F",
+        CloudInitUserData: sfc.Pointer("IyEvYmluL2Jhc2gKZWNobyBoZWxsbyB3b3JsZAo="),
+        Name: optionalnullable.From(sfc.Pointer("my-resource-name")),
+    }, optionalnullable.From[string](nil))
+    if err != nil {
+        log.Fatal(err)
+    }
+    if res.InstanceResponse != nil {
+        // handle response
+    }
+}
+```
+
+### Parameters
+
+| Parameter                                                                                                  | Type                                                                                                       | Required                                                                                                   | Description                                                                                                | Example                                                                                                    |
+| ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `ctx`                                                                                                      | [context.Context](https://pkg.go.dev/context#Context)                                                      | :heavy_check_mark:                                                                                         | The context to use for the request.                                                                        |                                                                                                            |
+| `id`                                                                                                       | `string`                                                                                                   | :heavy_check_mark:                                                                                         | N/A                                                                                                        | inst_k3R-nX9vLm7Qp2Yw5Jd8F                                                                                 |
+| `body`                                                                                                     | [components.ReplaceInstanceRequest](../../models/components/replaceinstancerequest.md)                     | :heavy_check_mark:                                                                                         | N/A                                                                                                        |                                                                                                            |
+| `idempotencyKey`                                                                                           | optionalnullable.OptionalNullable[`string`]                                                                | :heavy_minus_sign:                                                                                         | Optional key that makes the request idempotent. Retries with the same key return the original replacement. |                                                                                                            |
+| `opts`                                                                                                     | [][operations.Option](../../models/operations/option.md)                                                   | :heavy_minus_sign:                                                                                         | The options for this request.                                                                              |                                                                                                            |
+
+### Response
+
+**[*operations.ReplaceInstanceResponse](../../models/operations/replaceinstanceresponse.md), error**
+
+### Errors
+
+| Error Type                         | Status Code                        | Content Type                       |
+| ---------------------------------- | ---------------------------------- | ---------------------------------- |
+| apierrors.BadRequestError          | 400                                | application/json                   |
 | apierrors.UnauthorizedError        | 401                                | application/json                   |
 | apierrors.ForbiddenError           | 403                                | application/json                   |
 | apierrors.NotFoundError            | 404                                | application/json                   |

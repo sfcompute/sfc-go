@@ -328,7 +328,7 @@ func (s *InstanceSKUs) ListAvailability(ctx context.Context, requirements *strin
 // ListInstanceSKUs - List instance SKUs
 // > ⚠️ This endpoint is in [public preview](/preview/roadmap).
 //
-// List all instance SKUs available on the market with their properties.
+// List the instance SKUs available on the market with their properties.
 func (s *InstanceSKUs) ListInstanceSKUs(ctx context.Context, limit *int64, startingAfter *string, endingBefore *string, opts ...operations.Option) (*operations.ListInstanceSkusResponse, error) {
 	request := operations.ListInstanceSkusRequest{
 		Limit:         limit,
@@ -665,7 +665,7 @@ func (s *InstanceSKUs) ListInstanceSKUs(ctx context.Context, limit *int64, start
 // GetInstanceSku - Get instance SKU
 // > ⚠️ This endpoint is in [public preview](/preview/roadmap).
 //
-// Retrieve an instance SKU by ID, including its registered properties.
+// Retrieve an instance SKU by ID, including its properties.
 func (s *InstanceSKUs) GetInstanceSku(ctx context.Context, id string, opts ...operations.Option) (*operations.GetInstanceSkuResponse, error) {
 	request := operations.GetInstanceSkuRequest{
 		ID: id,

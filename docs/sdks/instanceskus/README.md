@@ -71,7 +71,7 @@ func main() {
 
 > ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
-List all instance SKUs available on the market with their properties.
+List the instance SKUs available on the market with their properties.
 
 ### Example Usage
 
@@ -141,7 +141,7 @@ func main() {
 
 > ⚠️ This endpoint is in [public preview](/preview/roadmap).
 
-Retrieve an instance SKU by ID, including its registered properties.
+Retrieve an instance SKU by ID, including its properties.
 
 ### Example Usage
 

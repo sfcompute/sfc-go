@@ -3,6 +3,7 @@
 package components
 
 type CapacitySummary struct {
+	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }

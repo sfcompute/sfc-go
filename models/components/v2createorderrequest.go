@@ -7,11 +7,13 @@ import (
 )
 
 type V2CreateOrderRequest struct {
-	// A resource path like 'sfc:capacity:acme:prod:my-capacity' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
-	Capacity string `json:"capacity"`
-	Side     Side   `json:"side"`
+	// A resource path like 'sfc:pool:acme:prod:my-pool' _or_ an ID. Resource paths are human-readable but not stable - they change when resources are renamed or moved. IDs are stable and permanent.
+	Pool string `json:"pool"`
+	Side Side   `json:"side"`
 	// If true, the order rests on the order book until it fills, is cancelled, or its end time passes. If false, the order is cancelled immediately if it does not fill.
 	AllowStanding *bool `json:"allow_standing,omitzero"`
+	// If true, the order may fill partially — fewer nodes and/or a subset of the requested time window. The filled time may be disjoint.
+	AllowPartial *bool `json:"allow_partial,omitzero"`
 	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
 	InstanceSku string `json:"instance_sku"`
 	// Node count over time, as a list of `[start_at, end_at)` time ranges.
@@ -35,11 +37,11 @@ func (v *V2CreateOrderRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (v *V2CreateOrderRequest) GetCapacity() string {
+func (v *V2CreateOrderRequest) GetPool() string {
 	if v == nil {
 		return ""
 	}
-	return v.Capacity
+	return v.Pool
 }
 
 func (v *V2CreateOrderRequest) GetSide() Side {
@@ -54,6 +56,13 @@ func (v *V2CreateOrderRequest) GetAllowStanding() *bool {
 		return nil
 	}
 	return v.AllowStanding
+}
+
+func (v *V2CreateOrderRequest) GetAllowPartial() *bool {
+	if v == nil {
+		return nil
+	}
+	return v.AllowPartial
 }
 
 func (v *V2CreateOrderRequest) GetInstanceSku() string {

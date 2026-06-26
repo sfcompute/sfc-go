@@ -10,7 +10,7 @@ import (
 )
 
 type V2OrderPreviewRequestSell struct {
-	Capacity optionalnullable.OptionalNullable[string] `json:"capacity,omitzero"`
+	Pool optionalnullable.OptionalNullable[string] `json:"pool,omitzero"`
 	// Unix timestamp.
 	StartAt int64 `json:"start_at"`
 	// Order duration in seconds. Must be a positive multiple of 60.
@@ -36,11 +36,11 @@ func (v *V2OrderPreviewRequestSell) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (v *V2OrderPreviewRequestSell) GetCapacity() optionalnullable.OptionalNullable[string] {
+func (v *V2OrderPreviewRequestSell) GetPool() optionalnullable.OptionalNullable[string] {
 	if v == nil {
 		return nil
 	}
-	return v.Capacity
+	return v.Pool
 }
 
 func (v *V2OrderPreviewRequestSell) GetStartAt() int64 {
@@ -87,7 +87,7 @@ type V2OrderPreviewRequestBuy struct {
 	DurationSeconds int64 `json:"duration_seconds"`
 	// Number of nodes. Must be positive.
 	NodeCount int                                       `json:"node_count"`
-	Capacity  optionalnullable.OptionalNullable[string] `json:"capacity,omitzero"`
+	Pool      optionalnullable.OptionalNullable[string] `json:"pool,omitzero"`
 }
 
 func (v V2OrderPreviewRequestBuy) MarshalJSON() ([]byte, error) {
@@ -129,11 +129,11 @@ func (v *V2OrderPreviewRequestBuy) GetNodeCount() int {
 	return v.NodeCount
 }
 
-func (v *V2OrderPreviewRequestBuy) GetCapacity() optionalnullable.OptionalNullable[string] {
+func (v *V2OrderPreviewRequestBuy) GetPool() optionalnullable.OptionalNullable[string] {
 	if v == nil {
 		return nil
 	}
-	return v.Capacity
+	return v.Pool
 }
 
 // #region class-body-v2orderpreviewrequestbuy

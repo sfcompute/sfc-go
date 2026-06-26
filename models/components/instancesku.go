@@ -4,17 +4,253 @@ package components
 
 import (
 	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/optionalnullable"
 	"github.com/sfcompute/sfc-go/types"
 )
 
+type Region struct {
+	// The geographic region where the hardware is located, e.g. `europe-north1`.
+	Value        string `json:"value"`
+	DisplayValue string `json:"display_value"`
+}
+
+func (r *Region) GetValue() string {
+	if r == nil {
+		return ""
+	}
+	return r.Value
+}
+
+func (r *Region) GetDisplayValue() string {
+	if r == nil {
+		return ""
+	}
+	return r.DisplayValue
+}
+
+type AvailabilityZone struct {
+	// An independent failure domain within a region, e.g. `a`.
+	Value        string `json:"value"`
+	DisplayValue string `json:"display_value"`
+}
+
+func (a *AvailabilityZone) GetValue() string {
+	if a == nil {
+		return ""
+	}
+	return a.Value
+}
+
+func (a *AvailabilityZone) GetDisplayValue() string {
+	if a == nil {
+		return ""
+	}
+	return a.DisplayValue
+}
+
+type Accelerator struct {
+	// The AI accelerator chip model, e.g. `h100`.
+	Value        string `json:"value"`
+	DisplayValue string `json:"display_value"`
+}
+
+func (a *Accelerator) GetValue() string {
+	if a == nil {
+		return ""
+	}
+	return a.Value
+}
+
+func (a *Accelerator) GetDisplayValue() string {
+	if a == nil {
+		return ""
+	}
+	return a.DisplayValue
+}
+
+type FormFactor struct {
+	// The accelerator's physical form factor and host interface, e.g. `sxm`.
+	Value        string `json:"value"`
+	DisplayValue string `json:"display_value"`
+}
+
+func (f *FormFactor) GetValue() string {
+	if f == nil {
+		return ""
+	}
+	return f.Value
+}
+
+func (f *FormFactor) GetDisplayValue() string {
+	if f == nil {
+		return ""
+	}
+	return f.DisplayValue
+}
+
+// Value - The RDMA technology available on the node.
+type Value string
+
+const (
+	ValueInfiniband Value = "infiniband"
+	ValueRoce       Value = "roce"
+)
+
+func (e Value) ToPointer() *Value {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *Value) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "infiniband", "roce":
+			return true
+		}
+	}
+	return false
+}
+
+type RdmaType struct {
+	// The RDMA technology available on the node.
+	Value        Value  `json:"value"`
+	DisplayValue string `json:"display_value"`
+}
+
+func (r *RdmaType) GetValue() Value {
+	if r == nil {
+		return Value("")
+	}
+	return r.Value
+}
+
+func (r *RdmaType) GetDisplayValue() string {
+	if r == nil {
+		return ""
+	}
+	return r.DisplayValue
+}
+
+type NumAccelerators struct {
+	// The number of accelerator chips per node.
+	Value        int64  `json:"value"`
+	DisplayValue string `json:"display_value"`
+}
+
+func (n *NumAccelerators) GetValue() int64 {
+	if n == nil {
+		return 0
+	}
+	return n.Value
+}
+
+func (n *NumAccelerators) GetDisplayValue() string {
+	if n == nil {
+		return ""
+	}
+	return n.DisplayValue
+}
+
+type NumVcpus struct {
+	// The number of vCPUs per node, including hyperthreads.
+	Value        int64  `json:"value"`
+	DisplayValue string `json:"display_value"`
+}
+
+func (n *NumVcpus) GetValue() int64 {
+	if n == nil {
+		return 0
+	}
+	return n.Value
+}
+
+func (n *NumVcpus) GetDisplayValue() string {
+	if n == nil {
+		return ""
+	}
+	return n.DisplayValue
+}
+
+type Memory struct {
+	// The total system memory per node, in bytes.
+	Value        int64  `json:"value"`
+	DisplayValue string `json:"display_value"`
+}
+
+func (m *Memory) GetValue() int64 {
+	if m == nil {
+		return 0
+	}
+	return m.Value
+}
+
+func (m *Memory) GetDisplayValue() string {
+	if m == nil {
+		return ""
+	}
+	return m.DisplayValue
+}
+
+type LocalStorage struct {
+	// The total local storage available to the VM, in bytes.
+	Value        int64  `json:"value"`
+	DisplayValue string `json:"display_value"`
+}
+
+func (l *LocalStorage) GetValue() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.Value
+}
+
+func (l *LocalStorage) GetDisplayValue() string {
+	if l == nil {
+		return ""
+	}
+	return l.DisplayValue
+}
+
+type SupportsPublicIpv4 struct {
+	// Whether the node provides a public IPv4 address.
+	Value        bool   `json:"value"`
+	DisplayValue string `json:"display_value"`
+}
+
+func (s *SupportsPublicIpv4) GetValue() bool {
+	if s == nil {
+		return false
+	}
+	return s.Value
+}
+
+func (s *SupportsPublicIpv4) GetDisplayValue() string {
+	if s == nil {
+		return ""
+	}
+	return s.DisplayValue
+}
+
+// #region class-body-supportspublicipv4
+// #endregion class-body-supportspublicipv4
+
+// InstanceSku - Instance SKU details. See [the instance SKUs guide](https://docs.sfcompute.com/preview/instance-skus).
 type InstanceSku struct {
-	// Single discriminator for the instance-SKU object on both admin and public endpoints. They expose different field shapes but represent the same underlying resource (mirrors Stripe's pattern of one `object` discriminator per resource type, regardless of view).
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	object *string `const:"instance_sku" json:"object"`
 	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
-	ID         string                `json:"id"`
-	Name       string                `json:"name"`
-	Properties []InstanceSkuProperty `json:"properties"`
+	ID                 string                                                `json:"id"`
+	Alias              string                                                `json:"alias"`
+	Region             optionalnullable.OptionalNullable[Region]             `json:"region,omitzero"`
+	AvailabilityZone   optionalnullable.OptionalNullable[AvailabilityZone]   `json:"availability_zone,omitzero"`
+	Accelerator        optionalnullable.OptionalNullable[Accelerator]        `json:"accelerator,omitzero"`
+	FormFactor         optionalnullable.OptionalNullable[FormFactor]         `json:"form_factor,omitzero"`
+	RdmaType           optionalnullable.OptionalNullable[RdmaType]           `json:"rdma_type,omitzero"`
+	NumAccelerators    optionalnullable.OptionalNullable[NumAccelerators]    `json:"num_accelerators,omitzero"`
+	NumVcpus           optionalnullable.OptionalNullable[NumVcpus]           `json:"num_vcpus,omitzero"`
+	Memory             optionalnullable.OptionalNullable[Memory]             `json:"memory,omitzero"`
+	LocalStorage       optionalnullable.OptionalNullable[LocalStorage]       `json:"local_storage,omitzero"`
+	SupportsPublicIpv4 optionalnullable.OptionalNullable[SupportsPublicIpv4] `json:"supports_public_ipv4,omitzero"`
 }
 
 func (i InstanceSku) MarshalJSON() ([]byte, error) {
@@ -39,16 +275,79 @@ func (i *InstanceSku) GetID() string {
 	return i.ID
 }
 
-func (i *InstanceSku) GetName() string {
+func (i *InstanceSku) GetAlias() string {
 	if i == nil {
 		return ""
 	}
-	return i.Name
+	return i.Alias
 }
 
-func (i *InstanceSku) GetProperties() []InstanceSkuProperty {
+func (i *InstanceSku) GetRegion() optionalnullable.OptionalNullable[Region] {
 	if i == nil {
-		return []InstanceSkuProperty{}
+		return nil
 	}
-	return i.Properties
+	return i.Region
+}
+
+func (i *InstanceSku) GetAvailabilityZone() optionalnullable.OptionalNullable[AvailabilityZone] {
+	if i == nil {
+		return nil
+	}
+	return i.AvailabilityZone
+}
+
+func (i *InstanceSku) GetAccelerator() optionalnullable.OptionalNullable[Accelerator] {
+	if i == nil {
+		return nil
+	}
+	return i.Accelerator
+}
+
+func (i *InstanceSku) GetFormFactor() optionalnullable.OptionalNullable[FormFactor] {
+	if i == nil {
+		return nil
+	}
+	return i.FormFactor
+}
+
+func (i *InstanceSku) GetRdmaType() optionalnullable.OptionalNullable[RdmaType] {
+	if i == nil {
+		return nil
+	}
+	return i.RdmaType
+}
+
+func (i *InstanceSku) GetNumAccelerators() optionalnullable.OptionalNullable[NumAccelerators] {
+	if i == nil {
+		return nil
+	}
+	return i.NumAccelerators
+}
+
+func (i *InstanceSku) GetNumVcpus() optionalnullable.OptionalNullable[NumVcpus] {
+	if i == nil {
+		return nil
+	}
+	return i.NumVcpus
+}
+
+func (i *InstanceSku) GetMemory() optionalnullable.OptionalNullable[Memory] {
+	if i == nil {
+		return nil
+	}
+	return i.Memory
+}
+
+func (i *InstanceSku) GetLocalStorage() optionalnullable.OptionalNullable[LocalStorage] {
+	if i == nil {
+		return nil
+	}
+	return i.LocalStorage
+}
+
+func (i *InstanceSku) GetSupportsPublicIpv4() optionalnullable.OptionalNullable[SupportsPublicIpv4] {
+	if i == nil {
+		return nil
+	}
+	return i.SupportsPublicIpv4
 }

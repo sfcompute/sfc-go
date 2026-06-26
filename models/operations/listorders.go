@@ -76,9 +76,11 @@ func (u ListOrdersSortBy) MarshalJSON() ([]byte, error) {
 type ListOrdersRequest struct {
 	// Filter by order ID (repeatable).
 	ID []string `queryParam:"style=form,explode=true,name=id"`
-	// Filter by capacity.
-	Capacity *string          `queryParam:"style=form,explode=true,name=capacity"`
-	Side     *components.Side `queryParam:"style=form,explode=true,name=side"`
+	// Filter by pool.
+	Pool *string `queryParam:"style=form,explode=true,name=pool"`
+	// Scope the listing to a single workspace (ID, resource path, or name). Ignored when `pool` is given (the pool already names its workspace). Without either, the list spans the whole organization and requires an org-level `Order:List` grant.
+	Workspace *string          `queryParam:"style=form,explode=true,name=workspace"`
+	Side      *components.Side `queryParam:"style=form,explode=true,name=side"`
 	// Filter by status (repeatable).
 	Status        []components.OrderStatus `queryParam:"style=form,explode=true,name=status"`
 	CreatedAfter  *int64                   `queryParam:"style=form,explode=true,name=created_after"`
@@ -112,11 +114,18 @@ func (l *ListOrdersRequest) GetID() []string {
 	return l.ID
 }
 
-func (l *ListOrdersRequest) GetCapacity() *string {
+func (l *ListOrdersRequest) GetPool() *string {
 	if l == nil {
 		return nil
 	}
-	return l.Capacity
+	return l.Pool
+}
+
+func (l *ListOrdersRequest) GetWorkspace() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Workspace
 }
 
 func (l *ListOrdersRequest) GetSide() *components.Side {

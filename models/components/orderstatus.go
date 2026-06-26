@@ -8,6 +8,8 @@ package components
 //
 // `filled` = order executed.
 //
+// `partially_filled` = the order matched part of its requested capacity and remains active for the remainder.
+//
 // `standing` = the order is waiting for a match.
 //
 // `cancelled` = the order was cancelled either automatically (not a standing order and didn't immediately fill, or current time past `end_at`) or by explicit cancellation.
@@ -16,11 +18,12 @@ package components
 type OrderStatus string
 
 const (
-	OrderStatusPending   OrderStatus = "pending"
-	OrderStatusFilled    OrderStatus = "filled"
-	OrderStatusRejected  OrderStatus = "rejected"
-	OrderStatusCancelled OrderStatus = "cancelled"
-	OrderStatusStanding  OrderStatus = "standing"
+	OrderStatusPending         OrderStatus = "pending"
+	OrderStatusFilled          OrderStatus = "filled"
+	OrderStatusPartiallyFilled OrderStatus = "partially_filled"
+	OrderStatusRejected        OrderStatus = "rejected"
+	OrderStatusCancelled       OrderStatus = "cancelled"
+	OrderStatusStanding        OrderStatus = "standing"
 )
 
 func (e OrderStatus) ToPointer() *OrderStatus {
@@ -31,7 +34,7 @@ func (e OrderStatus) ToPointer() *OrderStatus {
 func (e *OrderStatus) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "pending", "filled", "rejected", "cancelled", "standing":
+		case "pending", "filled", "partially_filled", "rejected", "cancelled", "standing":
 			return true
 		}
 	}

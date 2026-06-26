@@ -16,8 +16,10 @@ type DeploymentResponse struct {
 	WorkspaceID  string `json:"workspace_id"`
 	Name         string `json:"name"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	object              *string                 `const:"deployment" json:"object"`
-	Capacity            CapacitySummary         `json:"capacity"`
+	object   *string         `const:"deployment" json:"object"`
+	Capacity CapacitySummary `json:"capacity"`
+	// A pool referenced by id and name.
+	Pool                PoolSummary             `json:"pool"`
 	InstanceTemplate    InstanceTemplateSummary `json:"instance_template"`
 	TargetInstanceCount int                     `json:"target_instance_count"`
 	// A name template using {{variable}} syntax. Available variables: {{adjective}} (~128 random adjectives), {{noun}} (~128 random nouns), {{nanoid(N)}} (N-character alphanumeric identifier, 1 ≤ N ≤ 21). The template must produce enough unique combinations to avoid collisions — equivalent to at least the default template {{adjective}}-{{noun}}-{{nanoid(6)}} (~1 quadrillion possibilities). Must start with an alphanumeric character. Resolved names are limited to 255 characters.
@@ -91,6 +93,13 @@ func (d *DeploymentResponse) GetCapacity() CapacitySummary {
 		return CapacitySummary{}
 	}
 	return d.Capacity
+}
+
+func (d *DeploymentResponse) GetPool() PoolSummary {
+	if d == nil {
+		return PoolSummary{}
+	}
+	return d.Pool
 }
 
 func (d *DeploymentResponse) GetInstanceTemplate() InstanceTemplateSummary {

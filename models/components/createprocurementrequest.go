@@ -8,9 +8,9 @@ import (
 )
 
 type CreateProcurementRequest struct {
-	Name     optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
-	Target   ProcurementTarget                         `json:"target"`
-	Capacity string                                    `json:"capacity"`
+	Name   optionalnullable.OptionalNullable[string] `json:"name,omitzero"`
+	Target ProcurementTarget                         `json:"target"`
+	Pool   string                                    `json:"pool"`
 	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
 	InstanceSku string `json:"instance_sku"`
 	// Price rate in dollars per node-hour.
@@ -48,11 +48,11 @@ func (c *CreateProcurementRequest) GetTarget() ProcurementTarget {
 	return c.Target
 }
 
-func (c *CreateProcurementRequest) GetCapacity() string {
+func (c *CreateProcurementRequest) GetPool() string {
 	if c == nil {
 		return ""
 	}
-	return c.Capacity
+	return c.Pool
 }
 
 func (c *CreateProcurementRequest) GetInstanceSku() string {

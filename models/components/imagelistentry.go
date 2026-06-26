@@ -15,7 +15,10 @@ type ImageListEntry struct {
 	ResourcePath string `json:"resource_path"`
 	Owner        string `json:"owner"`
 	Workspace    string `json:"workspace"`
+	WorkspaceID  string `json:"workspace_id"`
 	Name         string `json:"name"`
+	// Whether this is an sfc-provided public image.
+	IsPublic bool `json:"is_public"`
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	object       *string           `const:"image" json:"object"`
 	UploadStatus ImageUploadStatus `json:"upload_status"`
@@ -64,11 +67,25 @@ func (i *ImageListEntry) GetWorkspace() string {
 	return i.Workspace
 }
 
+func (i *ImageListEntry) GetWorkspaceID() string {
+	if i == nil {
+		return ""
+	}
+	return i.WorkspaceID
+}
+
 func (i *ImageListEntry) GetName() string {
 	if i == nil {
 		return ""
 	}
 	return i.Name
+}
+
+func (i *ImageListEntry) GetIsPublic() bool {
+	if i == nil {
+		return false
+	}
+	return i.IsPublic
 }
 
 func (i *ImageListEntry) GetObject() *string {

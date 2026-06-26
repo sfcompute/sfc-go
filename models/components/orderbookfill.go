@@ -2,12 +2,16 @@
 
 package components
 
-// OrderbookFill - A single trade: execution rate, node count, and the time it was recorded.
+// OrderbookFill - A single trade: execution rate, delivered nodes over time, and the time it was recorded.
 type OrderbookFill struct {
 	// Price rate in dollars per node-hour.
 	DollarsPerNodeHour string `json:"dollars_per_node_hour"`
-	// Number of nodes filled at this execution rate.
-	NodeCount int64 `json:"node_count"`
+	// Node count over time, as a list of `[start_at, end_at)` time ranges.
+	//
+	// Example: 5 nodes from t=0 to t=3600 is `[{"start_at": 0, "end_at": 3600, "node_count": 5}]`.
+	//
+	// `start_at` and `end_at` must be 60-second aligned, `node_count` must be non-negative. On non-final entries, `end_at` may be omitted (inferred from the next entry's `start_at`); gaps fill with `node_count: 0`.
+	AllocationScheduleDelta []ScheduleEntry `json:"allocation_schedule_delta"`
 	// Unix timestamp.
 	FilledAt int64 `json:"filled_at"`
 }
@@ -19,11 +23,11 @@ func (o *OrderbookFill) GetDollarsPerNodeHour() string {
 	return o.DollarsPerNodeHour
 }
 
-func (o *OrderbookFill) GetNodeCount() int64 {
+func (o *OrderbookFill) GetAllocationScheduleDelta() []ScheduleEntry {
 	if o == nil {
-		return 0
+		return []ScheduleEntry{}
 	}
-	return o.NodeCount
+	return o.AllocationScheduleDelta
 }
 
 func (o *OrderbookFill) GetFilledAt() int64 {

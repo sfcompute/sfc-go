@@ -9,8 +9,9 @@ import (
 
 type ListDeploymentsRequest struct {
 	// Filter by workspace.
-	Workspace     string  `queryParam:"style=form,explode=true,name=workspace"`
-	Capacity      *string `queryParam:"style=form,explode=true,name=capacity"`
+	Workspace string `queryParam:"style=form,explode=true,name=workspace"`
+	// Filter by pool.
+	Pool          *string `queryParam:"style=form,explode=true,name=pool"`
 	Limit         *int64  `default:"50" queryParam:"style=form,explode=true,name=limit"`
 	StartingAfter *string `queryParam:"style=form,explode=true,name=starting_after"`
 	EndingBefore  *string `queryParam:"style=form,explode=true,name=ending_before"`
@@ -34,11 +35,11 @@ func (l *ListDeploymentsRequest) GetWorkspace() string {
 	return l.Workspace
 }
 
-func (l *ListDeploymentsRequest) GetCapacity() *string {
+func (l *ListDeploymentsRequest) GetPool() *string {
 	if l == nil {
 		return nil
 	}
-	return l.Capacity
+	return l.Pool
 }
 
 func (l *ListDeploymentsRequest) GetLimit() *int64 {

@@ -2,11 +2,33 @@
 
 package components
 
-// InstanceSkuSummary - Summary view of an instance SKU embedded on responses that reference one (orders, procurements, instances, capacity transfers). Carries both the id and the human-readable name. Legacy SKUs whose `name` column hasn't been backfilled use `UNKNOWN_INSTANCE_SKU_NAME` as a placeholder so this field is always populated on the wire.
+import (
+	"github.com/sfcompute/sfc-go/internal/utils"
+	"github.com/sfcompute/sfc-go/types"
+)
+
+// InstanceSkuSummary - A summary of an instance SKU - its `id` and human-recognizable `alias` - embedded on resources that reference a SKU.
 type InstanceSkuSummary struct {
+	//lint:ignore U1000 accessed via reflection for JSON marshaling
+	object *string `const:"instance_sku" json:"object"`
 	// Accepts the canonical prefix below; additional legacy prefixes are aliased for read compatibility. Writes always emit the canonical form.
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID    string `json:"id"`
+	Alias string `json:"alias"`
+}
+
+func (i InstanceSkuSummary) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InstanceSkuSummary) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (i *InstanceSkuSummary) GetObject() *string {
+	return types.Pointer("instance_sku")
 }
 
 func (i *InstanceSkuSummary) GetID() string {
@@ -16,9 +38,9 @@ func (i *InstanceSkuSummary) GetID() string {
 	return i.ID
 }
 
-func (i *InstanceSkuSummary) GetName() string {
+func (i *InstanceSkuSummary) GetAlias() string {
 	if i == nil {
 		return ""
 	}
-	return i.Name
+	return i.Alias
 }
